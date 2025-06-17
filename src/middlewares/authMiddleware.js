@@ -6,8 +6,8 @@ function authMiddleware(req, res, next) {
     return res.error("Token requerido", 401, "El usuario no posee token");
   }
   try {
-    const user = jwt.verificarToken(token); // Verifico que el token sea valido  y agrega los datos de user con el  user
-    req.user = user;
+    const user = jwt.verificarToken(token); // Verifico que el token sea valido  y obtengo los datos de user 
+    req.user = user; // Agrego los datos de user al request
     next();
   } catch (error) {
     return res.error("Error en el token", 403,'Token invalido');

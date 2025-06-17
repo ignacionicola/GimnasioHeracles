@@ -5,16 +5,15 @@ const { hashPassword } = require("../service/hashService");
 async function login(req, res) { 
   
   const usuarioLogin = req.body;
-
   try {
     // Verifica si el usuario existe y las credenciales son correctas
     const resultado = await loginUsuario(usuarioLogin);
     // Si las credenciales son correctas, se crea un token y se envía como cookie
     res.cookie("cookie-token", resultado.token, {
       // Config la cookie con el token
-      httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
+      httpOnly: true, // No accesible desde JS
+      secure: false, // falso porque toy usando http, si fuera https deberia ser true
+      sameSite: "Strict",  
       maxAge: 3600000,
     });
     res.json(resultado); //En caso de exito devuelve el token
@@ -25,7 +24,7 @@ async function login(req, res) {
 
 async function loginUsuario(usuarioLogin) {
   //Verifica que el usuario exista en la base de datos
-  const usuarioBD = await Usuario.findOne({ email: usuarioLogin.email });
+  const usuarioBD = await Usuario.findOne({ email: usuarioLogin.email }); 
 
   if (!usuarioBD) {
     // Si no existe el usuario, lanza un error
@@ -49,7 +48,7 @@ async function loginUsuario(usuarioLogin) {
   
   return {
     token,
-    user: { id: usuarioBD.id, email: usuarioLogin.email, rol: usuarioBD.rol }, //Devuelve el payload
+    user: { id: usuarioBD.id, email: usuarioLogin.email, rol: usuarioBD.rol }, //Devuelvo el token y el usuario 
   };
 }
 

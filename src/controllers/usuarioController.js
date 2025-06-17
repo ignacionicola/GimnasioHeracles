@@ -12,8 +12,10 @@ async function crearUsuario(req, res) {
     //Si hay errores, lo devuelve
     return res.error("Error al crear usuario", 400, error.array());
   }
+  
   const salt = crypto.randomBytes(16).toString("hex"); //Genera la "sal", un hash random para darle mas seguridad al hash del password.
-  const password = hashPassword(req.body.password, salt); //Utiliza mi servicio de Hash para hashear el password antes de almacenarlo.
+  const password = hashPassword(req.body.password, salt); // Crea el hash de la contraseña con la sal generada
+
   try {
     const nuevoUsuario = await new Usuario({ // Crea el nuevo usuario en la BD
       nombreUsuario: req.body.nombreUsuario,
@@ -108,3 +110,4 @@ module.exports = {
   actualizarUsuario,
   validarUsuarioNuevo,
 };
+

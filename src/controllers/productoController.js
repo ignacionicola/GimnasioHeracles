@@ -20,7 +20,6 @@ const validarProducto = [
 ];
 
 async function crearProducto(req, res) {
-  //Con Express validator validamos los datos que llegan por el request
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     //Si hay algun error, retorna error

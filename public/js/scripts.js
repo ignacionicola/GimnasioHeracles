@@ -17,7 +17,8 @@ form.addEventListener("submit", async (e) => {
     }
     mensaje.innerHTML = `<p>"${"Login exitoso"}"</p>`;
     // Después de login exitoso:
-    localStorage.setItem("usuarioActual", data.user.nombreUsuario || data.user.email); // esto es para que el frontend sepa quién es el usuario actual y guarde su carrito y su tema
+    localStorage.setItem("usuarioActual", data.user.nombreUsuario || data.user.email); 
+    // para que el frontend sepa quién es el usuario actual y guarde su carrito y su tema
     
     setTimeout(() => {
       window.location.href = "../productos.html";

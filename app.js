@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 // Middlewares globales
-app.use(express.json()); // Parsear JSON
+app.use(express.json()); // es para que pueda leer y entender el json
 app.use(cookies()); // Manejar cookies
 app.use(responseHandler); // Respuestas personalizadas
 app.use(express.static("public")); // Servir archivos estáticos
