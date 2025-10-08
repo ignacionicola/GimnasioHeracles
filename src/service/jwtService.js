@@ -1,14 +1,8 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config/config");
+require("dotenv").config();
+
 function generarToken(payload) {
-  return jwt.sign(payload, config.jwtSecret, {
-    //Crea el token con el payload que mandamos en login, la clave secrete y la duracion
-    expiresIn: config.jwtExpiresIn,
-  });
+  return jwt.sign(payload, process.env.JWT_SECRET || "secreto", { expiresIn: "1h" });
 }
 
-function verificarToken(token) {
-  return jwt.verify(token, config.jwtSecret); //Devuelve el payload en caso de ser un token valido.
-}
-
-module.exports = { generarToken, verificarToken };
+module.exports = { generarToken };

@@ -1,14 +1,8 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
+const { Sequelize } = require("sequelize");
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("Conectado a MongoDB");
-  } catch (error) {
-    console.error("Error al conectar a MongoDB:", error);
-    process.exit(1);
-  }
-};
+const sequelize = new Sequelize({
+  dialect: "sqlite",
+  storage: "./database.sqlite"
+});
 
-module.exports = connectDB;
+module.exports = sequelize;
