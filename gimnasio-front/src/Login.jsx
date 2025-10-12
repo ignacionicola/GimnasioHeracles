@@ -45,7 +45,7 @@ export default function Login() {
     return (
       <div className="login-container">
         <div className="login-card text-center">
-          <h3>¡Hola Tienes!</h3>
+          <h3>Gimnasio Heracles</h3>
           <span className="badge bg-warning text-dark mb-3">
             900 puntos disponibles
           </span>

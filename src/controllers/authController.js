@@ -14,7 +14,7 @@ async function login(req, res) {
       sameSite: "Strict",
       maxAge: 3600000,
     });
-    res.json({ token, user: { id: usuario.id, dni: usuario.dni, rol: usuario.rol } });
+    res.json({ token, user: { id: usuario.id, dni: usuario.dni, nombre: usuario.nombre, rol: usuario.rol } });
   } catch (error) {
     res.status(401).json({ error: error.message });
   }
