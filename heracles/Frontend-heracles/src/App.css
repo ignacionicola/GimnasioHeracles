@@ -1,0 +1,96 @@
+body{
+  margin: 0;
+}
+
+.gradiente {
+  border: none;
+  border-radius: 10px;
+  padding: .3rem 0;
+  background: linear-gradient(
+    90deg,
+    rgba(64, 123, 231, 1) 0%,
+    rgba(125, 104, 255, 1) 55%,
+    rgba(162, 80, 239, 1) 100%
+  );
+  width: 100%;
+  font-weight: bold;
+}
+.gradiente:hover {
+  background: linear-gradient(
+    90deg,
+    rgb(146, 184, 255) 0%,
+    rgb(68, 57, 140) 55%,
+    rgba(162, 80, 239, 1) 100%
+  );
+  box-shadow: 1px 1px 5px 1px rgb(0, 0, 0);
+}
+.gradiente-registro:hover {
+  background: linear-gradient(
+    90deg,
+    rgb(146, 184, 255) 0%,
+    rgb(68, 57, 140) 55%,
+    rgba(162, 80, 239, 1) 100%
+  );
+  box-shadow: 1px 1px 5px 1px rgb(0, 0, 0);
+}
+.gradiente-registro {
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: .3rem 0;
+  background: linear-gradient(
+    90deg,
+    rgb(156, 187, 246) 0%,
+    rgb(30, 0, 228) 55%,
+    rgb(15, 69, 122) 100%
+  );
+  width: 100%;
+}
+
+.container-botones-login{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/*Layout login*/
+.escudoColor {
+  border-radius: 30%;
+  padding: 0.3rem;
+  background: linear-gradient(
+    90deg,
+    rgba(64, 123, 231, 1) 0%,
+    rgba(125, 104, 255, 1) 55%,
+    rgba(162, 80, 239, 1) 100%
+  );
+}
+
+.titulo-gimnasio {
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 2em;
+  justify-content: center;
+  background-color: transparent;
+  padding-top: 1em;
+}
+
+#resultado {
+  color: black;
+  font-weight: bold;
+  padding: .3rem 0;
+  text-align: center;
+  font-size: 2rem;
+}
+.spinner{
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.errorForm{
+  color: red;
+  margin: .1rem 0;
+}
