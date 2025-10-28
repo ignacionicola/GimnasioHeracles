@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
 import { Spinner } from "react-bootstrap";
+import '../App.css';
+
 function Login() {
   const { setCargando, cargando } = useAuthStore();
   const login = useAuthStore((state) => state.login);
@@ -42,18 +44,14 @@ function Login() {
       </Form.Group>
       <Form.Group className="">
         <label htmlFor="">Contraseña</label>
-
-        <Form.Control type="password" placeholder="🔑 Ingrese su contraseña" />
+        <Form.Control type="password" placeholder="🔑 Ingrese su contraseña" />
       </Form.Group>
       <div id="resultado" className="text-center"></div>
-
       <div className="my-3 d-flex gap-2 justify-content-center container-botones-login">
         <button type="submit" className="gradiente">
-          Iniciar sesion
+          Iniciar sesión
         </button>
-        <button type="button" className="gradiente-registro" onClick={() => navigate("/register")}>
-          Registrarse
-        </button>
+        <button type="button" className="gradiente-registro" onClick={() => navigate("/register")}>Registrarse</button>
       </div>
       <div className="spinner">
         {cargando ? (

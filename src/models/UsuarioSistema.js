@@ -10,19 +10,22 @@ const UsuarioSistema = sequelize.define(
       autoIncrement: true,
     },
     nombreUsuario: {
-      type: DataTypes.STRING(15),
+      type: DataTypes.STRING(50),
       allowNull: false,
+      unique: true,
     },
     rol: {
       type: DataTypes.STRING(15),
       allowNull: false,
+      defaultValue: "admin",
     },
     contrasenia: {
       type: DataTypes.STRING(256),
       allowNull: false,
     },
     correoUsuario: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(100),
+      unique: true,
     },
     telefonoUsuario: {
       type: DataTypes.STRING(20),
@@ -33,8 +36,8 @@ const UsuarioSistema = sequelize.define(
     },
   },
   {
-    tableName: "UsuarioSistema",
-    timestamps: false, // no agregamos createdAt ni updatedAt
+    tableName: "usuarios_sistema",
+    timestamps: true,
   }
 );
 

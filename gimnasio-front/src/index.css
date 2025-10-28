@@ -5,8 +5,10 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background: linear-gradient(185deg, rgba(20, 28, 49, 1) 0%, rgba(24, 38, 67, 1) 50%, rgba(28, 49, 102, 1) 100%);
 
+  width: 100vw;
+  height: 100vh;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -52,6 +54,10 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+p{
+    color: white;
 }
 
 @media (prefers-color-scheme: light) {
