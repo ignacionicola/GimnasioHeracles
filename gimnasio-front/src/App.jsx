@@ -1,22 +1,22 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './Login';
-import Register from './Register';
-import Home from './pages/Home';
-import AdminLogin from './pages/Login';
-import Registro from './pages/Registro';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import IngresoSocio from "./pages/IngresoSocio";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import Registro from "./pages/Registro";
+import PanelSocio from "./pages/PanelSocio";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas de usuario/recepcionista */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<IngresoSocio />} />
+        <Route path="/ingreso" element={<IngresoSocio />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
-        {/* Rutas de administrador */}
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/home" element={<Home />} />
-        <Route path="/admin/registro" element={<Registro />} />
+        <Route path="/panel-socio" element={<PanelSocio />} />
+        <Route path="/registro" element={<Registro />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

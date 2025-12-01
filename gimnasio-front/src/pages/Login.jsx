@@ -1,68 +1,132 @@
-import { Button, Row, Col } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import { useState } from "react";
+import { Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
-import { Spinner } from "react-bootstrap";
-import '../App.css';
+import BrandHeader from "../components/BrandHeader";
+import "../styles/Login.css";
 
 function Login() {
   const { setCargando, cargando } = useAuthStore();
-  const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const [formData, setFormData] = useState({
+    nombreUsuario: "",
+    contrasenia: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError("");
+    setLoading(true);
     setCargando();
-    const nombreUsuario = e.target[0].value;
-    const contrasenia = e.target[1].value;
+
     try {
-      const data = await login({ nombreUsuario, contrasenia });
-      if (data?.success) {
-        setTimeout(() => {
-          setCargando();
-          navigate("/home");
-        }, 1000);
-      } else {
-        setCargando();
-        const resultado = document.getElementById("resultado");
-        resultado.innerHTML = "Usuario o contraseña incorrectos";
+      const payload = {
+        nombreUsuario: formData.nombreUsuario,
+        contrasenia: formData.contrasenia,
+      };
+
+      const response = await fetch("http://localhost:3000/api/usuarios/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Error en login");
       }
-    } catch (error) {
-      console.error(error);
+
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      setTimeout(() => {
+        setCargando();
+        navigate("/home");
+      }, 600);
+    } catch (err) {
+      setError(err.message);
       setCargando();
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Form className={`d-flex flex-column`} onSubmit={handleSubmit}>
-      <h1 className={`my-1 text-center h1`}>Acceso del Personal</h1>
-      <Form.Group
-        className="justify-content-center my-3"
-        controlId="form-email"
-      >
-        <label htmlFor="">Usuario</label>
-        <Form.Control type="text" placeholder="🔐 Ingrese su nombre de usuario" />
-      </Form.Group>
-      <Form.Group className="">
-        <label htmlFor="">Contraseña</label>
-        <Form.Control type="password" placeholder="🔑 Ingrese su contraseña" />
-      </Form.Group>
-      <div id="resultado" className="text-center"></div>
-      <div className="my-3 d-flex gap-2 justify-content-center container-botones-login">
-        <button type="submit" className="gradiente">
-          Iniciar sesión
-        </button>
-        <button type="button" className="gradiente-registro" onClick={() => navigate("/register")}>Registrarse</button>
+    <div className="auth-page">
+      <div className="auth-card">
+        <BrandHeader subtitle="Panel de Administración • Personal autorizado" />
+        <h2>Acceso de Personal</h2>
+        <p className="card-subtitle">
+          Ingresa tus credenciales para continuar con las gestiones internas.
+        </p>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label className="auth-field">
+            <span>Usuario</span>
+            <input
+              type="text"
+              name="nombreUsuario"
+              value={formData.nombreUsuario}
+              onChange={handleChange}
+              placeholder="Ingresa tu usuario"
+              required
+            />
+          </label>
+
+          <label className="auth-field">
+            <span>Contraseña</span>
+            <input
+              type="password"
+              name="contrasenia"
+              value={formData.contrasenia}
+              onChange={handleChange}
+              placeholder="Ingresa tu contraseña"
+              required
+            />
+          </label>
+
+          {error && <div className="form-error">{error}</div>}
+
+          <button className="primary-btn" type="submit" disabled={loading}>
+            {loading ? "Validando..." : "Iniciar sesión"}
+          </button>
+
+          <div className="form-spinner">
+            {cargando && (
+              <Spinner animation="border" role="status" size="sm">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            )}
+          </div>
+        </form>
+
+        <div className="auth-links">
+          <button
+            className="link-btn"
+            type="button"
+            onClick={() => navigate("/register")}
+          >
+            Registrar Personal
+          </button>
+          <button
+            className="link-btn secondary"
+            type="button"
+            onClick={() => navigate("/ingreso")}
+          >
+            ← Volver al login de usuarios
+          </button>
+        </div>
       </div>
-      <div className="spinner">
-        {cargando ? (
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        ) : (
-          ""
-        )}
-      </div>
-    </Form>
+    </div>
   );
 }
 

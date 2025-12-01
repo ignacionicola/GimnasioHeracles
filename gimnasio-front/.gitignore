@@ -34,7 +34,7 @@ Thumbs.db
 ehthumbs.db
 desktop.ini
 
-# Monorepo: evitar subir builds/credenciales al fusionar
+# Monorepo
 /.env
 /.env.local
 /../node_modules

@@ -1,108 +1,147 @@
-import Form from "react-bootstrap/Form";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../stores/authStore";
+import "../styles/Registro.css";
+
 function Registro() {
-  const { register } = useAuthStore();
   const navigate = useNavigate();
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let registroNombre = e.target[0];
-    let registroEmail = e.target[1];
-    let registroTelefono = e.target[2];
-    let registroPassword = e.target[3];
-    const respuesta = await register(
-      registroNombre.value.trim(),
-      registroEmail.value.trim(),
-      registroPassword.value.trim(),
-      registroTelefono.value.trim()
-    );
-    console.log(respuesta);
-    if (respuesta.success) {
-      registroNombre.value = "";
-      registroEmail.value = "";
-      registroPassword.value = "";
-      registroTelefono.value = "";
-      document.querySelector("#resultado").innerHTML = `Registro exitoso`;
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
-    } else {
-      manejoRespuesta(respuesta.details);
-      setTimeout(() => {
-        document.querySelector("#resultado").innerHTML = ``;
-      }, 1500);
+  const [formData, setFormData] = useState({
+    dni: "",
+    nombre: "",
+    apellido: "",
+    email: "",
+    telefono: "",
+  });
+  const [feedback, setFeedback] = useState({ type: "", message: "" });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setFeedback({ type: "", message: "" });
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:3000/api/usuarios/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Error al registrar socio");
+      }
+
+      setFeedback({
+        type: "success",
+        message: "Socio registrado correctamente.",
+      });
+      setFormData({
+        dni: "",
+        nombre: "",
+        apellido: "",
+        email: "",
+        telefono: "",
+      });
+    } catch (error) {
+      setFeedback({ type: "error", message: error.message });
+    } finally {
+      setLoading(false);
     }
   };
 
-  const manejoRespuesta = (respuesta) => {
-    document.querySelector("#nombreUsuarioError").innerHTML = ``;
-    document.querySelector("#correoUsuarioError").innerHTML = ``;
-    document.querySelector("#telefonoError").innerHTML = ``;
-    document.querySelector("#contraseniaError").innerHTML = ``;
-    let i = 0;
-    for (i = 0; i < respuesta.length; i++) {
-      if (respuesta[i].path == "nombreUsuario") {
-        document.querySelector(
-          "#nombreUsuarioError"
-        ).innerHTML = `Minimo 5 caracteres y maximo 15 caracteres`;
-      }
-      if (respuesta[i].path == "correoUsuario") {
-        document.querySelector(
-          "#correoUsuarioError"
-        ).innerHTML = `El email es requerido`;
-      }
-      if (respuesta[i].path == "telefonoUsuario") {
-        document.querySelector(
-          "#telefonoError"
-        ).innerHTML = `El telefono es requerido`;
-      }
-      if (respuesta[i].path == "contrasenia") {
-        document.querySelector(
-          "#contraseniaError"
-        ).innerHTML = `Contraseña minimo 6 caracteres`;
-      }
-    }
-  };
   return (
-    <>
-      <h1 className="text-center">Registro de personal</h1>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicNombreUsuario">
-          <Form.Label>Nombre de usuario</Form.Label>
-          <Form.Control type="text" placeholder="Nombre de usuario..." />
-          <div className="errorForm" id="nombreUsuarioError"></div>
-        </Form.Group>
+    <div className="registrar-page">
+      <div className="registrar-card">
+        <h2>Registrar Socio</h2>
+        <p className="registrar-subtitle">
+          Carga los datos del nuevo socio para habilitar su acceso al gimnasio.
+        </p>
 
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email</Form.Label>
-          <Form.Control type="email" placeholder="Email..." />
-          <div id="correoUsuarioError" className="errorForm"></div>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicTelefono">
-          <Form.Label>Telefono</Form.Label>
-          <Form.Control type="text" placeholder="Telefono" />
-          <div id="telefonoError" className="errorForm"></div>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Contraseña</Form.Label>
-          <Form.Control type="password" placeholder="Contraseña" />
-          <div id="contraseniaError" className="errorForm"></div>
-        </Form.Group>
-        <div className="my-3 d-flex gap-2 justify-content-center container-botones-login">
-          <button type="submit" className="gradiente">
-            Completar registro
+        <form className="registrar-form" onSubmit={handleSubmit}>
+          <label>
+            <span>DNI</span>
+            <input
+              type="text"
+              name="dni"
+              value={formData.dni}
+              onChange={handleChange}
+              placeholder="Ingresa tu DNI"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Nombre</span>
+            <input
+              type="text"
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+              placeholder="Ingresa tu nombre"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Apellido</span>
+            <input
+              type="text"
+              name="apellido"
+              value={formData.apellido}
+              onChange={handleChange}
+              placeholder="Ingresa tu apellido"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Email</span>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Ingresa tu email"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Teléfono</span>
+            <input
+              type="tel"
+              name="telefono"
+              value={formData.telefono}
+              onChange={handleChange}
+              placeholder="Ingresa tu teléfono"
+            />
+          </label>
+
+          {feedback.message && (
+            <div className={`registrar-alert ${feedback.type}`}>
+              {feedback.message}
+            </div>
+          )}
+
+          <button type="submit" className="primary-btn" disabled={loading}>
+            {loading ? "Registrando..." : "Registrar Socio"}
           </button>
           <button
             type="button"
-            className="gradiente-registro"
-            onClick={() => navigate("/")}
+            className="secondary-btn"
+            onClick={() => navigate("/home")}
           >
-            Volver a Login
+            ← Volver
           </button>
-        </div>
-        <div id="resultado"></div>
-      </Form>
-    </>
+        </form>
+      </div>
+    </div>
   );
 }
 
