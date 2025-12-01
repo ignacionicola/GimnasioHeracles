@@ -75,9 +75,4 @@ Todos los fetch del frontend apuntan al backend en `http://localhost:3000`, por 
 | gimnasio-front  | `npm run build` | Build de producción del frontend               |
 
 
-## Notas
-- `sequelize.sync()` crea/actualiza la base SQLite, por lo que no hay migraciones manuales.
-- Si cambias la URL del frontend/backend, actualizá el `origin` de CORS en `app.js` y los `fetch` del frontend.
 
-
-¡Listo! Con estos pasos cualquier colaborador puede clonar el repo y ejecutar exactamente el mismo flujo que tenemos localmente. 
