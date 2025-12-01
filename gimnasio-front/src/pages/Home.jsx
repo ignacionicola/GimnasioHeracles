@@ -21,6 +21,14 @@ const ACTIONS = [
     roles: ["recepcionista", "administrador"],
   },
   {
+    key: "beneficios",
+    title: "Gestión de Beneficios",
+    description: "Administra los beneficios disponibles para los socios del gimnasio.",
+    cta: "Gestionar Beneficios",
+    target: "/beneficios",
+    roles: ["administrador"],
+  },
+  {
     key: "logout",
     title: "Cerrar sesión segura",
     description: "Finaliza tu sesión actual y libera el puesto.",

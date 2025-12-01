@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Registro from "./pages/Registro";
 import PanelSocio from "./pages/PanelSocio";
+import Beneficios from "./pages/Beneficios";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/panel-socio" element={<PanelSocio />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/beneficios" element={<Beneficios />} />
       </Routes>
     </BrowserRouter>
   );
