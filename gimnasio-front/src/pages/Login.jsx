@@ -15,13 +15,27 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [errors, setErrors] = useState({});
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.nombreUsuario.trim()) newErrors.nombreUsuario = "El usuario es obligatorio";
+    if (!formData.contrasenia.trim()) newErrors.contrasenia = "La contraseña es obligatoria";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!validateForm()) return;
+
     setError("");
     setLoading(true);
     setCargando();
@@ -78,8 +92,9 @@ function Login() {
               value={formData.nombreUsuario}
               onChange={handleChange}
               placeholder="Ingresa tu usuario"
-              required
+              className={errors.nombreUsuario ? "input-error" : ""}
             />
+            {errors.nombreUsuario && <span className="error-msg">{errors.nombreUsuario}</span>}
           </label>
 
           <label className="auth-field">
@@ -90,8 +105,9 @@ function Login() {
               value={formData.contrasenia}
               onChange={handleChange}
               placeholder="Ingresa tu contraseña"
-              required
+              className={errors.contrasenia ? "input-error" : ""}
             />
+            {errors.contrasenia && <span className="error-msg">{errors.contrasenia}</span>}
           </label>
 
           {error && <div className="form-error">{error}</div>}

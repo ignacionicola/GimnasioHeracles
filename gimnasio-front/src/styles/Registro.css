@@ -57,6 +57,20 @@
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
 }
 
+.input-error {
+  border-color: #ef4444 !important;
+}
+
+.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.error-msg {
+  font-size: 0.85rem;
+  color: #ef4444;
+  margin-top: 0.1rem;
+}
+
 .registrar-alert {
   border-radius: 14px;
   padding: 0.85rem 1rem;
@@ -74,6 +88,7 @@
   color: #027a48;
   border: 1px solid #a6f4c5;
 }
+
 .primary-btn,
 .secondary-btn {
   border: none;

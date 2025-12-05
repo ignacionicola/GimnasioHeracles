@@ -59,6 +59,20 @@
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
 }
 
+.input-error {
+  border-color: #ef4444 !important;
+}
+
+.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.error-msg {
+  font-size: 0.85rem;
+  color: #ef4444;
+  margin-top: 0.1rem;
+}
+
 .form-error {
   background: #fee4e2;
   color: #b42318;

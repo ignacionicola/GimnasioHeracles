@@ -14,14 +14,28 @@ function Register() {
   });
   const [feedback, setFeedback] = useState({ type: "", message: "" });
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.nombreUsuario.trim()) newErrors.nombreUsuario = "El usuario es obligatorio";
+    if (!formData.correoUsuario.trim()) newErrors.correoUsuario = "El email es obligatorio";
+    if (!formData.contrasenia.trim()) newErrors.contrasenia = "La contraseña es obligatoria";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!validateForm()) return;
+
     setFeedback({ type: "", message: "" });
     setLoading(true);
 
@@ -59,7 +73,7 @@ function Register() {
         <BrandHeader subtitle="Panel de administración • Personal autorizado" />
         <h2>Registro de personal</h2>
         <p className="register-subtitle">
-          
+
         </p>
 
         <form className="register-form" onSubmit={handleSubmit}>
@@ -71,8 +85,9 @@ function Register() {
               value={formData.nombreUsuario}
               onChange={handleChange}
               placeholder="Nombre de usuario..."
-              required
+              className={errors.nombreUsuario ? "input-error" : ""}
             />
+            {errors.nombreUsuario && <span className="error-msg">{errors.nombreUsuario}</span>}
           </label>
 
           <label className="register-field">
@@ -83,8 +98,9 @@ function Register() {
               value={formData.correoUsuario}
               onChange={handleChange}
               placeholder="Email..."
-              required
+              className={errors.correoUsuario ? "input-error" : ""}
             />
+            {errors.correoUsuario && <span className="error-msg">{errors.correoUsuario}</span>}
           </label>
 
           <label className="register-field">
@@ -106,8 +122,9 @@ function Register() {
               value={formData.contrasenia}
               onChange={handleChange}
               placeholder="Contraseña..."
-              required
+              className={errors.contrasenia ? "input-error" : ""}
             />
+            {errors.contrasenia && <span className="error-msg">{errors.contrasenia}</span>}
           </label>
 
           <label className="register-field">

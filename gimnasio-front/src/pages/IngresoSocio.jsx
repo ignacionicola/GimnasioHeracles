@@ -9,10 +9,16 @@ function IngresoSocio() {
   const [status, setStatus] = useState("form"); // form | success | error
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorDni, setErrorDni] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!dni.trim()) {
+      setErrorDni("El DNI es obligatorio");
+      return;
+    }
+
     setLoading(true);
     setStatus("form");
     setMessage("");
@@ -73,10 +79,14 @@ function IngresoSocio() {
               <input
                 type="text"
                 value={dni}
-                onChange={(e) => setDni(e.target.value)}
+                onChange={(e) => {
+                  setDni(e.target.value);
+                  if (errorDni) setErrorDni("");
+                }}
                 placeholder="Ingresa tu DNI sin puntos ni espacios"
-                required
+                className={errorDni ? "input-error" : ""}
               />
+              {errorDni && <span className="error-msg">{errorDni}</span>}
             </label>
 
             {status === "error" && (

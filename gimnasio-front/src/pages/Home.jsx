@@ -89,8 +89,8 @@ function Home() {
           👋
         </h1>
         <p>
-          Desde aquí podés registrar socios, controlar asistencias y mantener el
-          club funcionando como en los mockups del proyecto.
+          Desde aquí podés registrar socios, controlar asistencias y gestionar
+          beneficios.
         </p>
 
         <div className="user-chip">

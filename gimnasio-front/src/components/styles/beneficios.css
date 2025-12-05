@@ -1,250 +1,146 @@
-:root{
-  --bg-1: #0f1720;
-  --bg-2: #111827;
-  --card-bg: rgba(255,255,255,0.04);
-  --muted: rgba(255,255,255,0.7);
-  --accent: #0ea5a4; /* teal accent */
-  --accent-2: #2563eb; /* blue */
-  --success: #16a34a;
-  --danger: #ef4444;
-  --glass: rgba(255,255,255,0.04);
-  --radius: 12px;
-  --shadow: 0 8px 30px rgba(2,6,23,0.6);
-  --glass-border: rgba(255,255,255,0.06);
+/* beneficios.css */
+
+/* Reutilizamos variables globales, pero definimos algunas específicas si hace falta */
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --primary-gradient: linear-gradient(135deg, #5d5fef, #38bdf8);
+  --text-muted: #94a3b8;
+  --text-light: #f7f9fc;
 }
 
+/* El contenedor principal ya usa .dashboard-page del global, 
+   aquí solo ajustamos cosas específicas si es necesario */
 
-/* fondo general y efecto sutil */
 .beneficios-container {
-  background: radial-gradient(1200px 600px at 10% 10%, rgba(37,99,235,0.07), transparent 10%),
-              radial-gradient(900px 500px at 90% 90%, rgba(14,165,164,0.05), transparent 10%),
-              linear-gradient(180deg, var(--bg-1), var(--bg-2));
-  min-height: 100vh;
-  padding: 3rem 1.25rem;
-  color: #ffffff;
-  position: relative;
-  overflow: hidden;
+  /* Si necesitamos algún ajuste extra sobre dashboard-page */
+  padding: 0;
+  /* Ya tiene padding el padre */
 }
 
-/* cabecera estilo "hero" pequeño */
-.beneficios-titulo-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  margin-bottom: 2rem;
-}
-
-.beneficios-titulo {
-  font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  font-weight: 700;
-  color: #f8fafc;
-  letter-spacing: 1px;
-  text-transform: none;
-  font-size: 2.1rem;
-  margin: 0;
-  text-shadow: 0 6px 20px rgba(2,6,23,0.5);
-}
-
-.beneficios-subtitulo {
-  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto;
-  color: var(--muted);
-  margin: 0;
-  font-size: 0.95rem;
-}
-
-/* tarjeta / tabla contenedor */
+/* Panel principal tipo tarjeta */
 .beneficios-panel {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background: rgba(8, 12, 24, 0.6);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-  padding: 1rem;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(6px) saturate(120%);
+  border-radius: 24px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* estilos de la tabla */
-.table.beneficios-table {
-  background: transparent;
-  color: #e5e6e7;
+/* Buscador y filtros */
+.search-input {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+  padding: 0.7rem 1rem !important;
+}
+
+.search-input:focus {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: #5d5fef !important;
+  box-shadow: 0 0 0 2px rgba(93, 95, 239, 0.2) !important;
+}
+
+/* Tabla */
+.beneficios-table {
   margin-bottom: 0;
-  border-collapse: separate;
-  border-spacing: 0;
-  width: 100%;
-}
-
-.table.beneficios-table thead th {
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  color: rgba(0, 0, 0, 0.801);
-  font-weight: 600;
-  padding: 1rem 0.75rem;
-  text-align: left;
-  font-size: 0.95rem;
-}
-
-.table.beneficios-table tbody tr {
-  transition: transform .15s ease, background .15s ease;
-}
-
-.table.beneficios-table tbody tr:hover {
-  transform: translateY(-4px);
-  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-}
-
-.table.beneficios-table td {
-  padding: 0.9rem 0.75rem;
+  color: var(--text-light);
   vertical-align: middle;
-  border-bottom: 1px dashed rgba(255,255,255,0.03);
-  color: rgba(54, 54, 54, 0.92);
-  font-size: 0.95rem;
 }
 
-/* columna descripción mas pequeña en pantallas pequeñas */
-.table .descripcion {
-  max-width: 50%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.beneficios-table thead th {
+  background: transparent;
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 1rem;
+
 }
 
-/* badges estilo pill */
+.beneficios-table tbody td {
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  padding: 1rem;
+  color: var(--text-light);
+}
+
+
+
+.beneficios-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Badges */
 .beneficios-badge {
-  display: inline-block;
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.8rem;
-  text-transform: none;
-  letter-spacing: 0.3px;
-  color: #081226;
+  padding: 0.5em 1em !important;
+  border-radius: 30px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em;
 }
 
-.beneficios-badge.activo {
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+/* Botones de acción en tabla */
+.icon-btn {
+  padding: 0.4rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+  color: var(--text-muted);
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
 }
 
-.beneficios-badge.inactivo {
-  background: rgba(255,255,255,0.06);
-  color: var(--muted);
-  border: 1px solid rgba(255,255,255,0.02);
-}
+/* Modal Dark Theme */
+/* .modal-dark is used as a class on the modal dialog */
 
-/* botones primarios / secundarios */
-.btn-crear {
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  border: none;
-  color: white;
-  padding: 0.55rem 1.15rem;
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(14,165,164,0.12);
-  font-weight: 600;
-}
-
-.btn-accion {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.04);
-  color: var(--muted);
-  padding: 0.35rem 0.6rem;
-  border-radius: 8px;
-}
-
-/* icon buttons (editar, eliminar) */
-.icon-btn {
-  background: transparent;
-  border: none;
-  color: var(--muted);
-  padding: 0.25rem;
-  margin-left: 0.45rem;
-  transition: color .12s ease, transform .12s ease;
-}
-.icon-btn:hover {
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-
-/* modal form tweaks */
-.modal-content {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+.modal-dark .modal-content {
+  background: #0f172a;
   border: 1px solid var(--glass-border);
-  color: #ebecee;
+  color: #fff;
+  border-radius: 20px;
 }
 
-.form-label {
-  color: #000;;
-  font-weight: 600;
-
+.modal-dark .modal-header {
+  border-bottom: 1px solid var(--glass-border);
 }
 
-/* estado cuando no hay datos */
-.vacio {
-  padding: 2rem;
-  text-align: center;
-  color: var(--muted);
-  font-size: 0.95rem;
+.modal-dark .modal-footer {
+  border-top: 1px solid var(--glass-border);
+  color: #031026 !important;
+  font-weight: 600 !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 12px !important;
+  transition: transform 0.2s !important;
 }
 
-/* Centrar título/subtítulo manteniendo botón a la derecha */
-.header-hero {
-  position: relative; /* contenedor relativo para las posiciones absolutas interiores */
-  padding: 1.25rem 0;
-  padding-bottom: 6rem;
+.btn-crear:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
 }
 
-.header-hero .beneficios-titulo-container {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  top: 50%;
-  transform: translate(-50%, -50%); /* centra verticalmente dentro del header-hero */
-  width: calc(100% - 220px); /* deja espacio para el botón a la derecha */
-  max-width: 900px;
-  pointer-events: none; /* evita capturar clicks por encima del botón */
+.btn-crear:disabled {
+  opacity: 0.7;
+  transform: none;
 }
 
-.header-hero .beneficios-titulo-container * {
-  pointer-events: auto; /* pero permite interacción con elementos dentro si los hubiese */
+/* Checkbox/Radio custom styles if needed */
+.form-check-input {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Ajuste para el botón: alineado a la derecha dentro del header */
-.header-hero .acciones-header {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+.form-check-input:checked {
+  background-color: #5d5fef;
+  border-color: #5d5fef;
 }
 
-/* Responsivo: en pantallas pequeñas vuelve a flow normal */
-@media (max-width: 768px) {
-  .header-hero .beneficios-titulo-container {
-    position: static;
-    transform: none;
-    width: 100%;
-    margin-bottom: 0.75rem;
-  }
-  .header-hero .acciones-header {
-    position: static;
-    transform: none;
-    margin-top: 0.5rem;
-    text-align: right;
-  }
-  .beneficios-titulo { font-size: 1.45rem; }
-  .table.beneficios-table thead th:nth-child(4),
-  .table.beneficios-table td:nth-child(4) { display: none; } /* ocultar columna de acciones si hace falta */
-  .table .descripcion { max-width: 35%; }
+.form-check-label {
+  color: var(--text-muted);
+  cursor: pointer;
 }
-
-/* pequeño decorativo */
-.decor-circle {
-  position: absolute;
-  width: 420px;
-  height: 420px;
-  right: -120px;
-  top: -80px;
-  background: radial-gradient(circle at 30% 30%, rgba(37,99,235,0.12), transparent 40%);
-  filter: blur(40px);
-  pointer-events: none;
-  z-index: 0;
-}
-

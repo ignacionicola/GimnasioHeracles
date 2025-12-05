@@ -13,14 +13,29 @@ function Registro() {
   });
   const [feedback, setFeedback] = useState({ type: "", message: "" });
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.dni.trim()) newErrors.dni = "El DNI es obligatorio";
+    if (!formData.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
+    if (!formData.apellido.trim()) newErrors.apellido = "El apellido es obligatorio";
+    if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!validateForm()) return;
+
     setFeedback({ type: "", message: "" });
     setLoading(true);
 
@@ -72,8 +87,9 @@ function Registro() {
               value={formData.dni}
               onChange={handleChange}
               placeholder="Ingresa tu DNI"
-              required
+              className={errors.dni ? "input-error" : ""}
             />
+            {errors.dni && <span className="error-msg">{errors.dni}</span>}
           </label>
 
           <label>
@@ -84,8 +100,9 @@ function Registro() {
               value={formData.nombre}
               onChange={handleChange}
               placeholder="Ingresa tu nombre"
-              required
+              className={errors.nombre ? "input-error" : ""}
             />
+            {errors.nombre && <span className="error-msg">{errors.nombre}</span>}
           </label>
 
           <label>
@@ -96,8 +113,9 @@ function Registro() {
               value={formData.apellido}
               onChange={handleChange}
               placeholder="Ingresa tu apellido"
-              required
+              className={errors.apellido ? "input-error" : ""}
             />
+            {errors.apellido && <span className="error-msg">{errors.apellido}</span>}
           </label>
 
           <label>
@@ -108,8 +126,9 @@ function Registro() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Ingresa tu email"
-              required
+              className={errors.email ? "input-error" : ""}
             />
+            {errors.email && <span className="error-msg">{errors.email}</span>}
           </label>
 
           <label>
