@@ -17,7 +17,7 @@ const UsuarioSistema = sequelize.define(
     rol: {
       type: DataTypes.STRING(15),
       allowNull: false,
-      defaultValue: "admin",
+      defaultValue: "recepcionista",
     },
     contrasenia: {
       type: DataTypes.STRING(256),

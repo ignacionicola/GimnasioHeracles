@@ -50,15 +50,16 @@ async function login(req, res) {
           rol: admin.rol
         }
       };
+        console.log(resultado.token);
+
     } else {
       throw new Error("Datos de login inválidos");
     }
 
     res.cookie("auth-token", resultado.token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Lax",
-      path: "/",
+      secure: false,
+      sameSite: "lax",
       maxAge: 3600000
     });
 
