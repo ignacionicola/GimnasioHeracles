@@ -27,6 +27,7 @@ function Registro() {
     if (!formData.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
     if (!formData.apellido.trim()) newErrors.apellido = "El apellido es obligatorio";
     if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
+    if (!formData.telefono.trim()) newErrors.telefono = "El teléfono es obligatorio";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -139,7 +140,9 @@ function Registro() {
               value={formData.telefono}
               onChange={handleChange}
               placeholder="Ingresa tu teléfono"
+              className={errors.telefono ? "input-error" : ""}
             />
+            {errors.telefono && <span className="error-msg">{errors.telefono}</span>}
           </label>
 
           {feedback.message && (
