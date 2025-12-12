@@ -27,6 +27,13 @@ function Register() {
     if (!formData.nombreUsuario.trim()) newErrors.nombreUsuario = "El usuario es obligatorio";
     if (!formData.correoUsuario.trim()) newErrors.correoUsuario = "El email es obligatorio";
     if (!formData.contrasenia.trim()) newErrors.contrasenia = "La contraseña es obligatoria";
+    if (!formData.telefonoUsuario.trim()) newErrors.telefonoUsuario = "El teléfono es obligatorio";
+
+    if (!formData.telefonoUsuario.trim()) {
+  newErrors.telefonoUsuario = "El teléfono es obligatorio";
+} else if (!/^\d{6,}$/.test(formData.telefonoUsuario.trim())) {
+  newErrors.telefonoUsuario = "Ingrese un teléfono válido (solo dígitos, mínimo 6)";
+}
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -111,8 +118,10 @@ function Register() {
               value={formData.telefonoUsuario}
               onChange={handleChange}
               placeholder="Teléfono..."
+              className={errors.telefonoUsuario ? "input-error" : ""}
             />
-          </label>
+           {errors.telefonoUsuario && <span className="error-msg">{errors.telefonoUsuario}</span>}
+           </label>
 
           <label className="register-field">
             <span>Contraseña</span>

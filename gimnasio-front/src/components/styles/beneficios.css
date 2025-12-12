@@ -46,7 +46,8 @@
 /* Tabla */
 .beneficios-table {
   margin-bottom: 0;
-  color: var(--text-light);
+  
+color: var(--text-light);
   vertical-align: middle;
 }
 
@@ -66,8 +67,10 @@
   background: transparent;
   border-bottom: 1px solid rgba(255, 255, 255, 0.02);
   padding: 1rem;
-  color: var(--text-light);
+  color:var(--text-light);
+
 }
+
 
 
 
@@ -143,4 +146,15 @@
 .form-check-label {
   color: var(--text-muted);
   cursor: pointer;
+}
+/* Forzar color legible solo para la columna "Detalle" en la tabla de Beneficios */
+.beneficios-panel .beneficios-table tbody td.text-muted {
+  color: var(--text-light) !important;
+  opacity: 0.95 !important;
+}
+
+/* Si alguna celda usa "small" y .text-muted juntos */
+.beneficios-panel .beneficios-table tbody td.small.text-muted {
+  color: var(--text-light) !important;
+  opacity: 0.95 !important;
 }
