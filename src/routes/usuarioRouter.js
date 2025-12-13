@@ -1,5 +1,5 @@
 const express = require("express");
-const { register, createSystemUser, getUsuarios } = require("../controllers/usuarioController");
+const { register, createSystemUser, getUsuarios,validarUsuarioNuevo } = require("../controllers/usuarioController");
 const { login, logout } = require("../controllers/authController");
 const router = express.Router();
 
@@ -14,6 +14,6 @@ router.post("/login", login);
 router.post("/logout", logout);
 
 // POST - Registrar usuario del sistema (admin / recepcionista)
-router.post("/system/register", createSystemUser);
+router.post("/system/register",validarUsuarioNuevo, createSystemUser);
 
 module.exports = router;
