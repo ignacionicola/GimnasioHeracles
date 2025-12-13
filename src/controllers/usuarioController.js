@@ -18,6 +18,10 @@ async function getUsuarios(req, res) {
 // POST - Registrar socio (cliente)
 async function register(req, res) {
   console.log("BODY:", req.body);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.error("Datos invalidos", 400, errors.array());
+  }
   const { dni, nombre, apellido, email, telefono, puntos, plan } = req.body;
   try {
     const usuario = await Usuario.create({
@@ -65,6 +69,27 @@ async function createSystemUser(req, res) {
     res.status(400).json({ error: error.message });
   }
 }
+
+const validarSocio = [
+  body("dni").notEmpty().withMessage("El DNI es requerido").trim(),
+  body("nombre")
+    .trim()
+    .notEmpty()
+    .withMessage("El nombre es requerido")
+    .isString(),
+  body("apellido")
+    .trim()
+    .notEmpty()
+    .withMessage("Apellido requerido")
+    .isString(),
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("El email es requerido")
+    .isEmail(),
+  body("telefono").trim().notEmpty().withMessage("El telefono es requerido"),
+  body("plan").trim().notEmpty().withMessage("El plan es requerido"),
+];
 const validarUsuarioNuevo = [
   body("nombreUsuario")
     .trim()
@@ -92,4 +117,5 @@ module.exports = {
   createSystemUser,
   getUsuarios,
   validarUsuarioNuevo,
+  validarSocio,
 };

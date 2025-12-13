@@ -1,5 +1,5 @@
 const express = require("express");
-const { register, createSystemUser, getUsuarios,validarUsuarioNuevo } = require("../controllers/usuarioController");
+const { register, createSystemUser, getUsuarios,validarUsuarioNuevo,validarSocio } = require("../controllers/usuarioController");
 const { login, logout } = require("../controllers/authController");
 const router = express.Router();
 
@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", getUsuarios);
 
 // POST - Registrar socio (cliente)
-router.post("/register", register);
+router.post("/register",validarSocio, register);
 
 // POST - Login / Logout (unificados)
 router.post("/login", login);
