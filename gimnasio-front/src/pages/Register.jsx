@@ -27,6 +27,12 @@ function Register() {
     if (!formData.nombreUsuario.trim()) newErrors.nombreUsuario = "El usuario es obligatorio";
     if (!formData.correoUsuario.trim()) newErrors.correoUsuario = "El email es obligatorio";
     if (!formData.contrasenia.trim()) newErrors.contrasenia = "La contraseña es obligatoria";
+    /* contraseña de  6 caracteres o mas*/
+
+    if (formData.contrasenia.trim().length < 6) {
+      newErrors.contrasenia = "La contraseña debe tener al menos 6 caracteres";
+    }
+
     if (!formData.telefonoUsuario.trim()) newErrors.telefonoUsuario = "El teléfono es obligatorio";
 
     if (!formData.telefonoUsuario.trim()) {

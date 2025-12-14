@@ -113,3 +113,27 @@
 .secondary-btn:hover {
   background: #e2e8f0;
 }
+
+/* Plan selector styles */
+.plan-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.plan-select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid #d0d5dd;
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23475467' d='M5.5 7l4.5 4 4.5-4z'/></svg>") no-repeat right 12px center/12px;
+}
+
+.plan-select:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}

@@ -10,6 +10,7 @@ function Registro() {
     apellido: "",
     email: "",
     telefono: "",
+    plan: "",
   });
   const [feedback, setFeedback] = useState({ type: "", message: "" });
   const [loading, setLoading] = useState(false);
@@ -28,6 +29,7 @@ function Registro() {
     if (!formData.apellido.trim()) newErrors.apellido = "El apellido es obligatorio";
     if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
     if (!formData.telefono.trim()) newErrors.telefono = "El teléfono es obligatorio";
+    if (!formData.plan) newErrors.plan = "Selecciona un plan";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -63,6 +65,7 @@ function Registro() {
         apellido: "",
         email: "",
         telefono: "",
+        plan: "",
       });
     } catch (error) {
       setFeedback({ type: "error", message: error.message });
@@ -143,6 +146,22 @@ function Registro() {
               className={errors.telefono ? "input-error" : ""}
             />
             {errors.telefono && <span className="error-msg">{errors.telefono}</span>}
+          </label>
+
+          <label className="plan-group">
+            <span>Plan</span>
+            <select
+              name="plan"
+              value={formData.plan}
+              onChange={handleChange}
+              className={errors.plan ? "input-error plan-select" : "plan-select"}
+            >
+              <option value="">-- Selecciona un plan --</option>
+              <option value="basico">Básico</option>
+              <option value="medio">Medio</option>
+              <option value="libre">Libre</option>
+            </select>
+            {errors.plan && <span className="error-msg">{errors.plan}</span>}
           </label>
 
           {feedback.message && (
