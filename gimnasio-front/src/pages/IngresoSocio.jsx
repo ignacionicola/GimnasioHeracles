@@ -1,27 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Spinner } from "react-bootstrap";
 import BrandHeader from "../components/BrandHeader";
 import "../styles/IngresoSocio.css";
 
 function IngresoSocio() {
   const [dni, setDni] = useState("");
-  const [status, setStatus] = useState("form"); // form | success | error
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorDni, setErrorDni] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     if (!dni.trim()) {
-      setErrorDni("El DNI es obligatorio");
+      setErrorMessage("El DNI es obligatorio");
       return;
     }
 
     setLoading(true);
-    setStatus("form");
-    setMessage("");
+    setErrorMessage("");
 
     try {
       const response = await fetch("http://localhost:3000/api/usuarios/login", {
@@ -40,16 +38,40 @@ function IngresoSocio() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      setStatus("success");
-      setMessage("¡Sesión iniciada exitosamente! Redirigiendo...");
+      setSuccessMessage("¡Sesión iniciada exitosamente! Redirigiendo...");
       setTimeout(() => navigate("/panel-socio"), 1500);
     } catch (error) {
-      setStatus("error");
-      setMessage(error.message);
+      setErrorMessage(error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  // Pantalla de inicio si pasa
+  if (successMessage) {
+    return (
+      <div className="ingreso-page">
+        <div className="ingreso-card">
+          <BrandHeader
+            variant="dumbbell"
+            subtitle="Ingresa tu DNI para registrar asistencia"
+          />
+          <div className="ingreso-status success">
+            <div className="status-icon">✔</div>
+            <h3>Acceso al Gimnasio</h3>
+            <p>{successMessage}</p>
+            <button
+              className="secondary-btn"
+              type="button"
+              onClick={() => navigate("/")}
+            >
+              ← Volver al inicio
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="ingreso-page">
@@ -59,53 +81,30 @@ function IngresoSocio() {
           subtitle="Ingresa tu DNI para registrar asistencia"
         />
 
-        {status === "success" ? (
-          <div className="ingreso-status success">
-            <div className="status-icon">✔</div>
-            <h3>Acceso al Gimnasio</h3>
-            <p>{message}</p>
-            <button
-              className="secondary-btn"
-              type="button"
-              onClick={() => navigate("/")}
-            >
-              ← Volver al inicio
-            </button>
-          </div>
-        ) : (
-          <form className="ingreso-form" onSubmit={handleSubmit}>
-            <label>
-              <span>DNI</span>
-              <input
-                type="text"
-                value={dni}
-                onChange={(e) => {
-                  setDni(e.target.value);
-                  if (errorDni) setErrorDni("");
-                }}
-                placeholder="Ingresa tu DNI sin puntos ni espacios"
-                className={errorDni ? "input-error" : ""}
-              />
-              {errorDni && <span className="error-msg">{errorDni}</span>}
-            </label>
+        <form className="ingreso-form" onSubmit={handleSubmit}>
+          <label>
+            <span>DNI</span>
+            <input
+              type="text"
+              value={dni}
+              onChange={(e) => {
+                setDni(e.target.value);
+                if (errorMessage) setErrorMessage("");
+              }}
+              placeholder="Ingresa tu DNI sin puntos ni espacios"
+              className={errorMessage ? "input-error" : ""}
+            />
+            {errorMessage && <span className="error-msg">{errorMessage}</span>}
+          </label>
 
-            {status === "error" && (
-              <div className="ingreso-alert error">{message}</div>
-            )}
+          {errorMessage && (
+            <div className="ingreso-alert error">{errorMessage}</div>
+          )}
 
-            <button className="primary-btn" type="submit" disabled={loading}>
-              {loading ? "Ingresando..." : "Ingresar al Gimnasio"}
-            </button>
-
-            <div className="form-spinner">
-              {loading && (
-                <Spinner animation="border" role="status" size="sm">
-                  <span className="visually-hidden">Loading...</span>
-                </Spinner>
-              )}
-            </div>
-          </form>
-        )}
+          <button className="primary-btn" type="submit" disabled={loading}>
+            {loading ? "Ingresando..." : "Ingresar al Gimnasio"}
+          </button>
+        </form>
 
         <div className="ingreso-links">
           <button
@@ -122,4 +121,3 @@ function IngresoSocio() {
 }
 
 export default IngresoSocio;
-

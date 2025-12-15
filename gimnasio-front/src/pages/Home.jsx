@@ -1,42 +1,7 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BrandHeader from "../components/BrandHeader";
 import "../styles/Home.css";
-
-const ACTIONS = [
-  {
-    key: "register-socio",
-    title: "Registrar nuevo socio",
-    description: "Carga DNI, datos personales y habilita el acceso.",
-    cta: "Ir a Registro",
-    target: "/registro",
-    roles: ["recepcionista", "administrador"],
-  },
-  {
-    key: "panel-socio",
-    title: "Panel de socios",
-    description: "Abre el panel para socios y registra asistencias.",
-    cta: "Abrir panel",
-    target: "/ingreso",
-    roles: ["recepcionista", "administrador"],
-  },
-  {
-    key: "beneficios",
-    title: "Gestión de Beneficios",
-    description: "Administra los beneficios disponibles para los socios del gimnasio.",
-    cta: "Gestionar Beneficios",
-    target: "/beneficios",
-    roles: ["administrador"],
-  },
-  {
-    key: "logout",
-    title: "Cerrar sesión segura",
-    description: "Finaliza tu sesión actual y libera el puesto.",
-    cta: "Cerrar sesión",
-    action: "logout",
-    roles: ["recepcionista", "administrador"],
-  },
-];
 
 function Home() {
   const navigate = useNavigate();
@@ -68,11 +33,6 @@ function Home() {
     }
   };
 
-  const quickActions = useMemo(() => {
-    if (!user?.rol) return [];
-    return ACTIONS.filter((action) => action.roles.includes(user.rol));
-  }, [user]);
-
   if (loading) {
     return <div className="loading">Cargando...</div>;
   }
@@ -81,13 +41,7 @@ function Home() {
     <div className="dashboard-page">
       <header className="dashboard-hero">
         <BrandHeader subtitle="Panel interno • Personal autorizado" />
-        <h1>
-          Hola{" "}
-          {user?.nombreUsuario ||
-            user?.nombre ||
-            "Recepcionista"}{" "}
-          👋
-        </h1>
+        <h1>Hola {user?.correoUsuario}!</h1>
         <p>
           Desde aquí podés registrar socios, controlar asistencias y gestionar
           beneficios.
@@ -98,12 +52,6 @@ function Home() {
             <span>Rol</span>
             <strong>{user?.rol || "Usuario"}</strong>
           </div>
-          {user?.dni && (
-            <div>
-              <span>DNI</span>
-              <strong>{user.dni}</strong>
-            </div>
-          )}
           {user?.correoUsuario && (
             <div>
               <span>Correo</span>
@@ -116,37 +64,40 @@ function Home() {
         </div>
       </header>
 
-      {quickActions.length > 0 && (
-        <section className="dashboard-section">
-          <div className="section-head">
-            <div>
-              <h2>Acciones rápidas</h2>
-              <p>
-                Atajos pensados para la recepción: alta de socios y acceso al
-                kiosco de asistencias.
-              </p>
-            </div>
+      <section className="dashboard-section">
+        <div className="section-head">
+          <div>
+            <h2>Acciones rápidas</h2>
+            <p>Atajos para gestionar socios, beneficios y asistencias.</p>
           </div>
+        </div>
 
-          <div className="action-grid">
-            {quickActions.map((action) => (
-              <article key={action.key} className="action-card">
-                <h3>{action.title}</h3>
-                <p>{action.description}</p>
-                <button
-                  onClick={() =>
-                    action.action === "logout"
-                      ? handleLogout()
-                      : navigate(action.target)
-                  }
-                >
-                  {action.cta}
-                </button>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
+        <div className="action-grid">
+          <article className="action-card">
+            <h3>Registrar nuevo socio</h3>
+            <p>Carga DNI, datos personales y habilita el acceso.</p>
+            <button onClick={() => navigate("/registro")}>
+              Ir a Registro
+            </button>
+          </article>
+
+          <article className="action-card">
+            <h3>Panel de socios</h3>
+            <p>Abre el panel para socios y registra asistencias.</p>
+            <button onClick={() => navigate("/ingreso")}>
+              Abrir panel
+            </button>
+          </article>
+
+          <article className="action-card">
+            <h3>Gestión de Beneficios</h3>
+            <p>Administra los beneficios disponibles para los socios.</p>
+            <button onClick={() => navigate("/beneficios")}>
+              Gestionar Beneficios
+            </button>
+          </article>
+        </div>
+      </section>
     </div>
   );
 }

@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
 import BrandHeader from "../components/BrandHeader";
 import "../styles/Login.css";
 
 function Login() {
-  const { setCargando, cargando } = useAuthStore();
+  const { setCargando } = useAuthStore();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nombreUsuario: "",
@@ -15,21 +14,22 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [errors, setErrors] = useState({});
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
+    if (error) setError("");
   };
 
   const validateForm = () => {
-    const newErrors = {};
-    if (!formData.nombreUsuario.trim()) newErrors.nombreUsuario = "El usuario es obligatorio";
-    if (!formData.contrasenia.trim()) newErrors.contrasenia = "La contraseña es obligatoria";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (!formData.nombreUsuario.trim()) {
+      setError("El usuario es obligatorio");
+      return false;
+    }
+    if (!formData.contrasenia.trim()) {
+      setError("La contraseña es obligatoria");
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async (event) => {
@@ -92,9 +92,8 @@ function Login() {
               value={formData.nombreUsuario}
               onChange={handleChange}
               placeholder="Ingresa tu usuario"
-              className={errors.nombreUsuario ? "input-error" : ""}
+              className={error ? "input-error" : ""}
             />
-            {errors.nombreUsuario && <span className="error-msg">{errors.nombreUsuario}</span>}
           </label>
 
           <label className="auth-field">
@@ -105,9 +104,8 @@ function Login() {
               value={formData.contrasenia}
               onChange={handleChange}
               placeholder="Ingresa tu contraseña"
-              className={errors.contrasenia ? "input-error" : ""}
+              className={error ? "input-error" : ""}
             />
-            {errors.contrasenia && <span className="error-msg">{errors.contrasenia}</span>}
           </label>
 
           {error && <div className="form-error">{error}</div>}
@@ -115,14 +113,6 @@ function Login() {
           <button className="primary-btn" type="submit" disabled={loading}>
             {loading ? "Validando..." : "Iniciar sesión"}
           </button>
-
-          <div className="form-spinner">
-            {cargando && (
-              <Spinner animation="border" role="status" size="sm">
-                <span className="visually-hidden">Loading...</span>
-              </Spinner>
-            )}
-          </div>
         </form>
 
         <div className="auth-links">

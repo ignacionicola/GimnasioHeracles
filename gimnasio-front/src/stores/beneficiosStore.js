@@ -16,7 +16,6 @@ export const useBeneficiosStore = create((set) => ({
         };
       }
 
-      // 2) try to match a temporary optimistic item: look for items marked with _temp and same key fields
       if (item && !item._temp) {
         const likelyIndex = state.beneficios.findIndex((b) => b._temp && b.nombreBeneficio === item.nombreBeneficio && Number(b.precioPuntos) === Number(item.precioPuntos));
         if (likelyIndex !== -1) {

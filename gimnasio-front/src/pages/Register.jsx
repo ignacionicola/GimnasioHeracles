@@ -14,35 +14,39 @@ function Register() {
   });
   const [feedback, setFeedback] = useState({ type: "", message: "" });
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
+    if (feedback.message) setFeedback({ type: "", message: "" });
   };
 
   const validateForm = () => {
-    const newErrors = {};
-    if (!formData.nombreUsuario.trim()) newErrors.nombreUsuario = "El usuario es obligatorio";
-    if (!formData.correoUsuario.trim()) newErrors.correoUsuario = "El email es obligatorio";
-    if (!formData.contrasenia.trim()) newErrors.contrasenia = "La contraseña es obligatoria";
-    /* contraseña de  6 caracteres o mas*/
-
-    if (formData.contrasenia.trim().length < 6) {
-      newErrors.contrasenia = "La contraseña debe tener al menos 6 caracteres";
+    if (!formData.nombreUsuario.trim()) {
+      setFeedback({ type: "error", message: "El usuario es obligatorio" });
+      return false;
     }
-
-    if (!formData.telefonoUsuario.trim()) newErrors.telefonoUsuario = "El teléfono es obligatorio";
-
+    if (!formData.correoUsuario.trim()) {
+      setFeedback({ type: "error", message: "El email es obligatorio" });
+      return false;
+    }
+    if (!formData.contrasenia.trim()) {
+      setFeedback({ type: "error", message: "La contraseña es obligatoria" });
+      return false;
+    }
+    if (formData.contrasenia.trim().length < 6) {
+      setFeedback({ type: "error", message: "La contraseña debe tener al menos 6 caracteres" });
+      return false;
+    }
     if (!formData.telefonoUsuario.trim()) {
-  newErrors.telefonoUsuario = "El teléfono es obligatorio";
-} else if (!/^\d{6,}$/.test(formData.telefonoUsuario.trim())) {
-  newErrors.telefonoUsuario = "Ingrese un teléfono válido (solo dígitos, mínimo 6)";
-}
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+      setFeedback({ type: "error", message: "El teléfono es obligatorio" });
+      return false;
+    }
+    if (!/^\d{6,}$/.test(formData.telefonoUsuario.trim())) {
+      setFeedback({ type: "error", message: "Ingrese un teléfono válido (solo dígitos, mínimo 6)" });
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async (event) => {
@@ -65,23 +69,16 @@ function Register() {
 
       if (!response.ok) {
         const data = await response.json().catch(() => null);
-        // Si el backend devuelve detalles de validación, mapearlos a los campos
         if (data && Array.isArray(data.details)) {
-          const newErrors = {};
-          data.details.forEach((e) => {
-            if (e.param) newErrors[e.param] = e.msg || data.error || "Error de validación";
-          });
-          setErrors((prev) => ({ ...prev, ...newErrors }));
-          setFeedback({ type: "error", message: data.error || "Error de validación" });
+          const errorMsg = data.details.map((e) => e.msg || e).join(", ");
+          setFeedback({ type: "error", message: errorMsg });
           return;
         }
-
-        // Si no hay detalles, mostrar mensaje genérico o el mensaje del backend
         setFeedback({ type: "error", message: (data && (data.error || data.message)) || "Error al registrar" });
         return;
       }
 
-      setFeedback({ type: "success", message: "Registro exitoso. Redirigiendo al login...", });
+      setFeedback({ type: "success", message: "Registro exitoso. Redirigiendo al login..." });
       setTimeout(() => navigate("/login"), 1800);
     } catch (error) {
       setFeedback({ type: "error", message: error.message });
@@ -96,7 +93,7 @@ function Register() {
         <BrandHeader subtitle="Panel de administración • Personal autorizado" />
         <h2>Registro de personal</h2>
         <p className="register-subtitle">
-
+          Completa los datos para crear una nueva cuenta de personal.
         </p>
 
         <form className="register-form" onSubmit={handleSubmit} noValidate>
@@ -108,9 +105,8 @@ function Register() {
               value={formData.nombreUsuario}
               onChange={handleChange}
               placeholder="Nombre de usuario..."
-              className={errors.nombreUsuario ? "input-error" : ""}
+              className={feedback.type === "error" ? "input-error" : ""}
             />
-            {errors.nombreUsuario && <span className="error-msg">{errors.nombreUsuario}</span>}
           </label>
 
           <label className="register-field">
@@ -121,9 +117,8 @@ function Register() {
               value={formData.correoUsuario}
               onChange={handleChange}
               placeholder="Email..."
-              className={errors.correoUsuario ? "input-error" : ""}
+              className={feedback.type === "error" ? "input-error" : ""}
             />
-            {errors.correoUsuario && <span className="error-msg">{errors.correoUsuario}</span>}
           </label>
 
           <label className="register-field">
@@ -134,10 +129,9 @@ function Register() {
               value={formData.telefonoUsuario}
               onChange={handleChange}
               placeholder="Teléfono..."
-              className={errors.telefonoUsuario ? "input-error" : ""}
+              className={feedback.type === "error" ? "input-error" : ""}
             />
-           {errors.telefonoUsuario && <span className="error-msg">{errors.telefonoUsuario}</span>}
-           </label>
+          </label>
 
           <label className="register-field">
             <span>Contraseña</span>
@@ -147,9 +141,8 @@ function Register() {
               value={formData.contrasenia}
               onChange={handleChange}
               placeholder="Contraseña..."
-              className={errors.contrasenia ? "input-error" : ""}
+              className={feedback.type === "error" ? "input-error" : ""}
             />
-            {errors.contrasenia && <span className="error-msg">{errors.contrasenia}</span>}
           </label>
 
           <label className="register-field">

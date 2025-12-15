@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom"; 
+/* Rutas de la aplicación */
 import IngresoSocio from "./pages/IngresoSocio";
 import Login from "./pages/Login";
 import Register from "./pages/Register";

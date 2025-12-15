@@ -21,6 +21,7 @@ export async function getBeneficio(id) {
 }
 
 export async function crearBeneficio(payload) {
+  // Preaparo la peticion http
   const res = await fetch(`${API_BASE}/admin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -28,8 +29,10 @@ export async function crearBeneficio(payload) {
     credentials: "include",
   });
   if (res.status === 204) return null;
+  // Recibo la respuesta y la convierto a json
   const j = await res.json();
   if (j && j.success === false) throw new Error(j.error || 'Error creating beneficio');
+ // Devuelvo los datos o el mensaje de error
   return j?.data ?? j;
 }
 
