@@ -64,14 +64,24 @@ function Register() {
       );
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Error al registrar");
+        const data = await response.json().catch(() => null);
+        // Si el backend devuelve detalles de validación, mapearlos a los campos
+        if (data && Array.isArray(data.details)) {
+          const newErrors = {};
+          data.details.forEach((e) => {
+            if (e.param) newErrors[e.param] = e.msg || data.error || "Error de validación";
+          });
+          setErrors((prev) => ({ ...prev, ...newErrors }));
+          setFeedback({ type: "error", message: data.error || "Error de validación" });
+          return;
+        }
+
+        // Si no hay detalles, mostrar mensaje genérico o el mensaje del backend
+        setFeedback({ type: "error", message: (data && (data.error || data.message)) || "Error al registrar" });
+        return;
       }
 
-      setFeedback({
-        type: "success",
-        message: "Registro exitoso. Redirigiendo al login...",
-      });
+      setFeedback({ type: "success", message: "Registro exitoso. Redirigiendo al login...", });
       setTimeout(() => navigate("/login"), 1800);
     } catch (error) {
       setFeedback({ type: "error", message: error.message });
@@ -89,7 +99,7 @@ function Register() {
 
         </p>
 
-        <form className="register-form" onSubmit={handleSubmit}>
+        <form className="register-form" onSubmit={handleSubmit} noValidate>
           <label className="register-field">
             <span>Nombre de usuario</span>
             <input

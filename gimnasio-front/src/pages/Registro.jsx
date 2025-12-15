@@ -19,16 +19,67 @@ function Registro() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Validación en tiempo real sin bloquear la entrada:
+    if (name === "dni") {
+      if (value && /\D/.test(value)) {
+        setErrors((prev) => ({ ...prev, dni: "No se permiten letras o símbolos" }));
+      } else if (value && value.trim().length > 0 && value.trim().length < 8) {
+        setErrors((prev) => ({ ...prev, dni: "Mínimo 8 dígitos" }));
+      } else {
+        setErrors((prev) => ({ ...prev, dni: null }));
+      }
+      return;
+    }
+
+    if (name === "telefono") {
+      if (value && /\D/.test(value)) {
+        setErrors((prev) => ({ ...prev, telefono: "No se permiten letras o símbolos" }));
+      } else if (value && value.trim().length > 0 && value.trim().length < 8) {
+        setErrors((prev) => ({ ...prev, telefono: "Mínimo 8 dígitos" }));
+      } else {
+        setErrors((prev) => ({ ...prev, telefono: null }));
+      }
+      return;
+    }
+
+    if (name === "nombre") {
+      if (value && /\d/.test(value)) {
+        setErrors((prev) => ({ ...prev, nombre: "No se permiten números" }));
+      } else if (value && value.trim().length > 0 && value.trim().length < 4) {
+        setErrors((prev) => ({ ...prev, nombre: "Mínimo 4 letras" }));
+      } else {
+        setErrors((prev) => ({ ...prev, nombre: null }));
+      }
+      return;
+    }
+
+    if (name === "apellido") {
+      if (value && /\d/.test(value)) {
+        setErrors((prev) => ({ ...prev, apellido: "No se permiten números" }));
+      } else if (value && value.trim().length > 0 && value.trim().length < 5) {
+        setErrors((prev) => ({ ...prev, apellido: "Mínimo 5 letras" }));
+      } else {
+        setErrors((prev) => ({ ...prev, apellido: null }));
+      }
+      return;
+    }
+
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
   };
 
   const validateForm = () => {
     const newErrors = {};
     if (!formData.dni.trim()) newErrors.dni = "El DNI es obligatorio";
+    else if (!/^\d+$/.test(formData.dni)) newErrors.dni = "No se permiten letras o símbolos en el DNI";
+    
     if (!formData.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
+    else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(formData.nombre)) newErrors.nombre = "No se permiten números en el nombre";
     if (!formData.apellido.trim()) newErrors.apellido = "El apellido es obligatorio";
+    else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(formData.apellido)) newErrors.apellido = "No se permiten números en el apellido";
     if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
     if (!formData.telefono.trim()) newErrors.telefono = "El teléfono es obligatorio";
+    else if (!/^\d+$/.test(formData.telefono)) newErrors.telefono = "No se permiten letras o símbolos en el teléfono";
     if (!formData.plan) newErrors.plan = "Selecciona un plan";
 
     setErrors(newErrors);
@@ -82,7 +133,7 @@ function Registro() {
           Carga los datos del nuevo socio para habilitar su acceso al gimnasio.
         </p>
 
-        <form className="registrar-form" onSubmit={handleSubmit}>
+        <form className="registrar-form" onSubmit={handleSubmit} noValidate>
           <label>
             <span>DNI</span>
             <input
@@ -92,6 +143,8 @@ function Registro() {
               onChange={handleChange}
               placeholder="Ingresa tu DNI"
               className={errors.dni ? "input-error" : ""}
+              inputMode="numeric"
+              pattern="\\d*"
             />
             {errors.dni && <span className="error-msg">{errors.dni}</span>}
           </label>
@@ -105,6 +158,7 @@ function Registro() {
               onChange={handleChange}
               placeholder="Ingresa tu nombre"
               className={errors.nombre ? "input-error" : ""}
+              pattern="[A-Za-zÀ-ÿ\s]+"
             />
             {errors.nombre && <span className="error-msg">{errors.nombre}</span>}
           </label>
@@ -144,6 +198,8 @@ function Registro() {
               onChange={handleChange}
               placeholder="Ingresa tu teléfono"
               className={errors.telefono ? "input-error" : ""}
+              inputMode="numeric"
+              pattern="\\d*"
             />
             {errors.telefono && <span className="error-msg">{errors.telefono}</span>}
           </label>
