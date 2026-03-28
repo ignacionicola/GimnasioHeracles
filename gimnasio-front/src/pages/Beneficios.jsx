@@ -268,12 +268,12 @@ function Beneficios() {
               />
             </Form.Group>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="outline-secondary" onClick={() => setMostrarModal(false)} disabled={guardando}>Cancelar</Button>
-            <Button variant="primary" type="submit" disabled={guardando} className="btn-crear">
-              {guardando ? (beneficioEditando ? "Guardando..." : "Creando...") : (beneficioEditando ? "Guardar Cambios" : "Crear Beneficio")}
-            </Button>
-          </Modal.Footer>
+         <Modal.Footer className="d-flex justify-content-between gap-2">
+          <Button variant="danger" size="sm" onClick={() => setMostrarModal(false)} disabled={guardando}>Cancelar</Button>
+          <Button variant="primary" type="submit" disabled={guardando} className="btn-crear">
+           {guardando ? (beneficioEditando ? "Guardando..." : "Creando...") : (beneficioEditando ? "Guardar Cambios" : "Crear Beneficio")}
+        </Button>
+        </Modal.Footer>
         </Form>
       </Modal>
     </div>

@@ -123,7 +123,6 @@ color: var(--text-light);
 }
 
 .btn-crear:hover {
-  transform: translateY(-1px);
   filter: brightness(1.1);
 }
 
