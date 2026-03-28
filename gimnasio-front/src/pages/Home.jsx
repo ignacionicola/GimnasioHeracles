@@ -41,7 +41,8 @@ function Home() {
     <div className="dashboard-page">
       <header className="dashboard-hero">
         <BrandHeader subtitle="Panel interno • Personal autorizado" />
-        <h1>Hola {user?.correoUsuario}!</h1>
+        {console.log(user)}
+        <h1>Hola {user?.nombre}!</h1>
         <p>
           Desde aquí podés registrar socios, controlar asistencias y gestionar
           beneficios.

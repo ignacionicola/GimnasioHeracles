@@ -42,12 +42,13 @@ async function login(req, res) {
         token: jwt.generarToken({
           id: admin.id,
           email: admin.correoUsuario,
-          rol: admin.rol
+          rol: admin.rol,
         }),
         user: {
           id: admin.id,
           correoUsuario: admin.correoUsuario,
-          rol: admin.rol
+          rol: admin.rol,
+          nombre: admin.nombreUsuario
         }
       };
         console.log(resultado.token);
