@@ -21,11 +21,11 @@ const specs = swaggerJsdoc(options);
 // Cargar modelos
 require("./src/models/UsuarioSistema");
 require("./src/models/Beneficios");
-
+require("./src/models/Cuota");
 const authRoutes = require("./src/routes/authRoutes");
 const usuarioRouter = require("./src/routes/usuarioRouter");
 const beneficiosRouter = require("./src/routes/beneficioRouter");
-
+const cuotaRouter = require("./src/routes/cuotaRouter");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -42,9 +42,9 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/usuarios", usuarioRouter);
 app.use("/api/beneficios", beneficiosRouter);
-
+app.use("/api/cuotas", cuotaRouter);
 // Sincronizar base de datos
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
   });
