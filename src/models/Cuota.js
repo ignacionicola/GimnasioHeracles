@@ -34,7 +34,6 @@ const Cuota = sequelize.define(
     },
         idSocio: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
             model: "usuarios",
             key: "dni",
