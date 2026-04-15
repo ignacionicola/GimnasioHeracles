@@ -90,6 +90,14 @@ function Home() {
             </button>
           </article>
 
+           <article className="action-card">
+            <h3>Gestion de Usuarios</h3>
+            <p>Abre el panel para gestionar usuarios y su pagos.</p>
+            <button onClick={() => navigate("/usuarios")}>
+              Abrir panel
+            </button>
+          </article>
+
           <article className="action-card">
             <h3>Gestión de Beneficios</h3>
             <p>Administra los beneficios disponibles para los socios.</p>
