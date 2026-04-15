@@ -4,7 +4,20 @@ const cookieParser = require("cookie-parser");
 const sequelize = require("./src/config/db");
 const responseHandler = require("./src/middlewares/responseHandler");
 const errorHandler = require("./src/middlewares/errorHandler");
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'GimnasioHeracles API',
+      version: '1.0.0',
+    },
+  },
+  apis: ['./src/routes/*.js'], // donde están tus rutas
+};
+const specs = swaggerJsdoc(options);
 // Cargar modelos
 require("./src/models/UsuarioSistema");
 require("./src/models/Beneficios");
@@ -39,5 +52,7 @@ sequelize.sync({ alter: true }).then(() => {
 
 // Manejo de errores
 app.use(errorHandler);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 module.exports = app;
