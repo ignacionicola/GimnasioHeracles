@@ -1,0 +1,1 @@
+const Cuota = require("../models/Cuota");
