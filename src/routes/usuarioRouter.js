@@ -10,26 +10,19 @@ const { login, logout } = require("../controllers/authController");
 const router = express.Router();
 
 // GET - Obtener todos los usuarios
-/**
- *@swagger
- * /api/usuarios/socios:
- *   get:
- *    summary: Obtener todos los usuarios
- *    tags: [Usuarios]
- *    responses:
- *     200:
- *       description: Lista de usuarios
- * */
-router.get("/socios", getUsuarios);
+
+// #swagger.path = '/api/usuarios/socios'
+router.get("/socios",/* #swagger.tags=['Usuarios'] */ getUsuarios);
 
 // POST - Registrar socio (cliente)
-router.post("/register", validarSocio, register);
+
+router.post("/register",/* #swagger.tags=['Usuarios'] */ validarSocio, register);
 
 // POST - Login / Logout (unificados)
-router.post("/login", login);
-router.post("/logout", logout);
+router.post("/login",/* #swagger.tags=['Usuarios'] */ login); 
+router.post("/logout",/* #swagger.tags=['Usuarios'] */ logout);
 
 // POST - Registrar usuario del sistema (admin / recepcionista)
-router.post("/system/register", validarUsuarioNuevo, createSystemUser);
+router.post("/system/register",/* #swagger.tags=['Usuarios'] */ validarUsuarioNuevo, createSystemUser);
 
 module.exports = router;
