@@ -2,7 +2,7 @@ const Usuario = require("../models/usuario");
 const UsuarioSistema = require("../models/UsuarioSistema");
 const { generarSalt, hashPassword } = require("../service/hashService");
 const { body, validationResult } = require("express-validator");
-
+const Cuota = require("../models/cuota");
 // GET - Obtener todos los usuarios
 async function getUsuarios(req, res) {
   try {
@@ -33,6 +33,7 @@ async function register(req, res) {
       puntos,
       plan,
     });
+    const cuota=await Cuota.create({ idSocio: usuario.dni, monto: 1000 });
     res.status(201).json({ message: "Usuario registrado", user: usuario });
   } catch (error) {
     res.status(400).json({ error: error.message });
