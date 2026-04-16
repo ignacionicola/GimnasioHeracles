@@ -13,6 +13,9 @@
   "paths": {
     "/api/auth/login": {
       "post": {
+        "tags": [
+          "Authentication"
+        ],
         "description": "",
         "parameters": [
           {
@@ -46,6 +49,9 @@
     },
     "/api/auth/logout": {
       "post": {
+        "tags": [
+          "Authentication"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -211,6 +217,9 @@
     },
     "/api/beneficios/admin": {
       "post": {
+        "tags": [
+          "Beneficios"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -221,6 +230,9 @@
     },
     "/api/beneficios/admin/desactivar/{id}": {
       "put": {
+        "tags": [
+          "Beneficios"
+        ],
         "description": "",
         "parameters": [
           {
@@ -239,6 +251,9 @@
     },
     "/api/beneficios/admin/activar/{id}": {
       "put": {
+        "tags": [
+          "Beneficios"
+        ],
         "description": "",
         "parameters": [
           {
@@ -257,6 +272,9 @@
     },
     "/api/beneficios/admin/listar": {
       "get": {
+        "tags": [
+          "Beneficios"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -267,6 +285,9 @@
     },
     "/api/beneficios/admin/listar/{id}": {
       "get": {
+        "tags": [
+          "Beneficios"
+        ],
         "description": "",
         "parameters": [
           {
@@ -285,6 +306,9 @@
     },
     "/api/beneficios/admin/modificar/{id}": {
       "put": {
+        "tags": [
+          "Beneficios"
+        ],
         "description": "",
         "parameters": [
           {
@@ -321,6 +345,9 @@
     },
     "/api/cuotas/": {
       "post": {
+        "tags": [
+          "Cuotas"
+        ],
         "description": "",
         "parameters": [
           {
@@ -346,6 +373,9 @@
         }
       },
       "get": {
+        "tags": [
+          "Cuotas"
+        ],
         "description": "",
         "responses": {
           "default": {
@@ -356,6 +386,9 @@
     },
     "/api/cuotas/{idCuota}/estado": {
       "put": {
+        "tags": [
+          "Cuotas"
+        ],
         "description": "",
         "parameters": [
           {

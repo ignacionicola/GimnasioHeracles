@@ -7,12 +7,12 @@ const {
 } = require("../controllers/cuotasController");
 
 // POST - Crear nueva cuota
-router.post("/", crearCuota);
+router.post("/",/* #swagger.tags=['Cuotas'] */ crearCuota);
 
 // GET - Obtener todas las cuotas
-router.get("/", obtenerCuotas);
+router.get("/",/* #swagger.tags=['Cuotas'] */ obtenerCuotas);
 
 // PUT - Actualizar estado de una cuota
-router.put("/:idCuota/estado", actualizarEstadoCuota);
+router.put("/:idCuota/estado", /* #swagger.tags=['Cuotas'] */ actualizarEstadoCuota);
 
 module.exports = router;
