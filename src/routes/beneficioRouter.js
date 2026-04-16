@@ -11,23 +11,26 @@ const {
 } = require("../controllers/beneficiosController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const rolesMiddleware = require("../middlewares/rolesMiddleware");
-router.post("/admin", authMiddleware, rolesMiddleware,validarBeneficio, crearBeneficio);
+router.post("/admin", /* #swagger.tags=['Beneficios'] */ authMiddleware, rolesMiddleware,validarBeneficio, crearBeneficio);
 router.put(
   "/admin/desactivar/:id",
+  /* #swagger.tags=['Beneficios'] */
   authMiddleware,
   rolesMiddleware,
   desactivarBeneficio
 );
 router.put(
   "/admin/activar/:id",
+  /* #swagger.tags=['Beneficios'] */
   authMiddleware,
   rolesMiddleware,
   activarBeneficio
 );
-router.get("/admin/listar", authMiddleware, listarBeneficios);
-router.get("/admin/listar/:id", listarBeneficioUnico);
+router.get("/admin/listar", /* #swagger.tags=['Beneficios'] */ authMiddleware, listarBeneficios);
+router.get("/admin/listar/:id", /* #swagger.tags=['Beneficios'] */ listarBeneficioUnico);
 router.put(
   "/admin/modificar/:id",
+  /* #swagger.tags=['Beneficios'] */
   authMiddleware,
   rolesMiddleware,
   validarBeneficio,
