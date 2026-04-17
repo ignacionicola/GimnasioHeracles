@@ -37,9 +37,20 @@ async function actualizarEstadoCuota(req, res) {
   }
 }
 
+async function obtenerCuotasPorSocio(req, res) {
+  const { idSocio } = req.params;
+  try {
+    const cuotas = await Cuota.findAll({ where: { idSocio } });
+    res.success(cuotas);
+  } catch (error) {
+    res.error(error.message, 500);
+  }
+}
+
 
 module.exports = {
   crearCuota,
   obtenerCuotas,
     actualizarEstadoCuota
+    , obtenerCuotasPorSocio
 };

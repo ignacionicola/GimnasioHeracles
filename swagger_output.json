@@ -416,6 +416,27 @@
           }
         }
       }
+    },
+    "/api/cuotas/socio/{idSocio}": {
+      "get": {
+        "tags": [
+          "Cuotas"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "idSocio",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
     }
   }
 }
