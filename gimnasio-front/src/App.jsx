@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"; 
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 /* Rutas de la aplicación */
 import IngresoSocio from "./pages/IngresoSocio";
 import Login from "./pages/Login";
@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Registro from "./pages/Registro";
 import PanelSocio from "./pages/PanelSocio";
 import Beneficios from "./pages/Beneficios";
+import GestionUsuario from "./pages/GestionUsuario";
 
 function App() {
   return (
@@ -20,10 +21,10 @@ function App() {
         <Route path="/registro" element={<Registro />} />
         <Route path="/home" element={<Home />} />
         <Route path="/beneficios" element={<Beneficios />} />
+        <Route path="/usuario" element={<GestionUsuario />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
-

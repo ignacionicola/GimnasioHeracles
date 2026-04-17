@@ -72,29 +72,18 @@ function Home() {
             <p>Atajos para gestionar socios, beneficios y asistencias.</p>
           </div>
         </div>
-
         <div className="action-grid">
-          <article className="action-card">
-            <h3>Registrar nuevo socio</h3>
-            <p>Carga DNI, datos personales y habilita el acceso.</p>
-            <button onClick={() => navigate("/registro")}>
-              Ir a Registro
-            </button>
-          </article>
-
           <article className="action-card">
             <h3>Panel de socios</h3>
             <p>Abre el panel para socios y registra asistencias.</p>
-            <button onClick={() => navigate("/ingreso")}>
-              Abrir panel
-            </button>
+            <button onClick={() => navigate("/ingreso")}>Abrir panel</button>
           </article>
 
-           <article className="action-card">
+          <article className="action-card">
             <h3>Gestion de Usuarios</h3>
             <p>Abre el panel para gestionar usuarios y su pagos.</p>
-            <button onClick={() => navigate("/usuarios")}>
-              Abrir panel
+            <button onClick={() => navigate("/usuario")}>
+              Gestionar Usuarios
             </button>
           </article>
 

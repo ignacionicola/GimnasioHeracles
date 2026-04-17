@@ -6,7 +6,7 @@ export const useBeneficiosStore = create((set) => ({
   addOrUpdateBeneficio: (item) =>
     set((state) => {
       const incomingId = item.idBeneficio || item.id;
-      // 1) exact id match
+      // Primero verificamos si ya existe un beneficio con el mismo ID
       const exists = state.beneficios.find((x) => (x.idBeneficio || x.id) === incomingId);
       if (exists) {
         return {
@@ -20,15 +20,15 @@ export const useBeneficiosStore = create((set) => ({
         const likelyIndex = state.beneficios.findIndex((b) => b._temp && b.nombreBeneficio === item.nombreBeneficio && Number(b.precioPuntos) === Number(item.precioPuntos));
         if (likelyIndex !== -1) {
           const next = [...state.beneficios];
-          // replace the optimistic item with the real one
+          
           next[likelyIndex] = { ...next[likelyIndex], ...item };
-          // ensure we remove the _temp flag
+          
           delete next[likelyIndex]._temp;
           return { beneficios: next };
         }
       }
 
-      // default: prepend
+    
       return { beneficios: [item, ...state.beneficios] };
     }),
 }));

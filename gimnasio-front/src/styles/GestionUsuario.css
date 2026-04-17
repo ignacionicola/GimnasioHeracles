@@ -1,0 +1,65 @@
+.dashboard-hero.gestion-hero {
+    padding: 1.5rem;
+  max-width: 900px;
+  max-height: 400px;
+  margin: 0 auto;
+}
+
+.dashboard-hero.gestion-hero h1 {
+  font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+}
+
+.dashboard-hero.gestion-hero p {
+  max-width: 520px;
+  margin: 0.8rem auto 1.5rem;
+}
+
+.usuario-section {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.usuario-table-container {
+  overflow-x: auto;
+}
+
+.usuario-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.usuario-table th,
+.usuario-table td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+}
+
+.usuario-table th {
+  text-align: left;
+  font-weight: 600;
+  color: #cbd5f5;
+}
+
+.usuario-actions button {
+  margin: 0.2rem 0.2rem 0 0;
+  padding: 0.5rem 0.8rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #2563eb;
+  color: white;
+}
+.ghost-btn {
+  margin-right: 20px;
+}
+.primary-btn {
+  margin-left: 20px;
+}
+.filtrodeusuarios-btn {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
