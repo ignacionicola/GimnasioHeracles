@@ -15,7 +15,7 @@ const Cuota = sequelize.define(
         defaultValue: DataTypes.NOW,
     },
     estado:{
-        type: DataTypes.ENUM("pagada", "pendiente","cancelada"),
+        type: DataTypes.ENUM("pagada", "vencida","cancelada"),
         allowNull: false,
         defaultValue: "pagada",
     },
@@ -33,7 +33,7 @@ const Cuota = sequelize.define(
         allowNull: false,
     },
         idSocio: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         references: {
             model: "usuarios",
             key: "dni",
