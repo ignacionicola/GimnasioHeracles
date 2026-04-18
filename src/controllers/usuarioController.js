@@ -15,6 +15,35 @@ async function getUsuarios(req, res) {
   }
 }
 
+// GET - Obtener usuarios activos
+async function getUsuariosActivos(req, res) {
+  try {
+    const usuarios = await Usuario.findAll({
+      where: { activo: true },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener usuarios activos" });
+  }
+}
+
+//PUT - Actualizar estado del usuario (activo/inactivo)
+async function actualizarEstadoUsuario(req, res) {
+  const { id } = req.params;
+  const { activo } = req.body;
+  try {    const usuario = await Usuario.findByPk(id);
+    if (!usuario) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+    await usuario.update({ activo });
+    res.json({ message: "Estado del usuario actualizado", user: usuario });
+  } catch (error) {
+    res.status(500).json({ error: "Error al actualizar estado del usuario" });
+  }
+}
+
+
 // POST - Registrar socio (cliente)
 async function register(req, res) {
   console.log("BODY:", req.body);
@@ -119,4 +148,6 @@ module.exports = {
   getUsuarios,
   validarUsuarioNuevo,
   validarSocio,
+  actualizarEstadoUsuario,
+  getUsuariosActivos
 };
