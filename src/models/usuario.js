@@ -9,6 +9,7 @@ const Usuario = sequelize.define("Usuario", {
   telefono: { type: DataTypes.STRING },
   puntos: { type: DataTypes.INTEGER, defaultValue: 0 },
   plan:{type: DataTypes.STRING, allowNull: false, defaultValue: "basico"},
+  activo: { type: DataTypes.BOOLEAN, defaultValue: true },
 }, {
   tableName: "usuarios"
 });
