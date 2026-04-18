@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import BrandHeader from "../components/BrandHeader";
 import "../styles/Home.css";
 
+
 function Home() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
