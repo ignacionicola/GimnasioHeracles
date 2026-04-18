@@ -51,6 +51,6 @@ async function obtenerCuotasPorSocio(req, res) {
 module.exports = {
   crearCuota,
   obtenerCuotas,
-    actualizarEstadoCuota
-    , obtenerCuotasPorSocio
+  actualizarEstadoCuota
+  ,obtenerCuotasPorSocio
 };
