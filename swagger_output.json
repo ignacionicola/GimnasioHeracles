@@ -1,0 +1,442 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "GimnasioHeracles API",
+    "version": "1.0.0",
+    "description": "API para la gestión de un gimnasio, incluyendo usuarios, beneficios y cuotas."
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dni": {
+                  "example": "any"
+                },
+                "nombreUsuario": {
+                  "example": "any"
+                },
+                "contrasenia": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/usuarios/socios": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/usuarios/register": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dni": {
+                  "example": "any"
+                },
+                "nombre": {
+                  "example": "any"
+                },
+                "apellido": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "telefono": {
+                  "example": "any"
+                },
+                "puntos": {
+                  "example": "any"
+                },
+                "plan": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/usuarios/login": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dni": {
+                  "example": "any"
+                },
+                "nombreUsuario": {
+                  "example": "any"
+                },
+                "contrasenia": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/usuarios/logout": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/usuarios/system/register": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombreUsuario": {
+                  "example": "any"
+                },
+                "contrasenia": {
+                  "example": "any"
+                },
+                "correoUsuario": {
+                  "example": "any"
+                },
+                "telefonoUsuario": {
+                  "example": "any"
+                },
+                "rol": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/beneficios/admin": {
+      "post": {
+        "tags": [
+          "Beneficios"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/beneficios/admin/desactivar/{id}": {
+      "put": {
+        "tags": [
+          "Beneficios"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/beneficios/admin/activar/{id}": {
+      "put": {
+        "tags": [
+          "Beneficios"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/beneficios/admin/listar": {
+      "get": {
+        "tags": [
+          "Beneficios"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/beneficios/admin/listar/{id}": {
+      "get": {
+        "tags": [
+          "Beneficios"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/beneficios/admin/modificar/{id}": {
+      "put": {
+        "tags": [
+          "Beneficios"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombreBeneficio": {
+                  "example": "any"
+                },
+                "descripcionBeneficio": {
+                  "example": "any"
+                },
+                "precioPuntos": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/cuotas/": {
+      "post": {
+        "tags": [
+          "Cuotas"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "idSocio": {
+                  "example": "any"
+                },
+                "monto": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Cuotas"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/cuotas/{idCuota}/estado": {
+      "put": {
+        "tags": [
+          "Cuotas"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "idCuota",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "estado": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/cuotas/socio/{idSocio}": {
+      "get": {
+        "tags": [
+          "Cuotas"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "idSocio",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    }
+  }
+}

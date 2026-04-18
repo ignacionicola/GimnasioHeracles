@@ -4,28 +4,17 @@ const cookieParser = require("cookie-parser");
 const sequelize = require("./src/config/db");
 const responseHandler = require("./src/middlewares/responseHandler");
 const errorHandler = require("./src/middlewares/errorHandler");
-const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger_output.json');
 
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'GimnasioHeracles API',
-      version: '1.0.0',
-    },
-  },
-  apis: ['./src/routes/*.js'], // donde están tus rutas
-};
-const specs = swaggerJsdoc(options);
 // Cargar modelos
 require("./src/models/UsuarioSistema");
 require("./src/models/Beneficios");
-
+require("./src/models/Cuota");
 const authRoutes = require("./src/routes/authRoutes");
 const usuarioRouter = require("./src/routes/usuarioRouter");
 const beneficiosRouter = require("./src/routes/beneficioRouter");
-
+const cuotaRouter = require("./src/routes/cuotaRouter");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -42,9 +31,9 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/usuarios", usuarioRouter);
 app.use("/api/beneficios", beneficiosRouter);
-
+app.use("/api/cuotas", cuotaRouter);
 // Sincronizar base de datos
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
   });
@@ -53,6 +42,6 @@ sequelize.sync({ alter: true }).then(() => {
 // Manejo de errores
 app.use(errorHandler);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 module.exports = app;
