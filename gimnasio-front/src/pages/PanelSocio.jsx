@@ -48,4 +48,3 @@ function PanelSocio() {
 }
 
 export default PanelSocio;
-

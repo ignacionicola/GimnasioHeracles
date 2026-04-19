@@ -63,7 +63,7 @@ function IngresoSocio() {
             <button
               className="secondary-btn"
               type="button"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/panel-socio")}
             >
               ← Volver al inicio
             </button>
