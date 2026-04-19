@@ -40,7 +40,9 @@ async function actualizarEstadoCuota(req, res) {
 async function obtenerCuotasPorSocio(req, res) {
   const { idSocio } = req.params;
   try {
-    const cuotas = await Cuota.findAll({ where: { idSocio } });
+    const cuotas = await Cuota.findAll({ where: { idSocio },
+    include:[{model: Usuario, attributes: ["dni", "nombre", "apellido"]}] ,
+  order:[['fechaPago', 'DESC']] });
     res.success(cuotas);
   } catch (error) {
     res.error(error.message, 500);

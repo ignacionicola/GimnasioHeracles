@@ -45,5 +45,6 @@ const Cuota = sequelize.define(
     timestamps: true,
   }
 );
-
+const Usuario = require("./usuario");
+Cuota.belongsTo(Usuario, { foreignKey: "idSocio", targetKey: "dni" });
 module.exports = Cuota;
