@@ -13,7 +13,4 @@ const Usuario = sequelize.define("Usuario", {
 }, {
   tableName: "usuarios"
 });
-Cuota = require("./Cuota");
-Usuario.hasMany(Cuota, { foreignKey: "idSocio", sourceKey: "dni" });
-
 module.exports = Usuario;

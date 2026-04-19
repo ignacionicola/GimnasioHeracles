@@ -1,5 +1,5 @@
 const Cuota = require("../models/Cuota");
-
+const Usuario = require("../models/usuario");
 async function crearCuota(req, res) {
   const { idSocio, monto } = req.body;
   if (!idSocio || !monto) {

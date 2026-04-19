@@ -34,6 +34,7 @@ const Cuota = sequelize.define(
     },
         idSocio: {
         type: DataTypes.STRING,
+        allowNull: false,
         references: {
             model: "usuarios",
             key: "dni",
@@ -45,6 +46,4 @@ const Cuota = sequelize.define(
     timestamps: true,
   }
 );
-const Usuario = require("./usuario");
-Cuota.belongsTo(Usuario, { foreignKey: "idSocio", targetKey: "dni" });
 module.exports = Cuota;
