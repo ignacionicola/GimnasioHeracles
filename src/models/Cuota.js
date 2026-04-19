@@ -34,6 +34,7 @@ const Cuota = sequelize.define(
     },
         idSocio: {
         type: DataTypes.STRING,
+        allowNull: false,
         references: {
             model: "usuarios",
             key: "dni",
@@ -45,5 +46,4 @@ const Cuota = sequelize.define(
     timestamps: true,
   }
 );
-
 module.exports = Cuota;

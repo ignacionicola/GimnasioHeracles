@@ -10,7 +10,9 @@ const swaggerFile = require('./swagger_output.json');
 // Cargar modelos
 require("./src/models/UsuarioSistema");
 require("./src/models/Beneficios");
+require("./src/models/usuario");
 require("./src/models/Cuota");
+require("./src/models/relaciones");
 const authRoutes = require("./src/routes/authRoutes");
 const usuarioRouter = require("./src/routes/usuarioRouter");
 const beneficiosRouter = require("./src/routes/beneficioRouter");
