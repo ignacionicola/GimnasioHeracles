@@ -13,9 +13,13 @@ async function crearCuota(req, res) {
   }
 }
 
-async function obtenerCuotas(req, res) {
+async function obtenerUltimaCuotaPorSocio(req, res) {
   try {
-    const cuotas = await Cuota.findAll();
+    const cuotas = await Cuota.findAll({
+      include:[{model: Usuario, attributes: ["dni", "nombre", "apellido"]}],
+      order:[['fechaPago', 'DESC']],
+      group:['idSocio']
+    });
     res.success(cuotas);
   } catch (error) {
     res.error(error.message, 500);
@@ -52,7 +56,7 @@ async function obtenerCuotasPorSocio(req, res) {
 
 module.exports = {
   crearCuota,
-  obtenerCuotas,
+  obtenerUltimaCuotaPorSocio,
   actualizarEstadoCuota
   ,obtenerCuotasPorSocio
 };
