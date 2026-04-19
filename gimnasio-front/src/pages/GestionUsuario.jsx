@@ -5,7 +5,11 @@ import BrandHeader from "../components/BrandHeader";
 import "../components/styles/beneficios.css";
 import "../styles/GestionUsuario.css";
 import { getUsuarios } from "../service/usuarioService";
-import { crearCuota, getCuotasPorSocio } from "../service/cuotaService";
+import {
+  crearCuota,
+  getCuotas,
+  getCuotasPorSocio,
+} from "../service/cuotaService";
 
 function GestionUsuario() {
   const navigate = useNavigate();
@@ -15,6 +19,11 @@ function GestionUsuario() {
   const [filtroEstado, setFiltroEstado] = useState("todos");
 
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+  const [mostrarModalPagos, setMostrarModalPagos] = useState(false);
+  const [pagos, setPagos] = useState([]);
+  const [cargandoPagos, setCargandoPagos] = useState(false);
+  const [errorPagos, setErrorPagos] = useState("");
+
   const [mostrarModalHistorial, setMostrarModalHistorial] = useState(false);
   const [cuotasHistorial, setCuotasHistorial] = useState([]);
   const [cargandoHistorial, setCargandoHistorial] = useState(false);
@@ -39,6 +48,22 @@ function GestionUsuario() {
       });
   }, [navigate]);
 
+  //funcion mostrar pagos
+  const handleMostrarPagos = async () => {
+    // solo maneja el modal
+    setMostrarModalPagos(true);
+    setErrorPagos("");
+    setCargandoPagos(true);
+    try {
+      const cuotas = await getCuotas();
+      setPagos(Array.isArray(cuotas) ? cuotas : cuotas?.data || []);
+    } catch (err) {
+      setErrorPagos(err.message || "Error al cargar pagos");
+    } finally {
+      setCargandoPagos(false);
+    }
+  };
+
   const visibleUsuarios = usuarios.filter((u) => {
     const texto = textoBusqueda.toLowerCase().trim();
     const coincideBusqueda =
@@ -50,7 +75,6 @@ function GestionUsuario() {
     if (!coincideBusqueda) return false;
     if (filtroEstado === "activos") return u.activo;
     if (filtroEstado === "inactivos") return !u.activo;
-    if (filtroEstado === "cancelados") return u.cancelado;
     return true;
   });
 
@@ -60,13 +84,11 @@ function GestionUsuario() {
     try {
       await crearCuota({
         idSocio: usuario.dni,
-        monto: 1000, // ahora fijo, después se puede cambiar por plan/monto dinámico
+        monto: 1000, // mockuado
       });
 
       setUsuarios((prev) =>
-        prev.map((u) =>
-          u.dni === usuario.dni ? { ...u, activo: true } : u
-        )
+        prev.map((u) => (u.dni === usuario.dni ? { ...u, activo: true } : u)),
       );
     } catch (err) {
       console.error("Error al registrar pago:", err);
@@ -108,8 +130,57 @@ function GestionUsuario() {
           <button className="primary-btn" onClick={() => navigate("/registro")}>
             Registrar socio
           </button>
+          <button className="primary-btn" onClick={() => handleMostrarPagos()}>
+            Mostrar Pagos
+          </button>
         </div>
       </header>
+
+      <Modal
+        show={mostrarModalPagos}
+        onHide={() => setMostrarModalPagos(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Pagos registrados</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {errorPagos && <div className="alert alert-danger">{errorPagos}</div>}
+
+          {cargandoPagos ? (
+            <div>Cargando pagos...</div>
+          ) : pagos.length === 0 ? (
+            <div>No hay pagos registrados</div>
+          ) : (
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>DNI</th>
+                  <th>Monto</th>
+                  <th>Fecha Pago</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pagos.map((pago) => (
+                  <tr key={pago.idCuota || pago.id}>
+                    <td>{pago.idCuota ?? pago.id}</td>
+                    <td>{pago.usuario?.nombre || "N/A"}</td>
+                    <td>{pago.usuario?.apellido || "N/A"}</td>
+                    <td>{pago.usuario?.dni || pago.idSocio}</td>
+                    <td>${Number(pago.monto).toFixed(2)}</td>
+                    <td>
+                      {new Date(pago.fechaPago).toLocaleDateString("es-AR")}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </Modal.Body>
+      </Modal>
 
       <section className="usuario-section">
         <div className="mb-4 row align-items-center">
@@ -147,14 +218,6 @@ function GestionUsuario() {
               checked={filtroEstado === "inactivos"}
               onChange={() => setFiltroEstado("inactivos")}
             />
-            <Form.Check
-              inline
-              label="Cancelados"
-              name="filtroEstado"
-              type="radio"
-              checked={filtroEstado === "cancelados"}
-              onChange={() => setFiltroEstado("cancelados")}
-            />
           </div>
         </div>
 
@@ -186,17 +249,20 @@ function GestionUsuario() {
                       }
                     >
                       {usuario.activo ? "Activo" : "Inactivo"}
-                      {usuario.cancelado && (
-                        <span className="status-cancelado">Cancelado</span>
-                      )}
                     </span>
                   </td>
-                  <td className="usuario-actions">
-                    <button onClick={() => abrirModalHistorial(usuario)}>
-                      Ver historial
+                  <td>
+                    <button
+                      className="btn-action"
+                      onClick={() => abrirModalHistorial(usuario)}
+                    >
+                      Ver Historial
                     </button>
-                    <button onClick={() => handleRegistrarPago(usuario)}>
-                      Registrar pago
+                    <button
+                      className="btn-actions"
+                      onClick={() => handleRegistrarPago(usuario)}
+                    >
+                      Registrar Pago
                     </button>
                   </td>
                 </tr>
@@ -232,7 +298,7 @@ function GestionUsuario() {
             <table className="table table-striped">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  {/* <th>ID</th> */}
                   <th>Monto</th>
                   <th>Estado</th>
                   <th>Fecha Pago</th>
@@ -242,7 +308,7 @@ function GestionUsuario() {
               <tbody>
                 {cuotasHistorial.map((cuota) => (
                   <tr key={cuota.idCuota}>
-                    <td>{cuota.idCuota}</td>
+                    {/* <td>{cuota.idCuota}</td> */}
                     <td>${cuota.monto}</td>
                     <td>{cuota.estado}</td>
                     <td>
@@ -250,7 +316,7 @@ function GestionUsuario() {
                     </td>
                     <td>
                       {new Date(cuota.fechaVencimiento).toLocaleDateString(
-                        "es-AR"
+                        "es-AR",
                       )}
                     </td>
                   </tr>
