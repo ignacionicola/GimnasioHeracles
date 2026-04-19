@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BrandHeader from "../components/BrandHeader";
 import "../styles/PanelSocio.css";
-import Beneficios from "./GestionUsuario";
 
 function PanelSocio() {
   const [usuario, setUsuario] = useState(null);
@@ -48,4 +47,4 @@ function PanelSocio() {
   );
 }
 
-export default Beneficios;
+export default PanelSocio;

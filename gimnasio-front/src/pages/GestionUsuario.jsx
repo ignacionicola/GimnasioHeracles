@@ -54,9 +54,19 @@ function GestionUsuario() {
     setMostrarModalPagos(true);
     setErrorPagos("");
     setCargandoPagos(true);
+
     try {
       const cuotas = await getCuotas();
-      setPagos(Array.isArray(cuotas) ? cuotas : cuotas?.data || []);
+      const pagosConSocio = (
+        Array.isArray(cuotas) ? cuotas : cuotas?.data || []
+      ).map((pago) => {
+        const socio = usuarios.find((u) => u.dni === pago.idSocio);
+        return {
+          ...pago,
+          socio,
+        };
+      });
+      setPagos(pagosConSocio);
     } catch (err) {
       setErrorPagos(err.message || "Error al cargar pagos");
     } finally {
@@ -167,9 +177,9 @@ function GestionUsuario() {
                 {pagos.map((pago) => (
                   <tr key={pago.idCuota || pago.id}>
                     <td>{pago.idCuota ?? pago.id}</td>
-                    <td>{pago.usuario?.nombre || "N/A"}</td>
-                    <td>{pago.usuario?.apellido || "N/A"}</td>
-                    <td>{pago.usuario?.dni || pago.idSocio}</td>
+                    <td>{pago.socio?.nombre}</td>
+                    <td>{pago.socio?.apellido}</td>
+                    <td>{pago.socio?.dni || pago.idSocio}</td>
                     <td>${Number(pago.monto).toFixed(2)}</td>
                     <td>
                       {new Date(pago.fechaPago).toLocaleDateString("es-AR")}
