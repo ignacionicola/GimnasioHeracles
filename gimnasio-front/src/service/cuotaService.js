@@ -30,6 +30,16 @@ export async function getCuotasPorSocio(idSocio) {
   return j?.data ?? j;
 }
 
+export async function obtenerUltimaCuotaPorSocio(idSocio) {
+  const res = await fetch(`${API_BASE}/socio/${idSocio}/ultima`, {
+    credentials: "include",
+  });
+  if (res.status === 204) return null;
+  const j = await res.json();
+  if (j && j.success === false) throw new Error(j.error || 'Error fetching ultima cuota por socio');
+  return j?.data ?? j;
+}
+
 export async function crearCuota(payload) {
   const res = await fetch(`${API_BASE}`, {
     method: "POST",

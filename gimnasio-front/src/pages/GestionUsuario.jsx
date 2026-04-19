@@ -50,7 +50,6 @@ function GestionUsuario() {
 
   //funcion mostrar pagos
   const handleMostrarPagos = async () => {
-    // solo maneja el modal
     setMostrarModalPagos(true);
     setErrorPagos("");
     setCargandoPagos(true);
@@ -60,7 +59,11 @@ function GestionUsuario() {
       const pagosConSocio = (
         Array.isArray(cuotas) ? cuotas : cuotas?.data || []
       ).map((pago) => {
-        const socio = usuarios.find((u) => u.dni === pago.idSocio);
+        const socio =
+          pago.Usuario ||
+          pago.usuario ||
+          usuarios.find((u) => String(u.dni) === String(pago.idSocio));
+
         return {
           ...pago,
           socio,
@@ -165,7 +168,7 @@ function GestionUsuario() {
             <table className="table table-striped">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th>Número Cuota</th>
                   <th>Nombre</th>
                   <th>Apellido</th>
                   <th>DNI</th>
@@ -175,11 +178,17 @@ function GestionUsuario() {
               </thead>
               <tbody>
                 {pagos.map((pago) => (
-                  <tr key={pago.idCuota || pago.id}>
+                  <tr key={pago.idCuota ?? pago.id}>
                     <td>{pago.idCuota ?? pago.id}</td>
-                    <td>{pago.socio?.nombre}</td>
-                    <td>{pago.socio?.apellido}</td>
-                    <td>{pago.socio?.dni || pago.idSocio}</td>
+                    <td>
+                      {pago.socio?.nombre || pago.Usuario?.nombre || "NA"}
+                    </td>
+                    <td>
+                      {pago.socio?.apellido || pago.Usuario?.apellido || "NA"}
+                    </td>
+                    <td>
+                      {pago.socio?.dni || pago.Usuario?.dni || pago.idSocio}
+                    </td>
                     <td>${Number(pago.monto).toFixed(2)}</td>
                     <td>
                       {new Date(pago.fechaPago).toLocaleDateString("es-AR")}
