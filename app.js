@@ -10,6 +10,7 @@ const swaggerFile = require('./swagger_output.json');
 // Cargar modelos
 require("./src/models/UsuarioSistema");
 require("./src/models/Beneficios");
+require("./src/models/Plan");
 require("./src/models/usuario");
 require("./src/models/Cuota");
 require("./src/models/relaciones");
@@ -17,6 +18,7 @@ const authRoutes = require("./src/routes/authRoutes");
 const usuarioRouter = require("./src/routes/usuarioRouter");
 const beneficiosRouter = require("./src/routes/beneficioRouter");
 const cuotaRouter = require("./src/routes/cuotaRouter");
+const planRouter = require("./src/routes/planRouter");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -34,6 +36,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/usuarios", usuarioRouter);
 app.use("/api/beneficios", beneficiosRouter);
 app.use("/api/cuotas", cuotaRouter);
+app.use("/api/planes", planRouter);
 // Sincronizar base de datos
 sequelize.sync().then(() => {
   app.listen(PORT, () => {
