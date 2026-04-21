@@ -180,8 +180,8 @@ function GestionUsuario() {
       
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Error al registrar socio");
+        /* pongo el msg que viene del backend */
+        throw new Error(data.error || data.message);
       }
 
       const nuevoSocio = data.usuario || data.nuevoUsuario || {...formData, activo: true};
@@ -201,6 +201,7 @@ function GestionUsuario() {
         plan: "",
       });
     } catch (error) {
+      /* aca debe aparecer el msg*/
       setFeedback({ type: "error", message: error.message });
     } finally {
       setLoading(false);
@@ -271,13 +272,13 @@ function GestionUsuario() {
         <p>Panel de control para gestionar usuarios y sus cuotas.</p>
 
         <div className="top-actions">
-          <button className="primary-btn" onClick={() => navigate("/home")}>
+          <button className="primary-btn2" onClick={() => navigate("/home")}>
             Volver al Home
           </button>
-          <button className="primary-btn" onClick={() => setMostrarModalRegistro(true)}>
+          <button className="primary-btn2" onClick={() => setMostrarModalRegistro(true)}>
             Registrar socio
           </button>
-          <button className="primary-btn" onClick={() => handleMostrarPagos()}>
+          <button className="primary-btn2" onClick={() => handleMostrarPagos()}>
             Mostrar Pagos
           </button>
         </div>

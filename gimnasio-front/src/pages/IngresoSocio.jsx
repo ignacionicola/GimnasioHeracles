@@ -80,7 +80,7 @@ function IngresoSocio() {
           variant="dumbbell"
           subtitle="Ingresa tu DNI para registrar asistencia"
         />
-
+ <div className="ingreso-content">
         <form className="ingreso-form" onSubmit={handleSubmit}>
           <label>
             <span>DNI</span>
@@ -116,6 +116,7 @@ function IngresoSocio() {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }
