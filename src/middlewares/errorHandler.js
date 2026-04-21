@@ -5,7 +5,7 @@ const errorHandler = (err, req, res, next) => {
     return res.error("Datos invalidos", 400, err.errors);
   }
 
-  if (err.code === 11000) {
+  if (err.name === "SequelizeUniqueConstraintError") {
     return res.error("El objeto ya existe", 409);
   }
 
