@@ -525,13 +525,13 @@ function GestionUsuario() {
                   </td>
                   <td>
                     <button
-                      className="btn-action"
+                      className="registrarpago"
                       onClick={() => abrirModalHistorial(usuario)}
                     >
                       Ver Historial
                     </button>
                     <button
-                      className="btn-actions"
+                      className="registrarpago"
                       onClick={() => handleRegistrarPago(usuario)}
                     >
                       Registrar Pago
