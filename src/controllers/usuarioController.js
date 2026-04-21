@@ -45,7 +45,7 @@ async function actualizarEstadoUsuario(req, res) {
 
 
 // POST - Registrar socio (cliente)
-async function register(req, res) {
+async function register(req, res,next) {
   console.log("BODY:", req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -65,7 +65,7 @@ async function register(req, res) {
     const cuota=await Cuota.create({ idSocio: usuario.dni, monto: 1000 });
     res.status(201).json({ message: "Usuario registrado", user: usuario });
   } catch (error) {
-    res.error("Error al registrar usuario", 500, error.message);
+    next(error);
   }
 }
 
