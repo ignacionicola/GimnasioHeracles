@@ -101,3 +101,27 @@
 .modal-pagos .modal-dialog {
   max-width: 600px;
 }
+.primary-btn2 {
+  border: none;
+  border-radius: 16px;
+  padding: 0.9rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+    margin-left: 20px;
+    
+
+  color: #fff;
+  background: linear-gradient(90deg, #5d5fef, #9c6bff);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary-btn2:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(92, 99, 255, 0.35);
+}
+
+.primary-btn2:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
