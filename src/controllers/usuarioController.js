@@ -65,7 +65,7 @@ async function register(req, res) {
     const cuota=await Cuota.create({ idSocio: usuario.dni, monto: 1000 });
     res.status(201).json({ message: "Usuario registrado", user: usuario });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.error("Error al registrar usuario", 500, error.message);
   }
 }
 
