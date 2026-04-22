@@ -183,7 +183,7 @@ function Planes() {
             <p>Administrá nombre, descripción y precio de cada plan.</p>
           </div>
           <Button className="btn-crear" onClick={() => abrirModal()}>
-            + Nuevo Plan
+             Crear Plan
           </Button>
         </div>
 
