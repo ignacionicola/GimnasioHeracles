@@ -39,24 +39,10 @@ async function actualizarPlan(req, res) {
     res.error(error.message, 500);
   }
 }
-// DELETE - Eliminar un plan, solo para probar
-async function eliminarPlan(req, res) {
-  const { id } = req.params;
-    try {
-    const plan = await Plan.findByPk(id);
-    if (!plan) {
-      return res.error("Plan no encontrado", 404);
-    }
-    await plan.destroy();
-    res.success({ message: "Plan eliminado correctamente" });
-  } catch (error) {
-    res.error(error.message, 500);
-  }
-}
+
 
 module.exports = {
   crearPlan,
   obtenerPlanes,
   actualizarPlan,
-  eliminarPlan
 };

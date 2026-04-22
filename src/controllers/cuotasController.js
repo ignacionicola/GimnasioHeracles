@@ -1,13 +1,17 @@
 const Cuota = require("../models/Cuota");
 const Usuario = require("../models/usuario");
 const { Op, literal } = require("sequelize");
-async function crearCuota(req, res) {
-  const { idSocio, monto } = req.body;
-  if (!idSocio || !monto) {
-    return res.error("Faltan campos obligatorios: idSocio y monto", 400);
-  }
+const Plan = require("../models/Plan");
+async function renovarCuota(req, res) {
+  const { idSocio, idPlan, metodoPago } = req.body;
   try {
-    const nuevaCuota = await Cuota.create({ idSocio, monto });
+    const plan = await Plan.findByPk(idPlan);
+    if (!plan) {
+      return res.error("Plan no encontrado", 404);
+    }
+    const monto = plan.precio;
+    const nombrePlan = plan.nombrePlan;
+    const nuevaCuota = await Cuota.create({ idSocio, monto, nombrePlan, metodoPago });
     res.success(nuevaCuota);
   } catch (error) {
     res.error(error.message, 500);
@@ -65,7 +69,7 @@ async function obtenerCuotasPorSocio(req, res) {
 }
 
 module.exports = {
-  crearCuota,
+  renovarCuota,
   obtenerUltimaCuotaPorSocio,
   actualizarEstadoCuota,
   obtenerCuotasPorSocio,

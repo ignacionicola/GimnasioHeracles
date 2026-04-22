@@ -1,24 +1,24 @@
-const Datatypes = require("sequelize");
+const {DataTypes} = require("sequelize");
 const sequelize = require("../config/db");
 
 const Plan = sequelize.define("Plan", {
   idPlan: {
-    type: Datatypes.INTEGER,
+    type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
     nombrePlan: {
-    type: Datatypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   descripcion:{
-    type: Datatypes.STRING,
+    type: DataTypes.STRING,
      allowNull: false,
   },
   precio: {
-    type: Datatypes.DECIMAL(10, 2),
+    type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
-  }
+  },
 }, {
   tableName: "Planes",
   timestamps: true,

@@ -11,7 +11,5 @@ router.get("/", /* #swagger.tags=['Planes'] */ obtenerPlanes);
 // PUT - Actualizar un plan existente
 router.put("/admin/:id", /* #swagger.tags=['Planes'] */ actualizarPlan);
 
-// DELETE - Eliminar un plan
-router.delete("/admin/:id", /* #swagger.tags=['Planes'] */ eliminarPlan);
 
 module.exports = router;
