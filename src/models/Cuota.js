@@ -9,41 +9,50 @@ const Cuota = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    fechaPago:{
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
+    fechaPago: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
-    estado:{
-        type: DataTypes.ENUM("pagada", "vencida","cancelada"),
-        allowNull: false,
-        defaultValue: "pagada",
+    estado: {
+      type: DataTypes.ENUM("pagada", "vencida", "cancelada"),
+      allowNull: false,
+      defaultValue: "pagada",
     },
-    fechaVencimiento:{
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: ()=>{
-            const fecha = new Date();
-            fecha.setDate(fecha.getDate() + 30); // Vencimiento a 30 días
-            return fecha;
-        },
+    fechaVencimiento: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: () => {
+        const fecha = new Date();
+        fecha.setDate(fecha.getDate() + 30); // Vencimiento a 30 días
+        return fecha;
+      },
     },
-        monto:{
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+    metodoPago:{
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-        idSocio: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        references: {
-            model: "usuarios",
-            key: "dni",
-        },
+    monto: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
     },
+    nombrePlan: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    idSocio: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      references: {
+        model: "usuarios",
+        key: "dni",
+      },
+    },
+   
   },
   {
     tableName: "Cuotas",
     timestamps: true,
-  }
+  },
 );
 module.exports = Cuota;

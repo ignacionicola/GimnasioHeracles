@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const {
-  crearCuota,
   obtenerUltimaCuotaPorSocio,
   actualizarEstadoCuota,
-  obtenerCuotasPorSocio
+  obtenerCuotasPorSocio,
+  renovarCuota
 } = require("../controllers/cuotasController");
 
 // POST - Crear nueva cuota
-router.post("/",/* #swagger.tags=['Cuotas'] */ crearCuota);
+router.post("/renovar",/* #swagger.tags=['Cuotas'] */ renovarCuota);
 
 // GET - Obtener ultima cuota por socio
 router.get("/",
@@ -19,5 +19,5 @@ router.get("/",
 // PUT - Actualizar estado de una cuota
 router.put("/:idCuota/estado", /* #swagger.tags=['Cuotas'] */ actualizarEstadoCuota);
 
-router.get("/socio/:idSocio", /* #swagger.tags=['Cuotas'] */ obtenerCuotasPorSocio);
+router.get("/:idSocio", /* #swagger.tags=['Cuotas'] */ obtenerCuotasPorSocio);
 module.exports = router;
