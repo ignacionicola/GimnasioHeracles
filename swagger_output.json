@@ -123,7 +123,10 @@
                 "puntos": {
                   "example": "any"
                 },
-                "plan": {
+                "metodoPago": {
+                  "example": "any"
+                },
+                "idPlan": {
                   "example": "any"
                 }
               }
@@ -133,9 +136,6 @@
         "responses": {
           "201": {
             "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
           }
         }
       }
@@ -398,7 +398,7 @@
         }
       }
     },
-    "/api/cuotas/": {
+    "/api/cuotas/renovar": {
       "post": {
         "tags": [
           "Cuotas"
@@ -414,7 +414,10 @@
                 "idSocio": {
                   "example": "any"
                 },
-                "monto": {
+                "idPlan": {
+                  "example": "any"
+                },
+                "metodoPago": {
                   "example": "any"
                 }
               }
@@ -426,7 +429,9 @@
             "description": ""
           }
         }
-      },
+      }
+    },
+    "/api/cuotas/": {
       "get": {
         "tags": [
           "Cuotas"
@@ -472,7 +477,7 @@
         }
       }
     },
-    "/api/cuotas/socio/{idSocio}": {
+    "/api/cuotas/{idSocio}": {
       "get": {
         "tags": [
           "Cuotas"
@@ -569,25 +574,6 @@
                 }
               }
             }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Planes"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
           }
         ],
         "responses": {
