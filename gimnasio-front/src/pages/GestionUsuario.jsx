@@ -4,6 +4,7 @@ import { Form, Modal } from "react-bootstrap";
 import BrandHeader from "../components/BrandHeader";
 import "../components/styles/beneficios.css";
 import "../styles/GestionUsuario.css";
+import { obtenerPlanes } from "../service/planesService";
 import { getUsuarios } from "../service/usuarioService";
 import {
   crearCuota,
@@ -14,7 +15,7 @@ import {
 function GestionUsuario() {
   const navigate = useNavigate();
   const [usuarios, setUsuarios] = useState([]);
- 
+  const [planesDisponibles, setPlanesDisponibles] = useState([]);
   const [textoBusqueda, setTextoBusqueda] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("todos");
   const [mostrarModalRegistro, setMostrarModalRegistro] = useState(false);
@@ -60,7 +61,19 @@ function GestionUsuario() {
       .finally(() => {
         setLoading(false);
       });
+    cargarPlanes();
   }, [navigate]);
+
+  async function cargarPlanes() {
+    try {
+      const data = await obtenerPlanes();
+      const lista = Array.isArray(data) ? data : data?.data || data?.planes || [];
+      setPlanesDisponibles(lista || []);
+    } catch (err) {
+      console.error("Error al cargar planes:", err);
+      setPlanesDisponibles([]);
+    }
+  }
 
   //funcion mostrar pagos
   const handleMostrarPagos = async () => {
@@ -153,13 +166,32 @@ function GestionUsuario() {
     if (!formData.apellido.trim()) newErrors.apellido = "El apellido es obligatorio";
     else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(formData.apellido)) newErrors.apellido = "No se permiten números en el apellido";
     if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "El email no es válido";
+
     if (!formData.telefono.trim()) newErrors.telefono = "El teléfono es obligatorio";
     else if (!/^\d+$/.test(formData.telefono)) newErrors.telefono = "No se permiten letras o símbolos en el teléfono";
     if (!formData.plan) newErrors.plan = "Selecciona un plan";
-
+    else if (!formData.metodoPago) newErrors.metodoPago = "Selecciona un método de pago";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+
+  const normalizar = (txt = "") =>
+    txt
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toLowerCase();
+  const obtenerIdPlanPorNombre = async (nombrePlan) => {
+    const planes = await obtenerPlanes();
+    const lista = Array.isArray(planes) ? planes : planes?.data || [];
+    const planEncontrado = lista.find(
+      (p) => normalizar(p.nombrePlan) === normalizar(nombrePlan)
+    );
+    return planEncontrado?.idPlan ?? null;
+  };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -168,13 +200,26 @@ function GestionUsuario() {
     setFeedback({ type: "", message: "" });
     setLoading(true);
 
-    try {
-      const response = await fetch("http://localhost:3000/api/usuarios/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
+   
+  try {
+    const idPlan = await obtenerIdPlanPorNombre(formData.plan);
+    if (!idPlan) throw new Error("No se encontró el plan seleccionado");
+    const payload = {
+      dni: formData.dni,
+      nombre: formData.nombre,
+      apellido: formData.apellido,
+      email: formData.email,
+      telefono: formData.telefono,
+      idPlan,
+      metodoPago: "",
+    };
+
+    const response = await fetch("http://localhost:3000/api/usuarios/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    });
 
       const data = await response.json();
       
@@ -184,8 +229,9 @@ function GestionUsuario() {
         throw new Error(data.error || data.message);
       }
 
-      const nuevoSocio = data.usuario || data.nuevoUsuario || {...formData, activo: true};
+      const nuevoSocio = data.user || { ...payload, plan: formData.plan, activo: true };
       setUsuarios((prev) => [...prev, nuevoSocio]);
+  
       
 
       setFeedback({
@@ -199,6 +245,7 @@ function GestionUsuario() {
         email: "",
         telefono: "",
         plan: "",
+        metodoPago: "",
       });
     } catch (error) {
       /* aca debe aparecer el msg*/
@@ -228,9 +275,16 @@ function GestionUsuario() {
     if (!usuario) return;
 
     try {
+
+      const idPlan = await obtenerIdPlanPorNombre(usuario.plan);
+      if (!idPlan) {
+        throw new Error("El socio no tiene un plan asignado");
+      }
+
       await crearCuota({
         idSocio: usuario.dni,
-        monto: 1000, // mockuado
+        idPlan,
+        metodoPago: "efectivo",
       });
 
       setUsuarios((prev) =>
@@ -238,6 +292,7 @@ function GestionUsuario() {
       );
     } catch (err) {
       console.error("Error al registrar pago:", err);
+      setFeedback({ type: "error", message: err.message });
     }
   };
 
@@ -365,20 +420,38 @@ function GestionUsuario() {
             />
             {errors.telefono && <span className="error-msg">{errors.telefono}</span>}
           </label>
+          <label>
+            <span>Método de pago</span>
+            <select
+              name="metodoPago"
+              value={formData.metodoPago}
+              onChange={handleChange}
+              className={errors.metodoPago ? "input-error" : ""}
+            >
+              <option value="efectivo">Efectivo</option>
+              <option value="tarjeta">Tarjeta</option>
+              <option value="transferencia">Transferencia</option>
+            </select>
+            {errors.metodoPago && <span className="error-msg">{errors.metodoPago}</span>}
+            
+
+          </label>
 
           <label className="plan-group">
             <span>Plan</span>
             <select
-              name="plan"
-              value={formData.plan}
-              onChange={handleChange}
-              className={errors.plan ? "input-error plan-select" : "plan-select"}
-            >
-              <option value="">-- Selecciona un plan --</option>
-              <option value="basico">Básico</option>
-              <option value="medio">Medio</option>
-              <option value="libre">Libre</option>
-            </select>
+  name="plan"
+  value={formData.plan}
+  onChange={handleChange}
+  className={errors.plan ? "input-error plan-select" : "plan-select"}
+>
+  <option value="">-- Selecciona un plan --</option>
+  {planesDisponibles.map((plan) => (
+    <option key={plan.idPlan} value={plan.nombrePlan}>
+      {plan.nombrePlan} - ${Number(plan.precio || 0).toFixed(2)}
+    </option>
+  ))}
+</select>
             {errors.plan && <span className="error-msg">{errors.plan}</span>}
           </label>
 
