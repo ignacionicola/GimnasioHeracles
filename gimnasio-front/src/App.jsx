@@ -8,12 +8,14 @@ import Registro from "./pages/Registro";
 import PanelSocio from "./pages/PanelSocio";
 import Beneficios from "./pages/Beneficios";
 import GestionUsuario from "./pages/GestionUsuario";
+import Planes from "./pages/Planes";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<IngresoSocio />} />
+        <Route path="/planes" element={<Planes />} />
         <Route path="/ingreso" element={<IngresoSocio />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

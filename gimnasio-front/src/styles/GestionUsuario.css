@@ -101,3 +101,53 @@
 .modal-pagos .modal-dialog {
   max-width: 600px;
 }
+.primary-btn2 {
+  border: none;
+  border-radius: 16px;
+  padding: 0.9rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+    margin-left: 20px;
+    
+
+  color: #fff;
+  background: linear-gradient(90deg, #5d5fef, #9c6bff);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary-btn2:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(92, 99, 255, 0.35);
+}
+
+.primary-btn2:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.registrarpago {
+  position: relative;
+  display: inline-block;
+  margin: 10px;
+  padding: 0.4rem 0.3rem;
+  text-align: center;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: #725AC1;
+  background: transparent;
+  cursor: pointer;
+  transition: ease-out 0.5s;
+  border: 2px solid #725AC1;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 0 #725AC1;
+}
+
+.registrarpago:hover {
+  color: white;
+  box-shadow: inset 0 -100px 0 0 #725AC1;
+}
+
+.registrarpago:active {
+  transform: scale(0.9);
+}

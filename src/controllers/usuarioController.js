@@ -3,6 +3,7 @@ const UsuarioSistema = require("../models/UsuarioSistema");
 const { generarSalt, hashPassword } = require("../service/hashService");
 const { body, validationResult } = require("express-validator");
 const Cuota = require("../models/cuota");
+const Plan = require("../models/Plan");
 // GET - Obtener todos los usuarios
 async function getUsuarios(req, res) {
   try {
@@ -45,14 +46,18 @@ async function actualizarEstadoUsuario(req, res) {
 
 
 // POST - Registrar socio (cliente)
-async function register(req, res) {
+async function register(req, res,next) {
   console.log("BODY:", req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.error("Datos invalidos", 400, errors.array());
   }
-  const { dni, nombre, apellido, email, telefono, puntos, plan } = req.body;
+  const { dni, nombre, apellido, email, telefono, puntos,metodoPago, idPlan } = req.body;
   try {
+  const plan= await Plan.findByPk(idPlan);
+  if (!plan) {
+    return res.error("Plan no encontrado", 404);
+  }
     const usuario = await Usuario.create({
       dni,
       nombre,
@@ -60,12 +65,12 @@ async function register(req, res) {
       email,
       telefono,
       puntos,
-      plan,
+      plan: plan.nombrePlan,
     });
-    const cuota=await Cuota.create({ idSocio: usuario.dni, monto: 1000 });
+    const cuota=await Cuota.create({ idSocio: usuario.dni,metodoPago, monto: plan.precio, nombrePlan: plan.nombrePlan });
     res.status(201).json({ message: "Usuario registrado", user: usuario });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 }
 
@@ -118,7 +123,6 @@ const validarSocio = [
     .withMessage("El email es requerido")
     .isEmail(),
   body("telefono").trim().notEmpty().withMessage("El telefono es requerido"),
-  body("plan").trim().notEmpty().withMessage("El plan es requerido"),
 ];
 const validarUsuarioNuevo = [
   body("nombreUsuario")
