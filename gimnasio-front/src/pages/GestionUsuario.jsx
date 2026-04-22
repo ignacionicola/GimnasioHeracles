@@ -19,7 +19,7 @@ function GestionUsuario() {
   const [textoBusqueda, setTextoBusqueda] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("todos");
   const [mostrarModalRegistro, setMostrarModalRegistro] = useState(false);
-    
+
   const [formData, setFormData] = useState({
     dni: "",
     nombre: "",
@@ -28,11 +28,9 @@ function GestionUsuario() {
     telefono: "",
     plan: "",
   });
- const [feedback, setFeedback] = useState({ type: "", message: "" });
-   const [loading, setLoading] = useState(true);
+  const [feedback, setFeedback] = useState({ type: "", message: "" });
+  const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
-
-
 
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [mostrarModalPagos, setMostrarModalPagos] = useState(false);
@@ -44,13 +42,13 @@ function GestionUsuario() {
   const [cargandoHistorial, setCargandoHistorial] = useState(false);
   const [errorHistorial, setErrorHistorial] = useState("");
 
-  const [mostrarModalSeleccionPago, setMostrarModalSeleccionPago] = useState(false);
-const [pagoTemporal, setPagoTemporal] = useState(
-  {idSocio: "",
-planNombre: "",
-metodoPago: "",
-}
-)
+  const [mostrarModalSeleccionPago, setMostrarModalSeleccionPago] =
+    useState(false);
+  const [pagoTemporal, setPagoTemporal] = useState({
+    idSocio: "",
+    planNombre: "",
+    metodoPago: "",
+  });
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -74,7 +72,9 @@ metodoPago: "",
   async function cargarPlanes() {
     try {
       const data = await obtenerPlanes();
-      const lista = Array.isArray(data) ? data : data?.data || data?.planes || [];
+      const lista = Array.isArray(data)
+        ? data
+        : data?.data || data?.planes || [];
       setPlanesDisponibles(lista || []);
     } catch (err) {
       console.error("Error al cargar planes:", err);
@@ -111,14 +111,17 @@ metodoPago: "",
     }
   };
 
-    const handleChange = (event) => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Validación en tiempo real sin bloquear la entrada:
     if (name === "dni") {
       if (value && /\D/.test(value)) {
-        setErrors((prev) => ({ ...prev, dni: "No se permiten letras o símbolos" }));
+        setErrors((prev) => ({
+          ...prev,
+          dni: "No se permiten letras o símbolos",
+        }));
       } else if (value && value.trim().length > 0 && value.trim().length < 8) {
         setErrors((prev) => ({ ...prev, dni: "Mínimo 8 dígitos" }));
       } else {
@@ -129,7 +132,10 @@ metodoPago: "",
 
     if (name === "telefono") {
       if (value && /\D/.test(value)) {
-        setErrors((prev) => ({ ...prev, telefono: "No se permiten letras o símbolos" }));
+        setErrors((prev) => ({
+          ...prev,
+          telefono: "No se permiten letras o símbolos",
+        }));
       } else if (value && value.trim().length > 0 && value.trim().length < 8) {
         setErrors((prev) => ({ ...prev, telefono: "Mínimo 8 dígitos" }));
       } else {
@@ -166,23 +172,30 @@ metodoPago: "",
   const validateForm = () => {
     const newErrors = {};
     if (!formData.dni.trim()) newErrors.dni = "El DNI es obligatorio";
-    else if (!/^\d+$/.test(formData.dni)) newErrors.dni = "No se permiten letras o símbolos en el DNI";
-    
-    if (!formData.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
-    else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(formData.nombre)) newErrors.nombre = "No se permiten números en el nombre";
-    if (!formData.apellido.trim()) newErrors.apellido = "El apellido es obligatorio";
-    else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(formData.apellido)) newErrors.apellido = "No se permiten números en el apellido";
-    if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "El email no es válido";
+    else if (!/^\d+$/.test(formData.dni))
+      newErrors.dni = "No se permiten letras o símbolos en el DNI";
 
-    if (!formData.telefono.trim()) newErrors.telefono = "El teléfono es obligatorio";
-    else if (!/^\d+$/.test(formData.telefono)) newErrors.telefono = "No se permiten letras o símbolos en el teléfono";
+    if (!formData.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
+    else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(formData.nombre))
+      newErrors.nombre = "No se permiten números en el nombre";
+    if (!formData.apellido.trim())
+      newErrors.apellido = "El apellido es obligatorio";
+    else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(formData.apellido))
+      newErrors.apellido = "No se permiten números en el apellido";
+    if (!formData.email.trim()) newErrors.email = "El email es obligatorio";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+      newErrors.email = "El email no es válido";
+
+    if (!formData.telefono.trim())
+      newErrors.telefono = "El teléfono es obligatorio";
+    else if (!/^\d+$/.test(formData.telefono))
+      newErrors.telefono = "No se permiten letras o símbolos en el teléfono";
     if (!formData.plan) newErrors.plan = "Selecciona un plan";
-    else if (!formData.metodoPago) newErrors.metodoPago = "Selecciona un método de pago";
+    if (!formData.metodoPago)      newErrors.metodoPago = "Selecciona un método de pago";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
 
   const normalizar = (txt = "") =>
     txt
@@ -194,11 +207,10 @@ metodoPago: "",
     const planes = await obtenerPlanes();
     const lista = Array.isArray(planes) ? planes : planes?.data || [];
     const planEncontrado = lista.find(
-      (p) => normalizar(p.nombrePlan) === normalizar(nombrePlan)
+      (p) => normalizar(p.nombrePlan) === normalizar(nombrePlan),
     );
     return planEncontrado?.idPlan ?? null;
   };
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -207,39 +219,42 @@ metodoPago: "",
     setFeedback({ type: "", message: "" });
     setLoading(true);
 
-   
-  try {
-    const idPlan = await obtenerIdPlanPorNombre(formData.plan);
-    if (!idPlan) throw new Error("No se encontró el plan seleccionado");
-    const payload = {
-      dni: formData.dni,
-      nombre: formData.nombre,
-      apellido: formData.apellido,
-      email: formData.email,
-      telefono: formData.telefono,
-      idPlan,
-      metodoPago: "",
-    };
+    try {
+      const idPlan = await obtenerIdPlanPorNombre(formData.plan);
+      if (!idPlan) throw new Error("No se encontró el plan seleccionado");
+      const payload = {
+        dni: formData.dni,
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        email: formData.email,
+        telefono: formData.telefono,
+        idPlan,
+        metodoPago: formData.metodoPago,
+      };
 
-    const response = await fetch("http://localhost:3000/api/usuarios/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(payload),
-    });
+      const response = await fetch(
+        "http://localhost:3000/api/usuarios/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(payload),
+        },
+      );
 
       const data = await response.json();
-      
 
       if (!response.ok) {
         /* pongo el msg que viene del backend */
         throw new Error(data.error || data.message);
       }
 
-      const nuevoSocio = data.user || { ...payload, plan: formData.plan, activo: true };
+      const nuevoSocio = data.user || {
+        ...payload,
+        plan: formData.plan,
+        activo: true,
+      };
       setUsuarios((prev) => [...prev, nuevoSocio]);
-  
-      
 
       setFeedback({
         type: "success",
@@ -261,8 +276,6 @@ metodoPago: "",
       setLoading(false);
     }
   };
-    
-
 
   const visibleUsuarios = usuarios.filter((u) => {
     const texto = textoBusqueda.toLowerCase().trim();
@@ -277,7 +290,7 @@ metodoPago: "",
     if (filtroEstado === "inactivos") return !u.activo;
     return true;
   });
-/*
+  /*
   const handleRegistrarPago = async (usuario) => {
     if (!usuario) return;
 
@@ -304,36 +317,38 @@ metodoPago: "",
   };
 */
 
-const handleRegistrarPago = (usuario) => {
-  if (!usuario) return;
-  setPagoTemporal({
-    idSocio: usuario.dni,
-    planNombre: usuario.plan || "",
-    metodoPago: ""
-  });
-  setMostrarModalSeleccionPago(true);
-};
-const confirmarRegistroPago = async () => {
-  try {
-    const idPlan = await obtenerIdPlanPorNombre(pagoTemporal.planNombre);
-    if (!idPlan) throw new Error("Plan no válido");
-
-    await crearCuota({
-      idSocio: pagoTemporal.idSocio,
-      idPlan: idPlan,
-      metodoPago: pagoTemporal.metodoPago,
+  const handleRegistrarPago = (usuario) => {
+    if (!usuario) return;
+    setPagoTemporal({
+      idSocio: usuario.dni,
+      planNombre: usuario.plan || "",
+      metodoPago: formData.metodoPago || "",
     });
+    setMostrarModalSeleccionPago(true);
+  };
+  const confirmarRegistroPago = async () => {
+    try {
+      const idPlan = await obtenerIdPlanPorNombre(pagoTemporal.planNombre);
+      if (!idPlan) throw new Error("Plan no válido");
 
-    setUsuarios((prev) =>
-      prev.map((u) => (u.dni === pagoTemporal.idSocio ? { ...u, activo: true } : u))
-    );
-    
-    setMostrarModalSeleccionPago(false);
-    setFeedback({ type: "success", message: "Pago registrado con éxito" });
-  } catch (err) {
-    setFeedback({ type: "error", message: err.message });
-  }
-};
+      await crearCuota({
+        idSocio: pagoTemporal.idSocio,
+        idPlan: idPlan,
+        metodoPago: pagoTemporal.metodoPago,
+      });
+
+      setUsuarios((prev) =>
+        prev.map((u) =>
+          u.dni === pagoTemporal.idSocio ? { ...u, activo: true } : u,
+        ),
+      );
+
+      setMostrarModalSeleccionPago(false);
+      setFeedback({ type: "success", message: "Pago registrado con éxito" });
+    } catch (err) {
+      setFeedback({ type: "error", message: err.message });
+    }
+  };
 
   const abrirModalHistorial = async (usuario) => {
     if (!usuario) return;
@@ -367,7 +382,10 @@ const confirmarRegistroPago = async () => {
           <button className="primary-btn2" onClick={() => navigate("/home")}>
             Volver al Home
           </button>
-          <button className="primary-btn2" onClick={() => setMostrarModalRegistro(true)}>
+          <button
+            className="primary-btn2"
+            onClick={() => setMostrarModalRegistro(true)}
+          >
             Registrar socio
           </button>
           <button className="primary-btn2" onClick={() => handleMostrarPagos()}>
@@ -376,150 +394,164 @@ const confirmarRegistroPago = async () => {
           <button className="primary-btn2" onClick={() => navigate("/planes")}>
             Gestionar Planes
           </button>
-
         </div>
       </header>
 
+      <Modal
+        show={mostrarModalRegistro}
+        onHide={() => setMostrarModalRegistro(false)}
+        centered
+        size="lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Registrar nuevo socio</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form className="registrar-form" onSubmit={handleSubmit} noValidate>
+            <label>
+              <span>DNI</span>
+              <input
+                type="text"
+                name="dni"
+                value={formData.dni}
+                onChange={handleChange}
+                placeholder="Ingresa tu DNI"
+                className={errors.dni ? "input-error" : ""}
+                inputMode="numeric"
+                pattern="\\d*"
+              />
+              {errors.dni && <span className="error-msg">{errors.dni}</span>}
+            </label>
 
-<Modal
-  show={mostrarModalRegistro}
-  onHide={() => setMostrarModalRegistro(false)}
-  centered
-  size="lg"
->
-  <Modal.Header closeButton>
-    <Modal.Title>Registrar nuevo socio</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
- <form className="registrar-form" onSubmit={handleSubmit} noValidate>
-          <label>
-            <span>DNI</span>
-            <input
-              type="text"
-              name="dni"
-              value={formData.dni}
-              onChange={handleChange}
-              placeholder="Ingresa tu DNI"
-              className={errors.dni ? "input-error" : ""}
-              inputMode="numeric"
-              pattern="\\d*"
-            />
-            {errors.dni && <span className="error-msg">{errors.dni}</span>}
-          </label>
+            <label>
+              <span>Nombre</span>
+              <input
+                type="text"
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleChange}
+                placeholder="Ingresa tu nombre"
+                className={errors.nombre ? "input-error" : ""}
+                pattern="[A-Za-zÀ-ÿ\s]+"
+              />
+              {errors.nombre && (
+                <span className="error-msg">{errors.nombre}</span>
+              )}
+            </label>
 
-          <label>
-            <span>Nombre</span>
-            <input
-              type="text"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleChange}
-              placeholder="Ingresa tu nombre"
-              className={errors.nombre ? "input-error" : ""}
-              pattern="[A-Za-zÀ-ÿ\s]+"
-            />
-            {errors.nombre && <span className="error-msg">{errors.nombre}</span>}
-          </label>
+            <label>
+              <span>Apellido</span>
+              <input
+                type="text"
+                name="apellido"
+                value={formData.apellido}
+                onChange={handleChange}
+                placeholder="Ingresa tu apellido"
+                className={errors.apellido ? "input-error" : ""}
+              />
+              {errors.apellido && (
+                <span className="error-msg">{errors.apellido}</span>
+              )}
+            </label>
 
-          <label>
-            <span>Apellido</span>
-            <input
-              type="text"
-              name="apellido"
-              value={formData.apellido}
-              onChange={handleChange}
-              placeholder="Ingresa tu apellido"
-              className={errors.apellido ? "input-error" : ""}
-            />
-            {errors.apellido && <span className="error-msg">{errors.apellido}</span>}
-          </label>
+            <label>
+              <span>Email</span>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Ingresa tu email"
+                className={errors.email ? "input-error" : ""}
+              />
+              {errors.email && (
+                <span className="error-msg">{errors.email}</span>
+              )}
+            </label>
 
-          <label>
-            <span>Email</span>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Ingresa tu email"
-              className={errors.email ? "input-error" : ""}
-            />
-            {errors.email && <span className="error-msg">{errors.email}</span>}
-          </label>
+            <label>
+              <span>Teléfono</span>
+              <input
+                type="tel"
+                name="telefono"
+                value={formData.telefono}
+                onChange={handleChange}
+                placeholder="Ingresa tu teléfono"
+                className={errors.telefono ? "input-error" : ""}
+                inputMode="numeric"
+                pattern="\\d*"
+              />
+              {errors.telefono && (
+                <span className="error-msg">{errors.telefono}</span>
+              )}
+            </label>
 
-          <label>
-            <span>Teléfono</span>
-            <input
-              type="tel"
-              name="telefono"
-              value={formData.telefono}
-              onChange={handleChange}
-              placeholder="Ingresa tu teléfono"
-              className={errors.telefono ? "input-error" : ""}
-              inputMode="numeric"
-              pattern="\\d*"
-            />
-            {errors.telefono && <span className="error-msg">{errors.telefono}</span>}
-          </label>
-          <label>
-            <span>Método de pago</span>
-            <select
-              name="metodoPago"
-              value={formData.metodoPago}
-              onChange={handleChange}
-                className={errors.metodoPago ? "input-error metodo-select" : "metodo-select"}
+            <label className="plan-group">
+              <span>Método de pago</span>
+              <select
+                name="metodoPago"
+                value={formData.metodoPago}
+                onChange={handleChange}
+                className={
+                  errors.metodoPago ? "input-error  plan-select" : "plan-select"
+                }
+              >
+                <option value="0" disabled selected>
+                  -- Metodo de Pagos --
+                </option>
+                <option value="efectivo">Efectivo</option>
+                <option value="tarjeta">Tarjeta</option>
+                <option value="transferencia">Transferencia</option>
+              </select>
+              {errors.metodoPago && (
+                <span className="error-msg">{errors.metodoPago}</span>
+              )}
+            </label>
 
-            >
-              <option value="efectivo">Efectivo</option>
-              <option value="tarjeta">Tarjeta</option>
-              <option value="transferencia">Transferencia</option>
-            </select>
-            {errors.metodoPago && <span className="error-msg">{errors.metodoPago}</span>}
-            
+            <label className="plan-group">
+              <span>Plan</span>
+              <select
+                name="plan"
+                value={formData.plan}
+                onChange={handleChange}
+                className={
+                  errors.plan ? "input-error plan-select" : "plan-select"
+                }
+              >
+                <option value="" disabled selected
+                >-- Selecciona un plan --</option>
+                {planesDisponibles.map((plan) => (
+                  <option key={plan.idPlan} value={plan.nombrePlan}>
+                    {plan.nombrePlan} - ${Number(plan.precio || 0).toFixed(2)}
+                  </option>
+                ))}
+              </select>
+              {errors.plan && <span className="error-msg">{errors.plan}</span>}
+            </label>
 
-          </label>
+            {feedback.message && (
+              <div className={`registrar-alert ${feedback.type}`}>
+                {feedback.message}
+              </div>
+            )}
 
-          <label className="plan-group">
-            <span>Plan</span>
-            <select
-  name="plan"
-  value={formData.plan}
-  onChange={handleChange}
-  className={errors.plan ? "input-error plan-select" : "plan-select"}
->
-  <option value="">-- Selecciona un plan --</option>
-  {planesDisponibles.map((plan) => (
-    <option key={plan.idPlan} value={plan.nombrePlan}>
-      {plan.nombrePlan} - ${Number(plan.precio || 0).toFixed(2)}
-    </option>
-  ))}
-</select>
-            {errors.plan && <span className="error-msg">{errors.plan}</span>}
-          </label>
+            <Modal.Footer>
+              <button type="submit" className="primary-btn" disabled={loading}>
+                {loading ? "Registrando..." : "Registrar Socio"}
+              </button>
+            </Modal.Footer>
+          </form>
+        </Modal.Body>
+      </Modal>
 
-          {feedback.message && (
-            <div className={`registrar-alert ${feedback.type}`}>
-              {feedback.message}
-            </div>
-          )}
-
-      <Modal.Footer>
-           <button type="submit" className="primary-btn" disabled={loading}>
-            {loading ? "Registrando..." : "Registrar Socio"}
-          </button>
-    </Modal.Footer>
-    </form>
-  </Modal.Body>
-</Modal>
-
-
-      <Modal className="modal-pagos"
+      <Modal
+        className="modal-pagos"
         show={mostrarModalPagos}
         onHide={() => setMostrarModalPagos(false)}
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title >Pagos registrados</Modal.Title>
+          <Modal.Title>Pagos registrados</Modal.Title>
         </Modal.Header>
         <Modal.Body className="modal-body-pagos">
           {errorPagos && <div className="alert alert-danger">{errorPagos}</div>}
@@ -595,7 +627,6 @@ const confirmarRegistroPago = async () => {
               type="radio"
               checked={filtroEstado === "activos"}
               onChange={() => setFiltroEstado("activos")}
-              
             />
             <Form.Check
               inline
@@ -631,15 +662,15 @@ const confirmarRegistroPago = async () => {
                   <td>{usuario.plan}</td>
                   <td>
                     <span
-                       
                       className={
                         usuario.activo ? "status-active" : "status-inactive"
-                        }
-                        style={usuario.activo ? { color: "green" } : { color: "red" }}
+                      }
+                      style={
+                        usuario.activo ? { color: "green" } : { color: "red" }
+                      }
                     >
                       {usuario.activo ? "Activo" : "Inactivo"}
                     </span>
-
                   </td>
                   <td>
                     <button
@@ -661,67 +692,81 @@ const confirmarRegistroPago = async () => {
           </table>
         </div>
       </section>
-<Modal
- show={mostrarModalSeleccionPago}
- onHide={() => setMostrarModalSeleccionPago(false)}
- centered
- size="lg"
->
-<Modal.Header closeButton>
-  <Modal.Title>Registrar Pago - Socio {pagoTemporal.idSocio} </Modal.Title>
-</Modal.Header>
-
-<Modal.Body>
-  <form>
-    <Form.Group className="mb-3">
-      <Form.Label>Confirmar Plan</Form.Label>
-      <FormSelect
-        value={pagoTemporal.planNombre}
-        onChange={(e) =>
-          setPagoTemporal((prev) => ({ ...prev, planNombre: e.target.value }))
-        }
+      <Modal
+        show={mostrarModalSeleccionPago}
+        onHide={() => setMostrarModalSeleccionPago(false)}
+        centered
+        size="lg"
       >
-        <option value="" disabled selected>-- Selecciona un plan --</option>
-        {planesDisponibles.map((plan) => (
-        
-          <option key={plan.idPlan} value={plan.nombrePlan}>
-            {plan.nombrePlan} - ${Number(plan.precio || 0).toFixed(2)}
-          </option>
-        ))}
-      </FormSelect>
-      {errors.plan && <span className="error-msg">{errors.plan}</span>}
-    </Form.Group>
-    <Form.Group className="mb-3">
-      <Form.Label>Seleccionar método de pago</Form.Label>
-      <FormSelect
-        value={pagoTemporal.metodoPago}
-        onChange={(e) =>
-          setPagoTemporal((prev) => ({ ...prev, metodoPago: e.target.value }))
-        }
-      >
-        <option value="" disabled selected>-- Metodo de Pagos --</option>
-        <option value="efectivo">Efectivo</option>
-        <option value="tarjeta">Tarjeta</option>
-        <option value="transferencia">Transferencia</option>
-      </FormSelect>
-      {errors.metodoPago && <span className="error-msg">{errors.metodoPago}</span>}
-    </Form.Group>
-    
-    <Form.Group className="mb-3">
-    
-    </Form.Group>
-  </form>
-</Modal.Body>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Registrar Pago - Socio {pagoTemporal.idSocio}{" "}
+          </Modal.Title>
+        </Modal.Header>
 
-<Modal.Footer>
-  <Button variant="secondary" onClick={() => setMostrarModalSeleccionPago(false)}>
-    Cancelar
-  </Button>
-  <Button variant="primary" onClick={confirmarRegistroPago}>
-     Confirmar
-  </Button>
-</Modal.Footer>
-</Modal>
+        <Modal.Body>
+          <form>
+            <Form.Group className="mb-3">
+              <Form.Label>Confirmar Plan</Form.Label>
+              <FormSelect
+                value={pagoTemporal.planNombre}
+                onChange={(e) =>
+                  setPagoTemporal((prev) => ({
+                    ...prev,
+                    planNombre: e.target.value,
+                  }))
+                }
+              >
+                <option value="" disabled selected>
+                  -- Selecciona un plan --
+                </option>
+                {planesDisponibles.map((plan) => (
+                  <option key={plan.idPlan} value={plan.nombrePlan}>
+                    {plan.nombrePlan} - ${Number(plan.precio || 0).toFixed(2)}
+                  </option>
+                ))}
+              </FormSelect>
+              {errors.plan && <span className="error-msg">{errors.plan}</span>}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Seleccionar método de pago</Form.Label>
+              <FormSelect
+                value={pagoTemporal.metodoPago}
+                onChange={(e) =>
+                  setPagoTemporal((prev) => ({
+                    ...prev,
+                    metodoPago: e.target.value,
+                  }))
+                }
+              >
+                <option value="" disabled selected>
+                  -- Metodo de Pagos --
+                </option>
+                <option value="efectivo">Efectivo</option>
+                <option value="tarjeta">Tarjeta</option>
+                <option value="transferencia">Transferencia</option>
+              </FormSelect>
+              {errors.metodoPago && (
+                <span className="error-msg">{errors.metodoPago}</span>
+              )}
+            </Form.Group>
+
+            <Form.Group className="mb-3"></Form.Group>
+          </form>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setMostrarModalSeleccionPago(false)}
+          >
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={confirmarRegistroPago}>
+            Confirmar
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Modal
         show={mostrarModalHistorial}
@@ -752,8 +797,8 @@ const confirmarRegistroPago = async () => {
                   {/* <th>ID</th> */}
                   <th>Monto</th>
                   <th>Estado</th>
-                   <th>Metodo de Pago</th>
-                  <th>Fecha Pago</th>                  
+                  <th>Metodo de Pago</th>
+                  <th>Fecha Pago</th>
                   <th>Vencimiento</th>
                 </tr>
               </thead>
@@ -761,11 +806,10 @@ const confirmarRegistroPago = async () => {
                 {cuotasHistorial.map((cuota) => (
                   <tr key={cuota.idCuota}>
                     {/* <td>{cuota.idCuota}</td> */}
-                    <td>${cuota.monto}</td>              
-                    <td>{cuota.estado}</td>  
-                    <td>{cuota.metodoPago}</td>  
-                    
-                
+                    <td>${cuota.monto}</td>
+                    <td>{cuota.estado}</td>
+                    <td>{cuota.metodoPago}</td>
+
                     <td>
                       {new Date(cuota.fechaPago).toLocaleDateString("es-AR")}
                     </td>
@@ -788,9 +832,6 @@ const confirmarRegistroPago = async () => {
           >
             Cerrar
           </button>
-
-          
-
         </Modal.Footer>
       </Modal>
     </div>
