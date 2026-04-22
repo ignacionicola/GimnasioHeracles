@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Modal } from "react-bootstrap";
+import { Form, FormSelect, Modal, Button } from "react-bootstrap";
 import BrandHeader from "../components/BrandHeader";
 import "../components/styles/beneficios.css";
 import "../styles/GestionUsuario.css";
@@ -19,7 +19,7 @@ function GestionUsuario() {
   const [textoBusqueda, setTextoBusqueda] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("todos");
   const [mostrarModalRegistro, setMostrarModalRegistro] = useState(false);
-
+    
   const [formData, setFormData] = useState({
     dni: "",
     nombre: "",
@@ -39,11 +39,18 @@ function GestionUsuario() {
   const [pagos, setPagos] = useState([]);
   const [cargandoPagos, setCargandoPagos] = useState(false);
   const [errorPagos, setErrorPagos] = useState("");
-
   const [mostrarModalHistorial, setMostrarModalHistorial] = useState(false);
   const [cuotasHistorial, setCuotasHistorial] = useState([]);
   const [cargandoHistorial, setCargandoHistorial] = useState(false);
   const [errorHistorial, setErrorHistorial] = useState("");
+
+  const [mostrarModalSeleccionPago, setMostrarModalSeleccionPago] = useState(false);
+const [pagoTemporal, setPagoTemporal] = useState(
+  {idSocio: "",
+planNombre: "",
+metodoPago: "",
+}
+)
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -270,7 +277,7 @@ function GestionUsuario() {
     if (filtroEstado === "inactivos") return !u.activo;
     return true;
   });
-
+/*
   const handleRegistrarPago = async (usuario) => {
     if (!usuario) return;
 
@@ -295,8 +302,38 @@ function GestionUsuario() {
       setFeedback({ type: "error", message: err.message });
     }
   };
+*/
 
+const handleRegistrarPago = (usuario) => {
+  if (!usuario) return;
+  setPagoTemporal({
+    idSocio: usuario.dni,
+    planNombre: usuario.plan || "",
+    metodoPago: ""
+  });
+  setMostrarModalSeleccionPago(true);
+};
+const confirmarRegistroPago = async () => {
+  try {
+    const idPlan = await obtenerIdPlanPorNombre(pagoTemporal.planNombre);
+    if (!idPlan) throw new Error("Plan no válido");
 
+    await crearCuota({
+      idSocio: pagoTemporal.idSocio,
+      idPlan: idPlan,
+      metodoPago: pagoTemporal.metodoPago,
+    });
+
+    setUsuarios((prev) =>
+      prev.map((u) => (u.dni === pagoTemporal.idSocio ? { ...u, activo: true } : u))
+    );
+    
+    setMostrarModalSeleccionPago(false);
+    setFeedback({ type: "success", message: "Pago registrado con éxito" });
+  } catch (err) {
+    setFeedback({ type: "error", message: err.message });
+  }
+};
 
   const abrirModalHistorial = async (usuario) => {
     if (!usuario) return;
@@ -430,7 +467,8 @@ function GestionUsuario() {
               name="metodoPago"
               value={formData.metodoPago}
               onChange={handleChange}
-              className={errors.metodoPago ? "input-error" : ""}
+                className={errors.metodoPago ? "input-error metodo-select" : "metodo-select"}
+
             >
               <option value="efectivo">Efectivo</option>
               <option value="tarjeta">Tarjeta</option>
@@ -498,6 +536,7 @@ function GestionUsuario() {
                   <th>Nombre</th>
                   <th>Apellido</th>
                   <th>DNI</th>
+                  <th>Metodo de Pago</th>
                   <th>Monto</th>
                   <th>Fecha Pago</th>
                 </tr>
@@ -515,6 +554,8 @@ function GestionUsuario() {
                     <td>
                       {pago.socio?.dni || pago.Usuario?.dni || pago.idSocio}
                     </td>
+                    <td>{pago.metodoPago || "NA"}</td>
+
                     <td>${Number(pago.monto).toFixed(2)}</td>
                     <td>
                       {new Date(pago.fechaPago).toLocaleDateString("es-AR")}
@@ -620,6 +661,67 @@ function GestionUsuario() {
           </table>
         </div>
       </section>
+<Modal
+ show={mostrarModalSeleccionPago}
+ onHide={() => setMostrarModalSeleccionPago(false)}
+ centered
+ size="lg"
+>
+<Modal.Header closeButton>
+  <Modal.Title>Registrar Pago - Socio {pagoTemporal.idSocio} </Modal.Title>
+</Modal.Header>
+
+<Modal.Body>
+  <form>
+    <Form.Group className="mb-3">
+      <Form.Label>Confirmar Plan</Form.Label>
+      <FormSelect
+        value={pagoTemporal.planNombre}
+        onChange={(e) =>
+          setPagoTemporal((prev) => ({ ...prev, planNombre: e.target.value }))
+        }
+      >
+        <option value="" disabled selected>-- Selecciona un plan --</option>
+        {planesDisponibles.map((plan) => (
+        
+          <option key={plan.idPlan} value={plan.nombrePlan}>
+            {plan.nombrePlan} - ${Number(plan.precio || 0).toFixed(2)}
+          </option>
+        ))}
+      </FormSelect>
+      {errors.plan && <span className="error-msg">{errors.plan}</span>}
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Form.Label>Seleccionar método de pago</Form.Label>
+      <FormSelect
+        value={pagoTemporal.metodoPago}
+        onChange={(e) =>
+          setPagoTemporal((prev) => ({ ...prev, metodoPago: e.target.value }))
+        }
+      >
+        <option value="" disabled selected>-- Metodo de Pagos --</option>
+        <option value="efectivo">Efectivo</option>
+        <option value="tarjeta">Tarjeta</option>
+        <option value="transferencia">Transferencia</option>
+      </FormSelect>
+      {errors.metodoPago && <span className="error-msg">{errors.metodoPago}</span>}
+    </Form.Group>
+    
+    <Form.Group className="mb-3">
+    
+    </Form.Group>
+  </form>
+</Modal.Body>
+
+<Modal.Footer>
+  <Button variant="secondary" onClick={() => setMostrarModalSeleccionPago(false)}>
+    Cancelar
+  </Button>
+  <Button variant="primary" onClick={confirmarRegistroPago}>
+     Confirmar
+  </Button>
+</Modal.Footer>
+</Modal>
 
       <Modal
         show={mostrarModalHistorial}
@@ -650,7 +752,8 @@ function GestionUsuario() {
                   {/* <th>ID</th> */}
                   <th>Monto</th>
                   <th>Estado</th>
-                  <th>Fecha Pago</th>
+                   <th>Metodo de Pago</th>
+                  <th>Fecha Pago</th>                  
                   <th>Vencimiento</th>
                 </tr>
               </thead>
@@ -658,8 +761,11 @@ function GestionUsuario() {
                 {cuotasHistorial.map((cuota) => (
                   <tr key={cuota.idCuota}>
                     {/* <td>{cuota.idCuota}</td> */}
-                    <td>${cuota.monto}</td>
-                    <td>{cuota.estado}</td>
+                    <td>${cuota.monto}</td>              
+                    <td>{cuota.estado}</td>  
+                    <td>{cuota.metodoPago}</td>  
+                    
+                
                     <td>
                       {new Date(cuota.fechaPago).toLocaleDateString("es-AR")}
                     </td>
