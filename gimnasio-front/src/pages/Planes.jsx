@@ -167,6 +167,13 @@ function Planes() {
         <BrandHeader subtitle="Gestión de Planes" />
         <h1>Planes del Gimnasio</h1>
         <p>Panel de control para crear y editar los planes disponibles.</p>
+        
+        {// ir a gestion de usuarios
+        } <Button variant="primary" className="primary-btn6" onClick={() => window.history.back()}>
+          Volver a Gestión de Usuarios
+        </Button>
+        
+
       </header>
 
       <section className="dashboard-section">

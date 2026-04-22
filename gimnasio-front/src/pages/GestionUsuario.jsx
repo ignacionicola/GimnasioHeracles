@@ -336,6 +336,10 @@ function GestionUsuario() {
           <button className="primary-btn2" onClick={() => handleMostrarPagos()}>
             Mostrar Pagos
           </button>
+          <button className="primary-btn2" onClick={() => navigate("/planes")}>
+            Gestionar Planes
+          </button>
+
         </div>
       </header>
 
