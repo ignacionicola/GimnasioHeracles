@@ -326,7 +326,20 @@ function GestionUsuario() {
     });
     setMostrarModalSeleccionPago(true);
   };
+
+  
   const confirmarRegistroPago = async () => {
+
+const eroresConfirmarPago = {};
+    if (!pagoTemporal.planNombre) eroresConfirmarPago.plan = "Selecciona un plan";
+    if (!pagoTemporal.metodoPago) eroresConfirmarPago.metodoPago = "Selecciona un método de pago";
+
+    if (Object.keys(eroresConfirmarPago).length > 0) {
+      setErrors(eroresConfirmarPago);
+      return;
+    }    
+
+
     try {
       const idPlan = await obtenerIdPlanPorNombre(pagoTemporal.planNombre);
       if (!idPlan) throw new Error("Plan no válido");
@@ -335,7 +348,11 @@ function GestionUsuario() {
         idSocio: pagoTemporal.idSocio,
         idPlan: idPlan,
         metodoPago: pagoTemporal.metodoPago,
+
+
       });
+      
+      
 
       setUsuarios((prev) =>
         prev.map((u) =>
@@ -344,6 +361,7 @@ function GestionUsuario() {
       );
 
       setMostrarModalSeleccionPago(false);
+      setErrors({});
       setFeedback({ type: "success", message: "Pago registrado con éxito" });
     } catch (err) {
       setFeedback({ type: "error", message: err.message });
@@ -356,6 +374,8 @@ function GestionUsuario() {
     setUsuarioSeleccionado(usuario);
     setErrorHistorial("");
     setCuotasHistorial([]);
+    
+
     setMostrarModalHistorial(true);
     setCargandoHistorial(true);
 
@@ -496,12 +516,12 @@ function GestionUsuario() {
                   errors.metodoPago ? "input-error  plan-select" : "plan-select"
                 }
               >
-                <option value="0" disabled selected>
+                <option value="" disabled selected>
                   -- Metodo de Pagos --
                 </option>
-                <option value="efectivo">Efectivo</option>
-                <option value="tarjeta">Tarjeta</option>
-                <option value="transferencia">Transferencia</option>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta">Tarjeta</option>
+                <option value="Transferencia">Transferencia</option>
               </select>
               {errors.metodoPago && (
                 <span className="error-msg">{errors.metodoPago}</span>
@@ -545,10 +565,10 @@ function GestionUsuario() {
       </Modal>
 
       <Modal
-        className="modal-pagos"
         show={mostrarModalPagos}
         onHide={() => setMostrarModalPagos(false)}
         centered
+        size="xl"
       >
         <Modal.Header closeButton>
           <Modal.Title>Pagos registrados</Modal.Title>
@@ -568,8 +588,8 @@ function GestionUsuario() {
                   <th>Nombre</th>
                   <th>Apellido</th>
                   <th>DNI</th>
-                  <th>Metodo de Pago</th>
-                  <th>Monto</th>
+                  <th>Plan</th>
+                  <th>Metodo de Pago</th>            
                   <th>Fecha Pago</th>
                 </tr>
               </thead>
@@ -647,7 +667,6 @@ function GestionUsuario() {
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Email</th>
-                <th>Plan</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>
@@ -659,7 +678,6 @@ function GestionUsuario() {
                   <td>{usuario.nombre}</td>
                   <td>{usuario.apellido}</td>
                   <td>{usuario.email}</td>
-                  <td>{usuario.plan}</td>
                   <td>
                     <span
                       className={
@@ -674,13 +692,14 @@ function GestionUsuario() {
                   </td>
                   <td>
                     <button
-                      className="registrarpago"
+                      className="btn-historial"
                       onClick={() => abrirModalHistorial(usuario)}
                     >
-                      Ver Historial
+                    <i class="bi bi-clock-history"></i> Historial
+                      
                     </button>
                     <button
-                      className="registrarpago"
+                      className="btn-pago"
                       onClick={() => handleRegistrarPago(usuario)}
                     >
                       Registrar Pago
@@ -696,7 +715,7 @@ function GestionUsuario() {
         show={mostrarModalSeleccionPago}
         onHide={() => setMostrarModalSeleccionPago(false)}
         centered
-        size="lg"
+        size="xl"
       >
         <Modal.Header closeButton>
           <Modal.Title>
@@ -716,6 +735,7 @@ function GestionUsuario() {
                     planNombre: e.target.value,
                   }))
                 }
+                className={errors.plan ? "input-error" : ""}
               >
                 <option value="" disabled selected>
                   -- Selecciona un plan --
@@ -738,13 +758,14 @@ function GestionUsuario() {
                     metodoPago: e.target.value,
                   }))
                 }
+                className={errors.metodoPago ? "input-error" : ""}
               >
                 <option value="" disabled selected>
                   -- Metodo de Pagos --
                 </option>
-                <option value="efectivo">Efectivo</option>
-                <option value="tarjeta">Tarjeta</option>
-                <option value="transferencia">Transferencia</option>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta">Tarjeta</option>
+                <option value="Transferencia">Transferencia</option>
               </FormSelect>
               {errors.metodoPago && (
                 <span className="error-msg">{errors.metodoPago}</span>
@@ -797,6 +818,7 @@ function GestionUsuario() {
                   {/* <th>ID</th> */}
                   <th>Monto</th>
                   <th>Estado</th>
+                  <th>Plan</th>
                   <th>Metodo de Pago</th>
                   <th>Fecha Pago</th>
                   <th>Vencimiento</th>
@@ -808,6 +830,7 @@ function GestionUsuario() {
                     {/* <td>{cuota.idCuota}</td> */}
                     <td>${cuota.monto}</td>
                     <td>{cuota.estado}</td>
+                    <td>{cuota.nombrePlan}</td>
                     <td>{cuota.metodoPago}</td>
 
                     <td>

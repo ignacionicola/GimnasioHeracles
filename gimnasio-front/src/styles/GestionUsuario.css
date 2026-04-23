@@ -107,15 +107,13 @@
   padding: 0.9rem 1.2rem;
   font-size: 1rem;
   font-weight: 700;
-    margin-left: 20px;
-    
-
+  margin-left: 20px;
   color: #fff;
-  background: linear-gradient(90deg, #5d5fef, #9c6bff);
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+background: linear-gradient(135deg, #7b5cff, #a855f7);
+box-shadow: 0 0 15px rgba(123, 92, 255, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
 
+}
 .primary-btn2:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 8px 24px rgba(92, 99, 255, 0.35);
@@ -125,6 +123,7 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+  
 .registrarpago {
   position: relative;
   display: inline-block;
@@ -150,4 +149,37 @@
 
 .registrarpago:active {
   transform: scale(0.9);
+}
+.btn-historial {
+ background: rgba(255,255,255,0.1);
+border: 1px solid rgba(255,255,255,0.2);
+color: #fff;
+  backdrop-filter: blur(5px);
+  padding: 8px 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-historial:hover {
+  transform: translateY(-2px);
+  background: #202428;
+  border-color: #6366f1; 
+}
+.btn-pago {
+ background: linear-gradient(135deg, #323244 0%, #8a38d6 100%);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  margin: 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  transition: transform 0.2s;
+  
+}
+
+.btn-pago:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
 }
