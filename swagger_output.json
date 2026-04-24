@@ -76,6 +76,19 @@
         }
       }
     },
+    "/api/usuarios/socios/cuota": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "Obtiene la última cuota pagada por cada socio, incluyendo información del socio.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/usuarios/socios/activos": {
       "get": {
         "tags": [
@@ -424,19 +437,6 @@
             }
           }
         ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/cuotas/": {
-      "get": {
-        "tags": [
-          "Cuotas"
-        ],
-        "description": "Obtiene la última cuota pagada por cada socio, incluyendo información del socio.",
         "responses": {
           "default": {
             "description": ""
