@@ -15,6 +15,9 @@ import {
   getCuotasPorSocio,
 } from "../service/cuotaService";
 
+
+
+
 function GestionUsuario() {
   const navigate = useNavigate();
   const [usuarios, setUsuarios] = useState([]);
@@ -734,7 +737,7 @@ const eroresConfirmarPago = {};
             : "N/A"}
         </td>
 
-                  <td>
+         <td>
                     <span
                       className={
                         usuario.activo ? "status-active" : "status-inactive"
@@ -747,17 +750,34 @@ const eroresConfirmarPago = {};
                       {usuario.activo ? "Activo" : "Inactivo"}
                     </span>
                   </td>
+                  
+                  <td>
+  {ultimaCuota ? (
+    <span className={`badge-status status-${ultimaCuota.estado.toLowerCase()}`}>
+      {ultimaCuota.estado} 
+    </span>
+  ) : (
+    <span className="badge-status status-cancelada">
+      Sin Cuota
+    </span>
+  )}
+</td> 
+
+                {/*
+                  </td>
                   <td>
                     <span
                       className={
-                        ultimaCuota ? "badge-pagada" : "badge-inactiva"
+                        ultimaCuota ? "badge-pagada" : "badge-inactiva  badge-cancelada"
                       }
                       
                     
                     >
-                      {ultimaCuota ? "Pagada" : "No Pagada"}
+                      {ultimaCuota ? "Pagada" : "vencida" || "cancelada"}
                     </span>
-                  </td>
+                  </td>*/}
+
+
                   <td className="acciones-td">
  
                     <button

@@ -267,3 +267,37 @@ padding: 8px 4px !important;
   scrollbar-width: thin; 
   scrollbar-color: #555 #1a1c24;
 }
+.badge-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  min-width: 90px;
+}
+
+
+.status-pagada {
+  background-color: rgba(34, 197, 94, 0.2); 
+  color: #22c55e; 
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  
+
+  
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+  font-weight: 800;
+
+}
+
+.status-vencida {
+  background-color: #fff5f5;
+  color: #c9c612;
+  border: 1px solid #feb2b2;
+}
+
+.status-cancelada {
+  background-color: #edf2f7;
+  color: #da0b0b;
+  border: 1px solid #e2e8f0;
+}
