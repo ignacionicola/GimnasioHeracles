@@ -5,6 +5,8 @@ import BrandHeader from "../components/BrandHeader";
 import "../components/styles/beneficios.css";
 import "../styles/GestionUsuario.css";
 import { FiEdit2 } from "react-icons/fi";
+import { FaHistory } from "react-icons/fa";
+import { MdPayment } from "react-icons/md";
 import { obtenerPlanes } from "../service/planesService";
 import { getUsuarios, SociosConCuota } from "../service/usuarioService";
 import {
@@ -653,8 +655,9 @@ const eroresConfirmarPago = {};
       </Modal>
 
       <section className="usuario-section">
+        <div className="container-fluid" style={{ maxWidth:"1200px", margin:"0 auto" }}>
         <div className="mb-4 row align-items-center">
-          <div className="col-md-6 mb-3 mb-md-0">
+          <div className="col-md-8 mb-3 mb-md-0 ">
             <Form.Control
               type="text"
               placeholder="Buscar por usuario, apellido o email..."
@@ -663,7 +666,7 @@ const eroresConfirmarPago = {};
               className="search-input"
             />
           </div>
-          <div className="col-md-6 text-md-end">
+          <div className="col-md-4 d-flex justify-content-end align-items-center pe-0 checkform">
             <Form.Check
               inline
               label="Todos"
@@ -691,8 +694,8 @@ const eroresConfirmarPago = {};
           </div>
         </div>
 
-        <div className="usuario-table-responsive">
-          <table className="usuario-table">
+        <div className="usuario-table-responsive shadow-lg" style={{ borderRadius: '8px' , overflow: 'auto' }}>
+          <table className="usuario-table w-100">
             <thead>
               <tr>
                 <th>DNI</th>
@@ -755,20 +758,23 @@ const eroresConfirmarPago = {};
                       {ultimaCuota ? "Pagada" : "No Pagada"}
                     </span>
                   </td>
-                  <td>
+                  <td className="acciones-td">
  
                     <button
+                      variant="link"
                       className="btn-historial"
                       onClick={() => abrirModalHistorial(usuario)}
+                      title="Ver Historial de Pagos"
                     >
-                    <i class="bi bi-clock-history"></i> Historial
-                      
+                      <FaHistory size={18} color= "#ffffff" /> 
                     </button>
                     <button
                       className="btn-pago"
                       onClick={() => handleRegistrarPago(usuario)}
                     >
-                      Registrar Pago
+                      <MdPayment size={18} 
+                      color= "#ffffff" /> 
+                      
                     </button>
                   </td>
                 </tr>
@@ -776,7 +782,11 @@ const eroresConfirmarPago = {};
 
             </tbody>
 
+
+
+
           </table>
+          </div>
         </div>
       </section>
       <Modal
