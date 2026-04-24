@@ -5,7 +5,7 @@ import BrandHeader from "../components/BrandHeader";
 import "../components/styles/beneficios.css";
 import "../styles/GestionUsuario.css";
 import { obtenerPlanes } from "../service/planesService";
-import { getUsuarios } from "../service/usuarioService";
+import { getUsuarios, SociosConCuota } from "../service/usuarioService";
 import {
   crearCuota,
   getCuotas,
@@ -50,15 +50,29 @@ function GestionUsuario() {
     metodoPago: "",
   });
 
+const cargarSocios = async () => {
+    try { 
+      const data = await SociosConCuota();
+      setUsuarios(data || []);
+    } catch (error) {
+      console.error("Error al obtener socios:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+
     const storedUser = localStorage.getItem("user");
     if (!storedUser) {
       navigate("/login");
       return;
     }
-    getUsuarios()
+    SociosConCuota()
+
       .then((data) => {
         setUsuarios(data || []);
+        
       })
       .catch((error) => {
         console.error("Error al obtener usuarios:", error);
@@ -66,7 +80,9 @@ function GestionUsuario() {
       .finally(() => {
         setLoading(false);
       });
-    cargarPlanes();
+      cargarSocios();
+      cargarPlanes();
+    
   }, [navigate]);
 
   async function cargarPlanes() {
@@ -248,13 +264,16 @@ function GestionUsuario() {
         /* pongo el msg que viene del backend */
         throw new Error(data.error || data.message);
       }
-
+ /*
       const nuevoSocio = data.user || {
         ...payload,
         plan: formData.plan,
         activo: true,
       };
       setUsuarios((prev) => [...prev, nuevoSocio]);
+*/
+
+      await cargarSocios();      
 
       setFeedback({
         type: "success",
@@ -351,15 +370,17 @@ const eroresConfirmarPago = {};
 
 
       });
+
       
-      
+      /*
 
       setUsuarios((prev) =>
         prev.map((u) =>
           u.dni === pagoTemporal.idSocio ? { ...u, activo: true } : u,
         ),
       );
-
+*/
+      await cargarSocios();
       setMostrarModalSeleccionPago(false);
       setErrors({});
       setFeedback({ type: "success", message: "Pago registrado con éxito" });
@@ -425,7 +446,11 @@ const eroresConfirmarPago = {};
 
       <Modal
         show={mostrarModalRegistro}
-        onHide={() => setMostrarModalRegistro(false)}
+        onHide={() =>{
+           setMostrarModalRegistro(false);
+        setErrors({});
+        setFeedback({ type: "", message: "" });}}
+        
         centered
         size="lg"
       >
@@ -665,25 +690,48 @@ const eroresConfirmarPago = {};
           </div>
         </div>
 
-        <div className="usuario-table-container">
+        <div className="usuario-table-responsive">
           <table className="usuario-table">
             <thead>
               <tr>
                 <th>DNI</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Email</th>
-                <th>Estado</th>
+                <th>Plan</th>
+                <th>Pago</th>
+                <th>Metodo de Pago</th>
+                <th>Fecha Pago</th>
+                <th>Vencimiento</th>
+                <th>Estado Socio</th>
+                <th>Estado Cuota</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {visibleUsuarios.map((usuario) => (
+              {visibleUsuarios.map((usuario) => {
+               const ultimaCuota = usuario.Cuota && usuario.Cuota.length > 0 
+               ? usuario.Cuota[usuario.Cuota.length - 1] 
+               : null;
+                return (
                 <tr key={usuario.dni}>
                   <td>{usuario.dni}</td>
                   <td>{usuario.nombre}</td>
                   <td>{usuario.apellido}</td>
-                  <td>{usuario.email}</td>
+                  
+        <td>{ultimaCuota ? ultimaCuota.nombrePlan : "Sin Plan"}</td>
+        <td>{ultimaCuota ? `$${Number(ultimaCuota.monto).toFixed(2)}` : "---"}</td>
+        <td>{ultimaCuota ? ultimaCuota.metodoPago : "---"}</td>
+                  <td> 
+                    {ultimaCuota 
+                      ? new Date(ultimaCuota.fechaPago).toLocaleDateString("es-AR") 
+                      : "N/A"}
+                  </td>
+        <td>
+          {ultimaCuota 
+            ? new Date(ultimaCuota.fechaVencimiento).toLocaleDateString("es-AR") 
+            : "N/A"}
+        </td>
+
                   <td>
                     <span
                       className={
@@ -693,10 +741,27 @@ const eroresConfirmarPago = {};
                         usuario.activo ? { color: "green" } : { color: "red" }
                       }
                     >
+                    
                       {usuario.activo ? "Activo" : "Inactivo"}
                     </span>
                   </td>
                   <td>
+                    <span
+                      className={
+                        ultimaCuota ? "status-active" : "status-inactive"
+                      }
+                      style={
+                        ultimaCuota ? { color: "green" } : { color: "red" }
+                      }
+                      
+                       backgroundColor={ultimaCuota ? "rgba(0, 128, 0, 0.1)" : "rgba(255, 0, 0, 0.1)"}
+
+                    >
+                      {ultimaCuota ? "Pagada" : "No Pagada"}
+                    </span>
+                  </td>
+                  <td>
+ 
                     <button
                       className="btn-historial"
                       onClick={() => abrirModalHistorial(usuario)}
@@ -712,8 +777,10 @@ const eroresConfirmarPago = {};
                     </button>
                   </td>
                 </tr>
-              ))}
+              )})}
+
             </tbody>
+
           </table>
         </div>
       </section>

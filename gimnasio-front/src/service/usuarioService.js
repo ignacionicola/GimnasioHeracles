@@ -85,6 +85,17 @@ export async function registrarUsuarioSistema(payload) {
   }
   return json?.data ?? json;
 }
+export async function SociosConCuota() {
+  const res = await fetch(`${API_BASE}/socios/cuota`, {
+    credentials: "include",
+  });
+  if (res.status === 204) return null;
+  const json = await res.json();
+  if (!res.ok || json?.success === false) {
+    throw new Error(json?.error || "Error al obtener socios con cuota");
+  }
+  return json?.data ?? json;
+}
 // PUT /api/usuarios/:id
 export async function actualizarUsuario(id, payload) {
   const res = await fetch(`${API_BASE}/${id}`, {
@@ -108,4 +119,5 @@ export default {
   logoutUsuario,
   registrarUsuarioSistema,
   actualizarUsuario,
+  SociosConCuota,
 };
