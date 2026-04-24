@@ -10,7 +10,6 @@ const Usuario = sequelize.define(
     email: { type: DataTypes.STRING, allowNull: false },
     telefono: { type: DataTypes.STRING },
     puntos: { type: DataTypes.INTEGER, defaultValue: 0 },
-    plan: { type: DataTypes.STRING },
     activo: { type: DataTypes.BOOLEAN, defaultValue: true },
   },
   {

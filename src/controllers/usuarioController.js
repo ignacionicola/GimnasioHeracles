@@ -33,7 +33,8 @@ async function getUsuariosActivos(req, res) {
 async function actualizarEstadoUsuario(req, res) {
   const { id } = req.params;
   const { activo } = req.body;
-  try {    const usuario = await Usuario.findByPk(id);
+  try {
+    const usuario = await Usuario.findByPk(id);
     if (!usuario) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
@@ -44,32 +45,76 @@ async function actualizarEstadoUsuario(req, res) {
   }
 }
 
+// GET  - Obtener socios con su última cuota pagada
+async function getSociosConCuota(req, res) {
+  try {
+    const socios = await Usuario.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: Cuota,
+          attributes: [
+            "monto",
+            "nombrePlan",
+            "fechaPago",
+            "estado",
+            "metodoPago",
+            "fechaVencimiento",
+          ],
+          order: [["fechaPago", "DESC"]],
+          limit: 1, // solo la última cuota
+        },
+      ],
+    });
+    res.success(socios);
+  } catch (error) {
+    res.error(error.message, 500);
+  }
+}
 
 // POST - Registrar socio (cliente)
-async function register(req, res,next) {
+async function register(req, res, next) {
   console.log("BODY:", req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.error("Datos invalidos", 400, errors.array());
   }
-  const { dni, nombre, apellido, email, telefono, puntos,metodoPago, idPlan } = req.body;
+  const t = await Usuario.sequelize.transaction();
+  const { dni, nombre, apellido, email, telefono, puntos, metodoPago, idPlan } =
+    req.body;
   try {
-  const plan= await Plan.findByPk(idPlan);
-  if (!plan) {
-    return res.error("Plan no encontrado", 404);
-  }
-    const usuario = await Usuario.create({
-      dni,
-      nombre,
-      apellido,
-      email,
-      telefono,
-      puntos,
-      plan: plan.nombrePlan,
-    });
-    const cuota=await Cuota.create({ idSocio: usuario.dni,metodoPago, monto: plan.precio, nombrePlan: plan.nombrePlan });
+    const plan = await Plan.findByPk(idPlan);
+    if (!plan) {
+      await t.rollback();
+      return res.error("Plan no encontrado", 404);
+    }
+    const usuario = await Usuario.create(
+      {
+        dni,
+        nombre,
+        apellido,
+        email,
+        telefono,
+        puntos,
+      },
+      { transaction: t },
+    );
+
+    const cuota = await Cuota.create(
+      {
+        idSocio: usuario.dni,
+        metodoPago,
+        monto: plan.precio,
+        nombrePlan: plan.nombrePlan,
+      },
+      { transaction: t },
+    );
+
+    await t.commit();
+
     res.status(201).json({ message: "Usuario registrado", user: usuario });
   } catch (error) {
+    await t.rollback();
     next(error);
   }
 }
@@ -123,6 +168,12 @@ const validarSocio = [
     .withMessage("El email es requerido")
     .isEmail(),
   body("telefono").trim().notEmpty().withMessage("El telefono es requerido"),
+  body("idPlan").notEmpty().withMessage("El ID del plan es requerido").isInt(),
+  body("metodoPago")
+    .notEmpty()
+    .withMessage("El metodo de pago es requerido")
+    .isString()
+    .withMessage("El metodo de pago debe ser una cadena de texto"),
 ];
 const validarUsuarioNuevo = [
   body("nombreUsuario")
@@ -153,5 +204,6 @@ module.exports = {
   validarUsuarioNuevo,
   validarSocio,
   actualizarEstadoUsuario,
-  getUsuariosActivos
+  getUsuariosActivos,
+  getSociosConCuota,
 };
