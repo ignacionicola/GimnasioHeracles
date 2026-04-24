@@ -154,11 +154,13 @@ box-shadow: 0 0 15px rgba(123, 92, 255, 0.4);
  background: rgba(255,255,255,0.1);
 border: 1px solid rgba(255,255,255,0.2);
 color: #fff;
+  margin: 0.3rem;
   backdrop-filter: blur(5px);
-  padding: 8px 16px;
+  padding: 7px 15px;
   font-weight: 600;
   border-radius: 8px;
   transition: all 0.3s ease;
+  
 }
 
 .btn-historial:hover {
@@ -172,10 +174,12 @@ color: #fff;
   color: white;
   padding: 8px 16px;
   margin: 0.5rem;
+
   border-radius: 8px;
   font-weight: 600;
   box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
   transition: transform 0.2s;
+  
   
 }
 
@@ -209,4 +213,57 @@ color: #fff;
   color: #00ff88;
   text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
   font-weight: 800;
+}
+
+
+
+.checkform {
+  display: flex;
+  gap: 1rem;
+  justify-content: end;
+align-items: center;
+ 
+}
+.usuario-table-responsive {
+ 
+  background: #1a1c24; 
+  border: 1px solid #333;
+  
+}
+
+.usuario-table th {
+  text-align: center; 
+  padding: 15px;
+  background-color: #252833;
+}
+
+.usuario-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.acciones-td {
+white-space: nowrap; 
+  width: 1%
+
+}
+  
+  .usuario-table {
+  width: 100%;
+  table-layout: auto;
+  font-size: 0.90rem;
+}
+
+.usuario-table th, 
+.usuario-table td {
+padding: 8px 4px !important; 
+  vertical-align: middle;
+  text-align: center;
+}
+
+.usuario-table-responsive {
+  width: 100%;
+  overflow: visible !important;
+  scrollbar-width: thin; 
+  scrollbar-color: #555 #1a1c24;
 }
