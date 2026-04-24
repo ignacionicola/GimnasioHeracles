@@ -21,6 +21,7 @@ async function renovarCuota(req, res) {
       nombrePlan,
       metodoPago,
     });
+    await Usuario.update({ activo: true }, { where: { dni: idSocio } });
     res.success(nuevaCuota);
   } catch (error) {
     res.error(error.message, 500);
