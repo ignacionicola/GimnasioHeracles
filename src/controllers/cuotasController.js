@@ -4,6 +4,10 @@ const { Op, literal } = require("sequelize");
 const Plan = require("../models/Plan");
 async function renovarCuota(req, res) {
   const { idSocio, idPlan, metodoPago } = req.body;
+  if (!idSocio || !idPlan || !metodoPago) {
+    return res.error("Faltan campos obligatorios", 400);
+  }
+
   try {
     const plan = await Plan.findByPk(idPlan);
     if (!plan) {
@@ -11,29 +15,13 @@ async function renovarCuota(req, res) {
     }
     const monto = plan.precio;
     const nombrePlan = plan.nombrePlan;
-    const nuevaCuota = await Cuota.create({ idSocio, monto, nombrePlan, metodoPago });
-    res.success(nuevaCuota);
-  } catch (error) {
-    res.error(error.message, 500);
-  }
-}
-
-async function obtenerUltimaCuotaPorSocio(req, res) {
-  try {
-    const cuotas = await Cuota.findAll({
-      include: [{ model: Usuario, attributes: ["dni", "nombre", "apellido"] }],
-      where: {
-        fechaPago: {
-          [Op.eq]: literal(`(
-        SELECT MAX(c2."fechaPago")
-        FROM "Cuotas" c2
-        WHERE c2."idSocio" = "Cuota"."idSocio"
-      )`),
-        },
-      },
+    const nuevaCuota = await Cuota.create({
+      idSocio,
+      monto,
+      nombrePlan,
+      metodoPago,
     });
-
-    res.success(cuotas);
+    res.success(nuevaCuota);
   } catch (error) {
     res.error(error.message, 500);
   }
@@ -70,7 +58,6 @@ async function obtenerCuotasPorSocio(req, res) {
 
 module.exports = {
   renovarCuota,
-  obtenerUltimaCuotaPorSocio,
   actualizarEstadoCuota,
   obtenerCuotasPorSocio,
 };

@@ -6,7 +6,8 @@ const {
   validarUsuarioNuevo,
   validarSocio,
   actualizarEstadoUsuario,
-  getUsuariosActivos
+  getUsuariosActivos,
+  getSociosConCuota
 } = require("../controllers/usuarioController");
 const { login, logout } = require("../controllers/authController");
 const router = express.Router();
@@ -14,6 +15,11 @@ const router = express.Router();
 // GET - Obtener todos los usuarios
 
 router.get("/socios",/* #swagger.tags=['Usuarios'] */ getUsuarios);
+
+router.get("/socios/cuota",
+  /* #swagger.tags=['Usuarios'] */
+  /* #swagger.description = 'Obtiene la última cuota pagada por cada socio, incluyendo información del socio.' */
+  getSociosConCuota);
 
 // GET - Obtener usuarios activos
 router.get("/socios/activos",/* #swagger.tags=['Usuarios'] */ getUsuariosActivos);
