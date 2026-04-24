@@ -404,13 +404,19 @@ const eroresConfirmarPago = {};
           </button>
           <button
             className="primary-btn2"
-            onClick={() => setMostrarModalRegistro(true)}
+            onClick={() =>{
+           setFeedback({ type: "", message: "" });
+
+               setMostrarModalRegistro(true)}
+              }
           >
             Registrar socio
           </button>
+          {/*
           <button className="primary-btn2" onClick={() => handleMostrarPagos()}>
             Mostrar Pagos
           </button>
+          */}
           <button className="primary-btn2" onClick={() => navigate("/planes")}>
             Gestionar Planes
           </button>
