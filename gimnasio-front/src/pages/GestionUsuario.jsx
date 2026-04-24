@@ -4,6 +4,7 @@ import { Form, FormSelect, Modal, Button } from "react-bootstrap";
 import BrandHeader from "../components/BrandHeader";
 import "../components/styles/beneficios.css";
 import "../styles/GestionUsuario.css";
+import { FiEdit2 } from "react-icons/fi";
 import { obtenerPlanes } from "../service/planesService";
 import { getUsuarios, SociosConCuota } from "../service/usuarioService";
 import {
@@ -698,7 +699,6 @@ const eroresConfirmarPago = {};
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Plan</th>
-                <th>Pago</th>
                 <th>Metodo de Pago</th>
                 <th>Fecha Pago</th>
                 <th>Vencimiento</th>
@@ -719,8 +719,7 @@ const eroresConfirmarPago = {};
                   <td>{usuario.apellido}</td>
                   
         <td>{ultimaCuota ? ultimaCuota.nombrePlan : "Sin Plan"}</td>
-        <td>{ultimaCuota ? `$${Number(ultimaCuota.monto).toFixed(2)}` : "---"}</td>
-        <td>{ultimaCuota ? ultimaCuota.metodoPago : "---"}</td>
+         <td>{ultimaCuota ? ultimaCuota.metodoPago : "---"}</td>
                   <td> 
                     {ultimaCuota 
                       ? new Date(ultimaCuota.fechaPago).toLocaleDateString("es-AR") 
@@ -748,14 +747,10 @@ const eroresConfirmarPago = {};
                   <td>
                     <span
                       className={
-                        ultimaCuota ? "status-active" : "status-inactive"
-                      }
-                      style={
-                        ultimaCuota ? { color: "green" } : { color: "red" }
+                        ultimaCuota ? "badge-pagada" : "badge-inactiva"
                       }
                       
-                       backgroundColor={ultimaCuota ? "rgba(0, 128, 0, 0.1)" : "rgba(255, 0, 0, 0.1)"}
-
+                    
                     >
                       {ultimaCuota ? "Pagada" : "No Pagada"}
                     </span>

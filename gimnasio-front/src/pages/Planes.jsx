@@ -191,10 +191,12 @@ function Planes() {
           <div className="col-md-6 mb-3 mb-md-0">
             <Form.Control
               type="text"
-              placeholder="Buscar por nombre o descripción..."
+               
+                
+                placeholder ="Buscar por nombre o descripción..."
               value={textoBusqueda}
               onChange={(e) => setTextoBusqueda(e.target.value)}
-              className="search-input"
+              className="search-input "
             />
           </div>
         </div>
