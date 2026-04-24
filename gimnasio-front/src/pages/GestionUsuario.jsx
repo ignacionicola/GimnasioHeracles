@@ -4,8 +4,9 @@ import { Form, FormSelect, Modal, Button } from "react-bootstrap";
 import BrandHeader from "../components/BrandHeader";
 import "../components/styles/beneficios.css";
 import "../styles/GestionUsuario.css";
+import { FiEdit2 } from "react-icons/fi";
 import { obtenerPlanes } from "../service/planesService";
-import { getUsuarios } from "../service/usuarioService";
+import { getUsuarios, SociosConCuota } from "../service/usuarioService";
 import {
   crearCuota,
   getCuotas,
@@ -50,15 +51,29 @@ function GestionUsuario() {
     metodoPago: "",
   });
 
+const cargarSocios = async () => {
+    try { 
+      const data = await SociosConCuota();
+      setUsuarios(data || []);
+    } catch (error) {
+      console.error("Error al obtener socios:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+
     const storedUser = localStorage.getItem("user");
     if (!storedUser) {
       navigate("/login");
       return;
     }
-    getUsuarios()
+    SociosConCuota()
+
       .then((data) => {
         setUsuarios(data || []);
+        
       })
       .catch((error) => {
         console.error("Error al obtener usuarios:", error);
@@ -66,7 +81,9 @@ function GestionUsuario() {
       .finally(() => {
         setLoading(false);
       });
-    cargarPlanes();
+      cargarSocios();
+      cargarPlanes();
+    
   }, [navigate]);
 
   async function cargarPlanes() {
@@ -248,13 +265,16 @@ function GestionUsuario() {
         /* pongo el msg que viene del backend */
         throw new Error(data.error || data.message);
       }
-
+ /*
       const nuevoSocio = data.user || {
         ...payload,
         plan: formData.plan,
         activo: true,
       };
       setUsuarios((prev) => [...prev, nuevoSocio]);
+*/
+
+      await cargarSocios();      
 
       setFeedback({
         type: "success",
@@ -351,15 +371,17 @@ const eroresConfirmarPago = {};
 
 
       });
+
       
-      
+      /*
 
       setUsuarios((prev) =>
         prev.map((u) =>
           u.dni === pagoTemporal.idSocio ? { ...u, activo: true } : u,
         ),
       );
-
+*/
+      await cargarSocios();
       setMostrarModalSeleccionPago(false);
       setErrors({});
       setFeedback({ type: "success", message: "Pago registrado con éxito" });
@@ -404,13 +426,19 @@ const eroresConfirmarPago = {};
           </button>
           <button
             className="primary-btn2"
-            onClick={() => setMostrarModalRegistro(true)}
+            onClick={() =>{
+           setFeedback({ type: "", message: "" });
+
+               setMostrarModalRegistro(true)}
+              }
           >
             Registrar socio
           </button>
+          {/*
           <button className="primary-btn2" onClick={() => handleMostrarPagos()}>
             Mostrar Pagos
           </button>
+          */}
           <button className="primary-btn2" onClick={() => navigate("/planes")}>
             Gestionar Planes
           </button>
@@ -419,7 +447,11 @@ const eroresConfirmarPago = {};
 
       <Modal
         show={mostrarModalRegistro}
-        onHide={() => setMostrarModalRegistro(false)}
+        onHide={() =>{
+           setMostrarModalRegistro(false);
+        setErrors({});
+        setFeedback({ type: "", message: "" });}}
+        
         centered
         size="lg"
       >
@@ -659,25 +691,46 @@ const eroresConfirmarPago = {};
           </div>
         </div>
 
-        <div className="usuario-table-container">
+        <div className="usuario-table-responsive">
           <table className="usuario-table">
             <thead>
               <tr>
                 <th>DNI</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Email</th>
-                <th>Estado</th>
+                <th>Plan</th>
+                <th>Metodo de Pago</th>
+                <th>Fecha Pago</th>
+                <th>Vencimiento</th>
+                <th>Estado Socio</th>
+                <th>Estado Cuota</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {visibleUsuarios.map((usuario) => (
+              {visibleUsuarios.map((usuario) => {
+               const ultimaCuota = usuario.Cuota && usuario.Cuota.length > 0 
+               ? usuario.Cuota[usuario.Cuota.length - 1] 
+               : null;
+                return (
                 <tr key={usuario.dni}>
                   <td>{usuario.dni}</td>
                   <td>{usuario.nombre}</td>
                   <td>{usuario.apellido}</td>
-                  <td>{usuario.email}</td>
+                  
+        <td>{ultimaCuota ? ultimaCuota.nombrePlan : "Sin Plan"}</td>
+         <td>{ultimaCuota ? ultimaCuota.metodoPago : "---"}</td>
+                  <td> 
+                    {ultimaCuota 
+                      ? new Date(ultimaCuota.fechaPago).toLocaleDateString("es-AR") 
+                      : "N/A"}
+                  </td>
+        <td>
+          {ultimaCuota 
+            ? new Date(ultimaCuota.fechaVencimiento).toLocaleDateString("es-AR") 
+            : "N/A"}
+        </td>
+
                   <td>
                     <span
                       className={
@@ -687,10 +740,23 @@ const eroresConfirmarPago = {};
                         usuario.activo ? { color: "green" } : { color: "red" }
                       }
                     >
+                    
                       {usuario.activo ? "Activo" : "Inactivo"}
                     </span>
                   </td>
                   <td>
+                    <span
+                      className={
+                        ultimaCuota ? "badge-pagada" : "badge-inactiva"
+                      }
+                      
+                    
+                    >
+                      {ultimaCuota ? "Pagada" : "No Pagada"}
+                    </span>
+                  </td>
+                  <td>
+ 
                     <button
                       className="btn-historial"
                       onClick={() => abrirModalHistorial(usuario)}
@@ -706,8 +772,10 @@ const eroresConfirmarPago = {};
                     </button>
                   </td>
                 </tr>
-              ))}
+              )})}
+
             </tbody>
+
           </table>
         </div>
       </section>
