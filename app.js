@@ -6,7 +6,7 @@ const responseHandler = require("./src/middlewares/responseHandler");
 const errorHandler = require("./src/middlewares/errorHandler");
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger_output.json');
-
+const { iniciarTareas } = require("./src/tasks/cuotasTasks");
 // Cargar modelos
 require("./src/models/UsuarioSistema");
 require("./src/models/Beneficios");
@@ -39,6 +39,7 @@ app.use("/api/cuotas", cuotaRouter);
 app.use("/api/planes", planRouter);
 // Sincronizar base de datos
 sequelize.sync().then(() => {
+  iniciarTareas();
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
   });
