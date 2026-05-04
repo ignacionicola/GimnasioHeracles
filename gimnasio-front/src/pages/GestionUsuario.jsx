@@ -698,23 +698,34 @@ const eroresConfirmarPago = {};
         </div>
 
         <div className="usuario-table-responsive shadow-lg" style={{ borderRadius: '8px' , overflow: 'auto' }}>
-          <table className="usuario-table w-100">
-            <thead>
-              <tr>
-                <th>DNI</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Plan</th>
-                <th>Metodo de Pago</th>
-                <th>Fecha Pago</th>
-                <th>Vencimiento</th>
-                <th>Estado Socio</th>
-                <th>Estado Cuota</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visibleUsuarios.map((usuario) => {
+          {visibleUsuarios.length === 0 ? (
+            <div style={{ 
+              padding: '2rem', 
+              textAlign: 'center', 
+              color: '#cbd5f5',
+              fontSize: '1.1rem',
+              fontWeight: '500'
+            }}>
+              No se encuentran socios
+            </div>
+          ) : (
+            <table className="usuario-table w-100">
+              <thead>
+                <tr>
+                  <th>DNI</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Plan</th>
+                  <th>Metodo de Pago</th>
+                  <th>Fecha Pago</th>
+                  <th>Vencimiento</th>
+                  <th>Estado Socio</th>
+                  <th>Estado Cuota</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleUsuarios.map((usuario) => {
                const ultimaCuota = usuario.Cuota && usuario.Cuota.length > 0 
                ? usuario.Cuota[usuario.Cuota.length - 1] 
                : null;
@@ -752,6 +763,7 @@ const eroresConfirmarPago = {};
                   </td>
                   
                   <td>
+
   {ultimaCuota ? (
     <span className={`badge-status status-${ultimaCuota.estado.toLowerCase()}`}>
       {ultimaCuota.estado} 
@@ -801,11 +813,8 @@ const eroresConfirmarPago = {};
               )})}
 
             </tbody>
-
-
-
-
-          </table>
+            </table>
+          )}
           </div>
         </div>
       </section>
