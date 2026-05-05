@@ -2,12 +2,13 @@ const Cuota = require("../models/Cuota");
 const Usuario = require("../models/usuario");
 const { Op, literal } = require("sequelize");
 const Plan = require("../models/Plan");
+const {body, validationResult} = require("express-validator");
 async function renovarCuota(req, res) {
-  const { idSocio, idPlan, metodoPago } = req.body;
-  if (!idSocio || !idPlan || !metodoPago) {
-    return res.error("Faltan campos obligatorios", 400);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.error("Errores de validación", 400, errors.array());
   }
-
+  const { idSocio, idPlan, metodoPago } = req.body;
   try {
     const plan = await Plan.findByPk(idPlan);
     if (!plan) {
@@ -57,8 +58,15 @@ async function obtenerCuotasPorSocio(req, res) {
   }
 }
 
+const validarRenovacion = [
+  body("idSocio").notEmpty().withMessage("El ID del socio es obligatorio"),
+  body("idPlan").notEmpty().withMessage("El ID del plan es obligatorio"),
+  body("metodoPago").notEmpty().isString().withMessage("El método de pago es obligatorio"),
+];
+
 module.exports = {
   renovarCuota,
   actualizarEstadoCuota,
   obtenerCuotasPorSocio,
+  validarRenovacion,
 };
