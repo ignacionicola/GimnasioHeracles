@@ -1,9 +1,10 @@
 const Usuario = require("../models/usuario");
 const UsuarioSistema = require("../models/UsuarioSistema");
 const { generarSalt, hashPassword } = require("../service/hashService");
-const { body, validationResult } = require("express-validator");
+const { body, validationResult, param } = require("express-validator");
 const Cuota = require("../models/cuota");
 const Plan = require("../models/Plan");
+
 // GET - Obtener todos los usuarios
 async function getUsuarios(req, res) {
   try {
@@ -31,6 +32,10 @@ async function getUsuariosActivos(req, res) {
 
 //PUT - Actualizar estado del usuario (activo/inactivo)
 async function actualizarEstadoUsuario(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ error: "Datos invalidos", details: errors.array() });
+  }
   const { id } = req.params;
   const { activo } = req.body;
   try {
@@ -197,6 +202,14 @@ const validarUsuarioNuevo = [
     .notEmpty()
     .withMessage("El telefono es requerido"),
 ];
+
+const validarActualizarEstado = [
+  body("activo")
+    .exists()
+    .isBoolean()
+    .withMessage("El campo activo debe ser un booleano"),
+  param("id").notEmpty().withMessage("El ID es obligatorio"),
+];
 module.exports = {
   register,
   createSystemUser,
@@ -206,4 +219,5 @@ module.exports = {
   actualizarEstadoUsuario,
   getUsuariosActivos,
   getSociosConCuota,
+  validarActualizarEstado,
 };

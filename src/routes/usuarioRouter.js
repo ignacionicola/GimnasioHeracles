@@ -7,7 +7,8 @@ const {
   validarSocio,
   actualizarEstadoUsuario,
   getUsuariosActivos,
-  getSociosConCuota
+  getSociosConCuota,
+  validarActualizarEstado
 } = require("../controllers/usuarioController");
 const { login, logout } = require("../controllers/authController");
 const router = express.Router();
@@ -41,5 +42,5 @@ router.post("/system/register",
 router.put("/:id",
   /* #swagger.tags=['Usuarios'] */ 
   /* #swagger.description='Actualizar estado del usuario a activo o inactivo, buscandolo por su ID' */
-  actualizarEstadoUsuario);
+  validarActualizarEstado, actualizarEstadoUsuario);
 module.exports = router;
