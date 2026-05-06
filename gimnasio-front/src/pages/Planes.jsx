@@ -263,7 +263,7 @@ function Planes() {
             {error && <div className="alert alert-danger">{error}</div>}
 
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="nombrePlan">Nombre del Plan</Form.Label>
+              <Form.Label htmlFor="nombrePlan">Nombre del Plan *</Form.Label>
               <Form.Control
                 id="nombrePlan"
                 name="nombrePlan"
@@ -276,7 +276,7 @@ function Planes() {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="descripcion">Descripción</Form.Label>
+              <Form.Label htmlFor="descripcion">Descripción *</Form.Label>
               <Form.Control
                 id="descripcion"
                 name="descripcion"
@@ -290,7 +290,7 @@ function Planes() {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="precio">Precio</Form.Label>
+              <Form.Label htmlFor="precio">Precio *</Form.Label>
               <Form.Control
                 id="precio"
                 name="precio"

@@ -466,7 +466,7 @@ const eroresConfirmarPago = {};
         <Modal.Body>
           <form className="registrar-form" onSubmit={handleSubmit} noValidate>
             <label>
-              <span>DNI</span>
+              <span>DNI *</span>
               <input
                 type="text"
                 name="dni"
@@ -481,7 +481,7 @@ const eroresConfirmarPago = {};
             </label>
 
             <label>
-              <span>Nombre</span>
+              <span>Nombre *</span>
               <input
                 type="text"
                 name="nombre"
@@ -497,7 +497,7 @@ const eroresConfirmarPago = {};
             </label>
 
             <label>
-              <span>Apellido</span>
+              <span>Apellido *</span>
               <input
                 type="text"
                 name="apellido"
@@ -512,7 +512,7 @@ const eroresConfirmarPago = {};
             </label>
 
             <label>
-              <span>Email</span>
+              <span>Email *</span>
               <input
                 type="email"
                 name="email"
@@ -527,7 +527,7 @@ const eroresConfirmarPago = {};
             </label>
 
             <label>
-              <span>Teléfono</span>
+              <span>Teléfono *</span>
               <input
                 type="tel"
                 name="telefono"
@@ -544,7 +544,7 @@ const eroresConfirmarPago = {};
             </label>
 
             <label className="plan-group">
-              <span>Método de pago</span>
+              <span>Método de pago *</span>
               <select
                 name="metodoPago"
                 value={formData.metodoPago}
@@ -566,7 +566,7 @@ const eroresConfirmarPago = {};
             </label>
 
             <label className="plan-group">
-              <span>Plan</span>
+              <span>Plan *</span>
               <select
                 name="plan"
                 value={formData.plan}
@@ -833,7 +833,7 @@ const eroresConfirmarPago = {};
         <Modal.Body>
           <form>
             <Form.Group className="mb-3">
-              <Form.Label>Confirmar Plan</Form.Label>
+              <Form.Label>Confirmar Plan *</Form.Label>
               <FormSelect
                 value={pagoTemporal.planNombre}
                 onChange={(e) =>
@@ -856,7 +856,7 @@ const eroresConfirmarPago = {};
               {errors.plan && <span className="error-msg">{errors.plan}</span>}
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Seleccionar método de pago</Form.Label>
+              <Form.Label>Seleccionar método de pago *</Form.Label>
               <FormSelect
                 value={pagoTemporal.metodoPago}
                 onChange={(e) =>
@@ -936,7 +936,7 @@ const eroresConfirmarPago = {};
                   <tr key={cuota.idCuota}>
                     {/* <td>{cuota.idCuota}</td> */}
                     <td>${cuota.monto}</td>
-                    <td>{cuota.estado}</td>
+                    <td style={{ textTransform: "capitalize" }}>{cuota.estado}</td>
                     <td>{cuota.nombrePlan}</td>
                     <td>{cuota.metodoPago}</td>
 
