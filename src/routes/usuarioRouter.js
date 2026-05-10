@@ -1,4 +1,6 @@
 const express = require("express");
+const authMiddleware = require("../middlewares/authMiddleware");
+const verificarAdmin = require("../middlewares/rolesMiddleware"); // Middleware para verificar rol de administrador
 const {
   register,
   createSystemUser,
@@ -8,39 +10,66 @@ const {
   actualizarEstadoUsuario,
   getUsuariosActivos,
   getSociosConCuota,
-  validarActualizarEstado
+  validarActualizarEstado,
 } = require("../controllers/usuarioController");
 const { login, logout } = require("../controllers/authController");
 const router = express.Router();
 
+//PUBLICAS
+// POST - Login / Logout (unificados)
+router.post("/login", /* #swagger.tags=['Usuarios'] */ login);
+router.post("/logout", /* #swagger.tags=['Usuarios'] */ logout);
+
+//Reguieren estar logueados
 // GET - Obtener todos los usuarios
+router.get(
+  "/socios" /* #swagger.tags=['Usuarios'] */,
+  authMiddleware,
+  getUsuarios,
+);
 
-router.get("/socios",/* #swagger.tags=['Usuarios'] */ getUsuarios);
-
-router.get("/socios/cuota",
+router.get(
+  "/socios/cuota",
   /* #swagger.tags=['Usuarios'] */
   /* #swagger.description = 'Obtiene la última cuota pagada por cada socio, incluyendo información del socio.' */
-  getSociosConCuota);
+  authMiddleware,
+  getSociosConCuota,
+);
 
 // GET - Obtener usuarios activos
-router.get("/socios/activos",/* #swagger.tags=['Usuarios'] */ getUsuariosActivos);
+router.get(
+  "/socios/activos",
+  /* #swagger.tags=['Usuarios'] */ authMiddleware,
+  getUsuariosActivos,
+);
 // POST - Registrar socio (cliente)
 
-router.post("/register",/* #swagger.tags=['Usuarios'] */ validarSocio, register);
-
-// POST - Login / Logout (unificados)
-router.post("/login",/* #swagger.tags=['Usuarios'] */ login); 
-router.post("/logout",/* #swagger.tags=['Usuarios'] */ logout);
+router.post(
+  "/register",
+  /* #swagger.tags=['Usuarios'] */ authMiddleware,
+  validarSocio,
+  register,
+);
 
 // POST - Registrar usuario del sistema (admin / recepcionista)
-router.post("/system/register",
+router.post(
+  "/system/register",
   /* #swagger.tags=['Usuarios'] */
   /* #swagger.description='Registrar usuario del sistema (admin / recepcionista)' */
-  validarUsuarioNuevo, createSystemUser);
+  authMiddleware,
+  verificarAdmin,
+  validarUsuarioNuevo,
+  createSystemUser,
+);
 
 // PUT - Actualizar datos de usuario
-router.put("/:id",
-  /* #swagger.tags=['Usuarios'] */ 
+router.put(
+  "/:id",
+  /* #swagger.tags=['Usuarios'] */
   /* #swagger.description='Actualizar estado del usuario a activo o inactivo, buscandolo por su ID' */
-  validarActualizarEstado, actualizarEstadoUsuario);
+  authMiddleware,
+  verificarAdmin,
+  validarActualizarEstado,
+  actualizarEstadoUsuario,
+);
 module.exports = router;
