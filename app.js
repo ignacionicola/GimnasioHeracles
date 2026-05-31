@@ -19,6 +19,7 @@ const usuarioRouter = require("./src/routes/usuarioRouter");
 const beneficiosRouter = require("./src/routes/beneficioRouter");
 const cuotaRouter = require("./src/routes/cuotaRouter");
 const planRouter = require("./src/routes/planRouter");
+const reportesRouter = require("./src/routes/reportesRouter");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -37,6 +38,7 @@ app.use("/api/usuarios", usuarioRouter);
 app.use("/api/beneficios", beneficiosRouter);
 app.use("/api/cuotas", cuotaRouter);
 app.use("/api/planes", planRouter);
+app.use("/api/reportes", reportesRouter);
 // Sincronizar base de datos
 sequelize.sync().then(() => {
   iniciarTareas();
