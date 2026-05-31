@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
+import { Button, Card, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import BrandHeader from "../components/BrandHeader";
 import "../styles/Informes.css";
 import { getUsuariosActivos, SociosConCuota } from "../service/usuarioService";
 import { FaUsers, FaCheckCircle, FaChartLine } from "react-icons/fa";
+import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 import InformeCard from "../components/InformeCard";
 function Informes() {
   // -------------------------
@@ -15,6 +16,7 @@ function Informes() {
   const [fechaHasta, setFechaHasta] = useState(""); // fecha hasta para el período
   const [loading, setLoading] = useState(true); // control de carga inicial
   const [error, setError] = useState(""); // mensaje de error si algo falla
+const [modal, setModal] = useState({ show: false, titulo: "", usuarios: [] });
 
   // -------------------------
   // Carga de datos inicial
@@ -92,6 +94,37 @@ const porcentajeRetencionPeriodo =
     ? 0
     : Math.round((totalActivosPeriodo / totalSociosPeriodo) * 100);
 
+    /* CREANDO GRAFICO DE PASTEL */
+const pieDataGeneral = [
+  { name: "Activos", value: totalActivos },
+  { name: "Inactivos", value: totalInactivos },
+];
+const pieDataPeriodo = [
+  { name: "Activos", value: totalActivosPeriodo },
+  { name: "Inactivos", value: totalSociosPeriodo - totalActivosPeriodo },
+];
+const PIE_COLORS = ["#28a745", "#dc3545"];
+
+const handleClickPieGeneral = (_, index) => {
+  if (index === 0) {
+    setModal({ show: true, titulo: "Socios Activos", usuarios: activos });
+  } else {
+    const inactivos = sociosConUltimaCuota.filter((s) => !s.activo);
+    setModal({ show: true, titulo: "Socios Inactivos", usuarios: inactivos });
+  }
+};
+const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  return (
+    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central"
+      fontSize={13} fontWeight="bold">
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
 
     // Componentes 
 
@@ -258,6 +291,37 @@ const porcentajeRetencionPeriodo =
           </Card.Body>
         </Card>
       </section>
+  
+
+<Modal show={modal.show} onHide={() => setModal({ ...modal, show: false })} size="lg">
+  <Modal.Header closeButton>
+    <Modal.Title>{modal.titulo}</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    {modal.usuarios.length === 0 ? (
+      <p>No hay socios en esta categoría.</p>
+    ) : (
+      <table className="styled-table mb-0 w-100 ">
+        <thead>
+          <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+          </tr>
+        </thead>
+        <tbody>
+          {modal.usuarios.map((u) => (
+            <tr key={u.dni}>
+              <td>{u.dni}</td>
+              <td>{u.nombre}</td>
+              <td>{u.apellido}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </Modal.Body>
+</Modal>
 
       {/* -------------------------
           aca voy a poner los graficos 
@@ -269,15 +333,37 @@ const porcentajeRetencionPeriodo =
         style={{ maxWidth: "1100px", margin: "0 auto" }}
       >
         <Card className="shadow-sm">
-          <Card.Body>
-            <Card.Title>Gráficos</Card.Title>
-            <Card.Text>
-              aca en teoria va los graficos:
-              <ul>
-              </ul>
-            </Card.Text>
-            
-          </Card.Body>
+<Card.Body>
+  <Card.Title>Distribución de socios</Card.Title>
+  <Row className="justify-content-center">
+    <Col xs={12} md={6} className="text-center">
+      <h6>Socios actuales</h6>
+      <PieChart width={300} height={260}>
+       <Pie data={pieDataGeneral} cx={150} cy={120} outerRadius={90} dataKey="value"
+        onClick={handleClickPieGeneral}
+        style={{ cursor: "pointer" }}
+          label={renderLabel}
+labelLine={false}>
+          {pieDataGeneral.map((_, i) => <Cell key={i} fill={PIE_COLORS[i]} />)}
+        </Pie>
+  
+        <Tooltip /><Legend />
+      </PieChart>
+    </Col>
+    <Col xs={12} md={6} className="text-center">
+      <h6>Período seleccionado</h6>
+      <PieChart width={300} height={260}>
+        <Pie data={pieDataPeriodo} cx={150} cy={120} outerRadius={90} dataKey="value"
+          label={renderLabel}
+labelLine={false}>
+          {pieDataPeriodo.map((_, i) => <Cell key={i} fill={PIE_COLORS[i]} />)}
+        </Pie>
+        <Tooltip /><Legend />
+      </PieChart>
+    </Col>
+  </Row>
+</Card.Body>
+
         </Card>
       </section>
     </div>
