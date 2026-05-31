@@ -34,6 +34,7 @@ const StyledWrapper = styled.div`
     gap: 6px;
     text-align: center;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    margin-top: 1.75rem;
   }
 
   .informe-card:hover {
@@ -78,9 +79,11 @@ const StyledWrapper = styled.div`
   }
 
   .informe-card__description {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     color: #c5cee0;
     line-height: 1.4;
+    margin-top: 2px;
+    padding-top: 2px;
   }
 `;
 
