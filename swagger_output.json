@@ -60,6 +60,55 @@
         }
       }
     },
+    "/api/usuarios/login": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dni": {
+                  "example": "any"
+                },
+                "nombreUsuario": {
+                  "example": "any"
+                },
+                "contrasenia": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/usuarios/logout": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/usuarios/socios": {
       "get": {
         "tags": [
@@ -153,55 +202,6 @@
         }
       }
     },
-    "/api/usuarios/login": {
-      "post": {
-        "tags": [
-          "Usuarios"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "dni": {
-                  "example": "any"
-                },
-                "nombreUsuario": {
-                  "example": "any"
-                },
-                "contrasenia": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/api/usuarios/logout": {
-      "post": {
-        "tags": [
-          "Usuarios"
-        ],
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/usuarios/system/register": {
       "post": {
         "tags": [
@@ -273,6 +273,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "404": {
             "description": "Not Found"
@@ -574,6 +577,26 @@
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/reportes/reporte": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "fecha",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
