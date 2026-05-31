@@ -9,6 +9,7 @@ import PanelSocio from "./pages/PanelSocio";
 import Beneficios from "./pages/Beneficios";
 import GestionUsuario from "./pages/GestionUsuario";
 import Planes from "./pages/Planes";
+import Informes from "./pages/Informes";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/beneficios" element={<Beneficios />} />
         <Route path="/usuario" element={<GestionUsuario />} />
+        <Route path="/informes" element={<Informes />} />
       </Routes>
     </BrowserRouter>
   );

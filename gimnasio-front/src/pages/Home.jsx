@@ -96,6 +96,15 @@ function Home() {
               Gestionar Beneficios
             </button>
           </article>
+
+          
+          <article className="action-card">
+            <h3>Listados e Informes</h3>
+            <p>Accede a los listados y informes de los socios y sus actividades.</p>
+            <button onClick={() => navigate("/informes")}>
+              Ver Informes
+            </button>
+          </article>
         </div>
       </section>
     </div>
