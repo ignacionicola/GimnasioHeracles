@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Button, Card, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import BrandHeader from "../components/BrandHeader";
 import "../styles/Informes.css";
 import { getReporte } from "../service/reportesService";
 import { FaUsers, FaCheckCircle, FaUserMinus } from "react-icons/fa";
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, Label, ResponsiveContainer } from "recharts";
 import InformeCard from "../components/InformeCard";
 
 function Informes() {
@@ -16,7 +16,6 @@ function Informes() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [modal, setModal] = useState({ show: false, titulo: "", usuarios: [] });
 
   const cargarFoto1 = async () => {
     if (!fechaFoto1) return;
@@ -86,52 +85,38 @@ function Informes() {
     return <span style={{ color }}>{`${prefix}${delta}`}</span>;
   };
 
-  const handleClickFoto1 = (_, index) => {
-    setModal({
-      show: true,
-      titulo: index === 0 ? "Activos" : "Inactivos",
-      usuarios:
-        index === 0
-          ? reporteFoto1.detalle.activos
-          : reporteFoto1.detalle.inactivos,
-    });
-  };
-
-  const handleClickFoto2 = (_, index) => {
-    setModal({
-      show: true,
-      titulo: index === 0 ? "Activos" : "Inactivos",
-      usuarios:
-        index === 0
-          ? reporteFoto2.detalle.activos
-          : reporteFoto2.detalle.inactivos,
-    });
-  };
-
-  const renderLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-  }) => {
+  const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+    if (percent === 0) return null;
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
     return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor="middle"
-        dominantBaseline="central"
-        fontSize={13}
-        fontWeight="bold"
-      >
+      <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={13} fontWeight="bold">
         {`${(percent * 100).toFixed(0)}%`}
       </text>
+    );
+  };
+
+  const PieLegend = ({ activos, inactivos, total }) => {
+    return (
+      <div className="pie-legend">
+        <div className="pie-legend-total">
+          <span className="pie-legend-total-label">Total Socios</span>
+          <span className="pie-legend-total-num">{total}</span>
+        </div>
+        <div className="pie-legend-divider" />
+        <div className="pie-legend-item">
+          <span className="pie-legend-dot" style={{ backgroundColor: "#28a745" }} />
+          <span className="pie-legend-label">Activos</span>
+          <span className="count-activos pie-legend-num">{activos}</span>
+        </div>
+        <div className="pie-legend-item">
+          <span className="pie-legend-dot" style={{ backgroundColor: "#dc3545" }} />
+          <span className="pie-legend-label">Inactivos</span>
+          <span className="count-inactivos pie-legend-num">{inactivos}</span>
+        </div>
+      </div>
     );
   };
 
@@ -254,27 +239,45 @@ function Informes() {
                         No hay socios registrados en esta fecha
                       </div>
                     ) : reporteFoto1 ? (
-                      <ResponsiveContainer width="100%" height={260}>
-                        <PieChart>
-                          <Pie
-                            data={pieDataFoto1}
-                            cx="50%"
-                            cy="45%"
-                            outerRadius={90}
-                            dataKey="value"
-                            onClick={handleClickFoto1}
-                            style={{ cursor: "pointer" }}
-                            label={renderLabel}
-                            labelLine={false}
-                          >
-                            {pieDataFoto1.map((_, i) => (
-                              <Cell key={i} fill={PIE_COLORS[i]} />
-                            ))}
-                          </Pie>
-                          <Tooltip />
-                          <Legend />
-                        </PieChart>
-                      </ResponsiveContainer>
+                      <>
+                        <ResponsiveContainer width="100%" height={240}>
+                          <PieChart>
+                            <Pie
+                              data={pieDataFoto1}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={65}
+                              outerRadius={105}
+                              dataKey="value"
+                              label={renderLabel}
+                              labelLine={false}
+                              strokeWidth={2}
+                              stroke="rgba(0,0,0,0.15)"
+                            >
+                              {pieDataFoto1.map((_, i) => (
+                                <Cell key={i} fill={PIE_COLORS[i]} />
+                              ))}
+                              <Label
+                                content={({ viewBox }) => {
+                                  const { cx, cy } = viewBox;
+                                  return (
+                                    <text textAnchor="middle">
+                                      <tspan x={cx} y={cy - 8} fontSize={28} fontWeight="bold" fill="#e6eef8">{reporteFoto1.resumen.totalSocios}</tspan>
+                                      <tspan x={cx} y={cy + 14} fontSize={11} fill="#94a3b8">socios</tspan>
+                                    </text>
+                                  );
+                                }}
+                                position="center"
+                              />
+                            </Pie>
+                          </PieChart>
+                        </ResponsiveContainer>
+                        <PieLegend
+                          activos={reporteFoto1.resumen.activos}
+                          inactivos={reporteFoto1.resumen.inactivos}
+                          total={reporteFoto1.resumen.totalSocios}
+                        />
+                      </>
                     ) : (
                       <div style={{ padding: "2rem", color: "#6c757d" }}>
                         Seleccioná una fecha y hacé click en Aplicar
@@ -306,27 +309,45 @@ function Informes() {
                     </Button>
 
                     {reporteFoto2 ? (
-                      <ResponsiveContainer width="100%" height={260}>
-                        <PieChart>
-                          <Pie
-                            data={pieDataFoto2}
-                            cx="50%"
-                            cy="45%"
-                            outerRadius={90}
-                            dataKey="value"
-                            onClick={handleClickFoto2}
-                            style={{ cursor: "pointer" }}
-                            label={renderLabel}
-                            labelLine={false}
-                          >
-                            {pieDataFoto2.map((_, i) => (
-                              <Cell key={i} fill={PIE_COLORS[i]} />
-                            ))}
-                          </Pie>
-                          <Tooltip />
-                          <Legend />
-                        </PieChart>
-                      </ResponsiveContainer>
+                      <>
+                        <ResponsiveContainer width="100%" height={240}>
+                          <PieChart>
+                            <Pie
+                              data={pieDataFoto2}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={65}
+                              outerRadius={105}
+                              dataKey="value"
+                              label={renderLabel}
+                              labelLine={false}
+                              strokeWidth={2}
+                              stroke="rgba(0,0,0,0.15)"
+                            >
+                              {pieDataFoto2.map((_, i) => (
+                                <Cell key={i} fill={PIE_COLORS[i]} />
+                              ))}
+                              <Label
+                                content={({ viewBox }) => {
+                                  const { cx, cy } = viewBox;
+                                  return (
+                                    <text textAnchor="middle">
+                                      <tspan x={cx} y={cy - 8} fontSize={28} fontWeight="bold" fill="#e6eef8">{reporteFoto2.resumen.totalSocios}</tspan>
+                                      <tspan x={cx} y={cy + 14} fontSize={11} fill="#94a3b8">socios</tspan>
+                                    </text>
+                                  );
+                                }}
+                                position="center"
+                              />
+                            </Pie>
+                          </PieChart>
+                        </ResponsiveContainer>
+                        <PieLegend
+                          activos={reporteFoto2.resumen.activos}
+                          inactivos={reporteFoto2.resumen.inactivos}
+                          total={reporteFoto2.resumen.totalSocios}
+                        />
+                      </>
                     ) : (
                       <div style={{ padding: "2rem", color: "#6c757d" }}>
                         Seleccioná una fecha y hacé click en Aplicar
@@ -340,40 +361,6 @@ function Informes() {
         </Card>
       </section>
 
-      {/* MODAL CON LISTADO DE SOCIOS */}
-      <Modal
-        show={modal.show}
-        onHide={() => setModal({ ...modal, show: false })}
-        size="lg"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{modal.titulo}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {modal.usuarios.length === 0 ? (
-            <p>No hay socios en esta categoría.</p>
-          ) : (
-            <table className="styled-table mb-0 w-100">
-              <thead>
-                <tr>
-                  <th>DNI</th>
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                </tr>
-              </thead>
-              <tbody>
-                {modal.usuarios.map((u) => (
-                  <tr key={u.dni}>
-                    <td>{u.dni}</td>
-                    <td>{u.nombre}</td>
-                    <td>{u.apellido}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </Modal.Body>
-      </Modal>
     </div>
   );
 }
