@@ -74,6 +74,8 @@ function IngresoSocio() {
     );
   }
 
+
+  
   return (
     <div className="ingreso-page">
       <div className="ingreso-card">
