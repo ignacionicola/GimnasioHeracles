@@ -340,5 +340,10 @@ white-space: nowrap;
   color: #717274;
  opacity: 1;
 }
+.top-actions {
+  padding-top: 0rem;
+}
 
-
+.dashboard-hero.gestion-hero {
+  padding-top: 0.5rem;
+}

@@ -77,7 +77,7 @@ function Login() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <BrandHeader subtitle="Panel de Administración • Personal autorizado" />
+        <BrandHeader subtitle="Panel de Administración • Personal autorizado" darkText />
         <h2>Acceso de Personal</h2>
         <p className="card-subtitle">
           Ingresa tus credenciales para continuar con las gestiones internas.
