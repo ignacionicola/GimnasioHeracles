@@ -16,15 +16,16 @@
 }
 
 .dashboard-hero h1 {
-  margin: 0.5rem 0;
+  margin: 0.2rem 0;
   font-size: clamp(2rem, 3vw, 2.7rem);
 }
 
 .dashboard-hero p {
   color: #cbd5f5;
-  max-width: 640px;
-  margin: 0 auto 2rem;
+  font-size: 1.1rem;
+  padding-bottom: 0.9rem;
 }
+
 
 .user-chip {
   margin: 0 auto;

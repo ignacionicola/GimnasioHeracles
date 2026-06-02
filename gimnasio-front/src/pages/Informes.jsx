@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import BrandHeader from "../components/BrandHeader";
 import "../styles/Informes.css";
 import { getReporte } from "../service/reportesService";
-import { FaUsers, FaCheckCircle, FaUserMinus } from "react-icons/fa";
+import { FaUsers, FaCheckCircle, FaUserMinus, FaFilePdf } from "react-icons/fa";
 import { PieChart, Pie, Cell, Label, ResponsiveContainer } from "recharts";
 import InformeCard from "../components/InformeCard";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 function Informes() {
   const [fechaFoto1, setFechaFoto1] = useState("");
@@ -16,6 +18,9 @@ function Informes() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [generandoPDF, setGenerandoPDF] = useState(false);
+
+  const pdfRef = useRef(null);
 
   const cargarFoto1 = async () => {
     if (!fechaFoto1) return;
@@ -98,6 +103,29 @@ function Informes() {
     );
   };
 
+  const descargarPDF = async () => {
+    if (!pdfRef.current) return;
+    setGenerandoPDF(true);
+    try {
+      const canvas = await html2canvas(pdfRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#0f172a",
+      });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const pdfW = pdf.internal.pageSize.getWidth();
+      const pdfH = pdf.internal.pageSize.getHeight();
+      const ratio = Math.min(pdfW / canvas.width, pdfH / canvas.height);
+      const imgX = (pdfW - canvas.width * ratio) / 2;
+      pdf.addImage(imgData, "PNG", imgX, 10, canvas.width * ratio, canvas.height * ratio);
+      const fecha = new Date().toISOString().split("T")[0];
+      pdf.save(`informe-gimnasio-${fecha}.pdf`);
+    } finally {
+      setGenerandoPDF(false);
+    }
+  };
+
   const PieLegend = ({ activos, inactivos, total }) => {
     return (
       <div className="pie-legend">
@@ -123,13 +151,26 @@ function Informes() {
   return (
     <div className="dashboard-page">
       {/* HEADER */}
-      <header className="dashboard-hero gestion-hero">
+      <header className="dashboard-hero gestion-hero ">
         <BrandHeader />
         <h1>Informes y estadísticas</h1>
-        <p>
+        <p style={{ maxWidth: "600px", margin: "0 auto" }}>
           Panel de informes para analizar socios activos, retención y datos de
           cuotas.
         </p>
+        <Button
+          variant="outline-light"
+          size="sm"
+          onClick={descargarPDF}
+          disabled={!reporteFoto2 || generandoPDF}
+          style={{ marginTop: "0.75rem", gap: "0.4rem", display: "inline-flex", alignItems: "center" }}
+        >
+          {generandoPDF ? (
+            <><Spinner animation="border" size="sm" /> Generando...</>
+          ) : (
+            <><FaFilePdf style={{ color: "#dc3545" }} /> Descargar PDF</>
+          )}
+        </Button>
       </header>
 
       {/* ERROR GENERAL */}
@@ -138,6 +179,8 @@ function Informes() {
           {error}
         </div>
       )}
+
+      <div ref={pdfRef} style={{ padding: "1rem" }}>
 
       {/* cards resumen */}
       <section className="mb-5" style={{ maxWidth: "1100px", margin: "0 auto" }}>
@@ -360,6 +403,8 @@ function Informes() {
           </Card.Body>
         </Card>
       </section>
+
+      </div>
 
     </div>
   );

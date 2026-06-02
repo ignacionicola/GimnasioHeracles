@@ -38,8 +38,8 @@ function BrandHeader({ subtitle, variant = "shield" }) {
         {ICONS[variant] || ICONS.shield}
       </div>
       <div className="brand-meta">
-        <p>HERACLES</p>
-        {subtitle && <span>{subtitle}</span>}
+        <p style={{ padding: "2px", margin: "4px" }}>HERACLES</p>
+        {subtitle && <span className="brand-meta-span">{subtitle}</span>}
       </div>
     </div>
   );
