@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import BrandHeader from "../components/BrandHeader";
 import "../styles/Informes.css";
@@ -10,6 +11,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 function Informes() {
+  const navigate = useNavigate();
   const [fechaFoto1, setFechaFoto1] = useState("");
   const [reporteFoto1, setReporteFoto1] = useState(null);
 
@@ -158,19 +160,29 @@ function Informes() {
           Panel de informes para analizar socios activos, retención y datos de
           cuotas.
         </p>
-        <Button
-          variant="outline-light"
-          size="sm"
-          onClick={descargarPDF}
-          disabled={!reporteFoto2 || generandoPDF}
-          style={{ marginTop: "0.75rem", gap: "0.4rem", display: "inline-flex", alignItems: "center" }}
-        >
-          {generandoPDF ? (
-            <><Spinner animation="border" size="sm" /> Generando...</>
-          ) : (
-            <><FaFilePdf style={{ color: "#dc3545" }} /> Descargar PDF</>
-          )}
-        </Button>
+        <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.75rem", justifyContent: "center" }}>
+          <Button
+            variant="outline-light"
+            size="sm"
+            onClick={() => navigate("/home")}
+            style={{ gap: "0.4rem", display: "inline-flex", alignItems: "center" }}
+          >
+            ← Volver
+          </Button>
+          <Button
+            variant="outline-light"
+            size="sm"
+            onClick={descargarPDF}
+            disabled={!reporteFoto2 || generandoPDF}
+            style={{ gap: "0.4rem", display: "inline-flex", alignItems: "center" }}
+          >
+            {generandoPDF ? (
+              <><Spinner animation="border" size="sm" /> Generando...</>
+            ) : (
+              <><FaFilePdf style={{ color: "#dc3545" }} /> Descargar PDF</>
+            )}
+          </Button>
+        </div>
       </header>
 
       {/* ERROR GENERAL */}
@@ -269,7 +281,7 @@ function Informes() {
                       />
                     </Form.Group>
                     <Button
-                      variant="primary"
+                      variant="outline-light"
                       size="sm"
                       className="mb-3"
                       onClick={cargarFoto1}
@@ -343,7 +355,7 @@ function Informes() {
                       />
                     </Form.Group>
                     <Button
-                      variant="primary"
+                      variant="outline-light"
                       size="sm"
                       className="mb-3"
                       onClick={cargarFoto2}

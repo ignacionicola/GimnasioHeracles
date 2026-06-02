@@ -4,7 +4,6 @@
   gap: 0.9rem;
   justify-content: center;
   flex-direction: column;
-  color: #f7f9fc;
   text-align: center;
   margin-bottom: 1.5rem;
 }
@@ -39,11 +38,16 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-align: center;
-  color: #f7f9fc;
+}
+
+.brand-text-dark {
+  color: #101828 !important;
+}
+
+.brand-text-light {
+  color: #ffffff !important;
 }
 
 .brand-meta span {
   font-size: 0.95rem;
-  color: #c7d2f5;
-
 }

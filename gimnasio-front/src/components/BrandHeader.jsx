@@ -31,15 +31,16 @@ const ICONS = {
   ),
 };
 
-function BrandHeader({ subtitle, variant = "shield" }) {
+function BrandHeader({ subtitle, variant = "shield", darkText = false }) {
+  const subtitleColor = darkText ? "#667085" : "#c7c4c4d2";
   return (
     <div className="brand-header">
       <div className={`brand-icon brand-icon--${variant}`}>
         {ICONS[variant] || ICONS.shield}
       </div>
       <div className="brand-meta">
-        <p style={{ padding: "2px", margin: "4px" }}>HERACLES</p>
-        {subtitle && <span className="brand-meta-span">{subtitle}</span>}
+        <p className={darkText ? "brand-text-dark" : "brand-text-black"}>HERACLES</p>
+        {subtitle && <span style={{ color: subtitleColor }} className="brand-meta-span">{subtitle}</span>}
       </div>
     </div>
   );

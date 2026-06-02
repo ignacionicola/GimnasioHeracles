@@ -90,7 +90,7 @@ function Register() {
   return (
     <div className="register-page">
       <div className="register-card">
-        <BrandHeader subtitle="Panel de administración • Personal autorizado" />
+        <BrandHeader subtitle="Panel de administración • Personal autorizado" darkText />
         <h2>Registro de personal</h2>
         <p className="register-subtitle">
           Completa los datos para crear una nueva cuenta de personal.

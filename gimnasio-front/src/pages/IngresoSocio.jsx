@@ -55,6 +55,7 @@ function IngresoSocio() {
           <BrandHeader
             variant="dumbbell"
             subtitle="Ingresa tu DNI para registrar asistencia"
+            darkText
           />
           <div className="ingreso-status success">
             <div className="status-icon">✔</div>
@@ -73,6 +74,8 @@ function IngresoSocio() {
     );
   }
 
+
+  
   return (
     <div className="ingreso-page">
       <div className="ingreso-card">

@@ -425,7 +425,7 @@ const eroresConfirmarPago = {};
         <h1>Gestion de Usuarios</h1>
         <p>Panel de control para gestionar usuarios y sus cuotas.</p>
 
-        <div className="top-actions">
+        <div className="top-actions ">
           <button className="primary-btn2" onClick={() => navigate("/home")}>
             Volver al Home
           </button>
