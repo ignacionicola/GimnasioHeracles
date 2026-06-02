@@ -26,21 +26,42 @@
 
 .usuario-table {
   width: 100%;
-  border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.05);
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  background: transparent;
 }
 
 .usuario-table th,
 .usuario-table td {
   padding: 0.9rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   color: #e2e8f0;
+  border: none;
 }
 
 .usuario-table th {
   text-align: left;
   font-weight: 600;
   color: #cbd5f5;
+}
+
+.usuario-table tbody tr td {
+  background: rgba(255, 255, 255, 0.04);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.usuario-table tbody tr td:first-child {
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px 0 0 8px;
+}
+
+.usuario-table tbody tr td:last-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0 8px 8px 0;
+}
+
+.usuario-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .btn-action  {
@@ -254,9 +275,9 @@ white-space: nowrap;
   font-size: 0.90rem;
 }
 
-.usuario-table th, 
+.usuario-table th,
 .usuario-table td {
-padding: 8px 4px !important; 
+  padding: 8px 6px !important;
   vertical-align: middle;
   text-align: center;
 }

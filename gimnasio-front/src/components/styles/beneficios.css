@@ -13,9 +13,11 @@
    aquí solo ajustamos cosas específicas si es necesario */
 
 .beneficios-container {
-  /* Si necesitamos algún ajuste extra sobre dashboard-page */
   padding: 0;
-  /* Ya tiene padding el padre */
+}
+
+.dashboard-hero p {
+  text-align: center;
 }
 
 /* Panel principal tipo tarjeta */
