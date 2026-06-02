@@ -12,21 +12,25 @@ const getReporte = async (req, res) => {
 
   const { fecha } = req.query;
 
+  // Punto de referencia: el final del dia elegido (23:59:59.999).
+  // Asi se incluye todo lo que paso durante ese dia, sin importar la hora.
+  const finDelDia = new Date(fecha + "T23:59:59.999");
+
   // Fecha limite: si la fechaVencimiento de la ultima cuota es anterior a esto,
   // el socio estaba cancelado (inactivo) en esa fecha.
-  const fechaLimite = new Date(fecha);
+  const fechaLimite = new Date(finDelDia);
   fechaLimite.setDate(fechaLimite.getDate() - 60);
 
   try {
     // 1. Socios que ya existian en esa fecha
     const socios = await Usuario.findAll({
-      where: { createdAt: { [Op.lte]: fecha } },
+      where: { createdAt: { [Op.lte]: finDelDia } },
       attributes: ["dni", "nombre", "apellido"],
     });
 
     // 2. Todas las cuotas pagadas hasta esa fecha, de mas nueva a mas vieja
     const cuotas = await Cuota.findAll({
-      where: { fechaPago: { [Op.lte]: fecha } },
+      where: { fechaPago: { [Op.lte]: finDelDia } },
       order: [["fechaPago", "DESC"]],
     });
 
